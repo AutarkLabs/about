@@ -1,6 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import { useAragonApi } from '@aragon/api-react'
-import { Main, AppBar, AppView, Button, Card } from '@aragon/ui'
+import {
+  Main,
+  AppBar,
+  AppView,
+  Button,
+  Card,
+  IconAdd,
+  SidePanel,
+} from '@aragon/ui'
 import styled from 'styled-components'
 
 const cardsData = {
@@ -16,9 +24,30 @@ const cardsData = {
   },
 }
 
+const StyledCard = styled(Card)``
+
+const EditButton = styled.span`
+  opacity: 0;
+  transition: opacity 0.25s;
+
+  ${StyledCard}:hover & {
+    opacity: 1;
+  }
+`
+
 function App() {
+  const [panelVisible, setPanelVisible] = useState(false)
   // const { api, appState } = useAragonApi()
   // const { count, syncing } = appState
+  const handleClick = param => e => {
+    // console.log('Event', e)
+    console.log('Param', param)
+    setPanelVisible(true)
+  }
+
+  const closePanel = () => {
+    setPanelVisible(false)
+  }
   return (
     <Main>
       <BaseLayout>
@@ -31,21 +60,40 @@ function App() {
           }
         >
           <WidgetsLayout>
-            <Card height="fit-content" width="100%">
+            <StyledCard height="fit-content" width="100%">
               <CardContent>
+                <EditButton onClick={handleClick('first')}>
+                  <IconAdd />
+                </EditButton>
                 <h1>{cardsData.left.title}</h1>
                 <span>{cardsData.left.content}</span>
               </CardContent>
-            </Card>
-            <Card height="fit-content" width="calc(100% - 30px)">
+            </StyledCard>
+            <StyledCard height="fit-content" width="calc(100% - 30px)">
               <CardContent>
+                <EditButton onClick={handleClick('second')}>
+                  <IconAdd />
+                </EditButton>
                 <h1>{cardsData.right.title}</h1>
                 <span>{cardsData.right.content}</span>
               </CardContent>
-            </Card>
+            </StyledCard>
           </WidgetsLayout>
         </AppView>
       </BaseLayout>
+      <SidePanel
+        opened={panelVisible}
+        onClose={closePanel}
+        title="Content Block Editor"
+      >
+        {/* <NewTransferPanelContent
+                opened={newTransferOpened}
+                tokens={tokens}
+                onWithdraw={this.handleWithdraw}
+                onDeposit={this.handleDeposit}
+                proxyAddress={proxyAddress}
+              /> */}
+      </SidePanel>
     </Main>
   )
 }
