@@ -8,7 +8,7 @@
  * you are free to choose a different license for the rest of the project.
  */
 
-pragma solidity 0.4.24;
+pragma solidity ^0.4.24;
 
 import "@aragon/os/contracts/factory/DAOFactory.sol";
 import "@aragon/os/contracts/apm/Repo.sol";
@@ -20,7 +20,7 @@ import "@aragon/apps-voting/contracts/Voting.sol";
 import "@aragon/apps-token-manager/contracts/TokenManager.sol";
 import "@aragon/apps-shared-minime/contracts/MiniMeToken.sol";
 
-import "./CounterApp.sol";
+import "./HomePage.sol";
 
 
 contract TemplateBase is APMNamehash {
@@ -71,7 +71,7 @@ contract Template is TemplateBase {
         bytes32 votingAppId = apmNamehash("voting");
         bytes32 tokenManagerAppId = apmNamehash("token-manager");
 
-        CounterApp app = CounterApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
+        HomePage app = HomePage(dao.newAppInstance(appId, latestVersionAppBase(appId)));
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
         TokenManager tokenManager = TokenManager(dao.newAppInstance(tokenManagerAppId, latestVersionAppBase(tokenManagerAppId)));
 
@@ -88,8 +88,10 @@ contract Template is TemplateBase {
 
         acl.createPermission(ANY_ENTITY, voting, voting.CREATE_VOTES_ROLE(), root);
 
-        acl.createPermission(voting, app, app.INCREMENT_ROLE(), voting);
-        acl.createPermission(ANY_ENTITY, app, app.DECREMENT_ROLE(), root);
+        acl.createPermission(voting, app, app.ADD_ROLE(), voting);
+        acl.createPermission(voting, app, app.REMOVE_ROLE(), voting);
+        acl.createPermission(voting, app, app.REORDER_ROLE(), voting);
+        acl.createPermission(voting, app, app.UPDATE_ROLE(), voting);
         acl.grantPermission(voting, tokenManager, tokenManager.MINT_ROLE());
 
         // Clean up permissions

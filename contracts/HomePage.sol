@@ -1,10 +1,9 @@
 pragma solidity ^0.4.24;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
-import "@aragon/os/contracts/lib/math/SafeMath.sol";
 
-contract Widgets is AragonApp {
-    using SafeMath for uint256;
+
+contract HomePage is AragonApp {
 
     /// Events
     event WidgetAdded();
@@ -21,9 +20,11 @@ contract Widgets is AragonApp {
     /// State
     Widget[] public widgets;
 
-
     /// ACL
-    bytes32 constant public MODIFIER_ROLE = keccak256("MODIFIER_ROLE");
+    bytes32 constant public ADD_ROLE = keccak256("ADD_ROLE");
+    bytes32 constant public REMOVE_ROLE = keccak256("REMOVE_ROLE");
+    bytes32 constant public REORDER_ROLE = keccak256("REORDER_ROLE");
+    bytes32 constant public UPDATE_ROLE = keccak256("UPDATE_ROLE");
 
     function initialize() external onlyInit {
         initialized();
@@ -33,7 +34,7 @@ contract Widgets is AragonApp {
      * @notice Add a widget's IPFS hash to the registry
      * @param _addr IPFS hash of the widget's data
      */
-    function addWidget(string _addr) external auth(MODIFIER_ROLE) {
+    function addWidget(string _addr) external auth(ADD_ROLE) {
         widgets.push(Widget(_addr, false));
         emit WidgetAdded();
     }
@@ -43,7 +44,7 @@ contract Widgets is AragonApp {
      * @param _priority Index of the widget
      * @param _addr IPFS hash of the widget's data
      */
-    function updateWidget(uint _priority, string _addr) external auth(MODIFIER_ROLE) {
+    function updateWidget(uint _priority, string _addr) external auth(UPDATE_ROLE) {
         Widget storage widget = widgets[_priority];
         widget.addr = _addr;
         emit WidgetUpdated();
@@ -53,7 +54,7 @@ contract Widgets is AragonApp {
      * @notice Remove a widget from the registry
      * @param _priority Index of the widget
      */
-    function removeWidget(uint _priority) external auth(MODIFIER_ROLE) {
+    function removeWidget(uint _priority) external auth(REMOVE_ROLE) {
         Widget storage widget = widgets[_priority];
         widget.addr = "";
         widget.deleted = true;
@@ -65,7 +66,7 @@ contract Widgets is AragonApp {
      * @param _priority1 index of the first widget to be swapped
      * @param _priority2 index of the second widget to be swapped
      */
-    function reorderWidgets(uint _priority1, uint _priority2) external auth(MODIFIER_ROLE) {
+    function reorderWidgets(uint _priority1, uint _priority2) external auth(REORDER_ROLE) {
         Widget memory temp = widgets[_priority1];
         widgets[_priority1] = widgets[_priority2];
         widgets[_priority2] = temp;
