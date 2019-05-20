@@ -17,7 +17,6 @@ contract('Widgets', accounts => {
   let daoFact, appBase, app
 
   const firstAccount = accounts[0]
-  const secondAccount = accounts[1]
 
   before(async () => {
     const kernelBase = await getContract('Kernel').new(true) // petrify immediately
@@ -31,6 +30,8 @@ contract('Widgets', accounts => {
     appBase = await HomePage.new()
 
     // Setup constants
+    // TODO: take roles hashes from constants file
+    // TODO: test roles pre-generated with keccak256
     APP_MANAGER_ROLE = await kernelBase.APP_MANAGER_ROLE()
     ADD_ROLE = await appBase.ADD_ROLE()
     REMOVE_ROLE = await appBase.REMOVE_ROLE()
@@ -105,53 +106,74 @@ contract('Widgets', accounts => {
         from: firstAccount,
       }
     )
+    app.initialize()
   })
 
-  it.only('debug', async () => {
-    console.log(
-      'hello',
-      UPDATE_ROLE,
-      REORDER_ROLE,
-      REMOVE_ROLE,
-      ADD_ROLE,
-      APP_MANAGER_ROLE
-    )
+  context('widgets usage functions', () => {
+    let widgetAddedReceipt = []
+
+    beforeEach(async () => {
+      widgetAddedReceipt = await app.addWidget('something')
+    })
+
+    it('should add a widget', async () => {
+      const event = widgetAddedReceipt.logs.filter(
+        l => l.event === 'WidgetAdded'
+      )
+      assert.equal(event.length, 1, 'widget not added correctly')
+    })
+
+    it('should update a widget', async () => {
+      const widgetUpdatedReceipt = await app.updateWidget(0, 'something else')
+      const event = widgetUpdatedReceipt.logs.filter(
+        l => l.event === 'WidgetUpdated'
+      )
+      assert.equal(event.length, 1, 'widget not updated correctly')
+    })
+
+    it('should remove a widget', async () => {
+      const widgetRemovedReceipt = await app.removeWidget(0)
+      const event = widgetRemovedReceipt.logs.filter(
+        l => l.event === 'WidgetRemoved'
+      )
+      assert.equal(event.length, 1, 'widget not removed correctly')
+    })
+
+    it('should reorder widgets', async () => {
+      await app.addWidget('second widget')
+      const widgetReorderReceipt = await app.reorderWidgets(0, 1)
+      const event = widgetReorderReceipt.logs.filter(
+        l => l.event === 'WidgetsReordered'
+      )
+      assert.equal(event.length, 1, 'widgets not reordered correctly')
+    })
+
+    it('should get widgets count', async () => {
+      await app.addWidget('second widget')
+      const widgetsCount = await app.getWCount()
+      assert.equal(widgetsCount.toNumber(), 2, 'widgets count invalid')
+    })
+
+    it('should get a widget', async () => {
+      const widget = await app.getWidget(0)
+      assert.equal(widget[0], 'something', 'widgets string invalid')
+      assert.equal(widget[1], 0, 'widgets priority invalid')
+    })
   })
+
+  // TODO: context('not authorized', async () => {})
 
   context('app initialization', () => {
     it('should initialize properly', async () => {
-      app.initialize()
       const initBlock = await app.getInitializationBlock()
       assert.isAbove(initBlock.toNumber(), 0, 'app not initialized')
     })
 
+    // TODO: Check why every test put after this fails with a revert
     it('should initialize only once', async () => {
-      app.initialize()
       assertRevert(async () => {
         app.initialize()
       })
     })
   })
-
-  context('widgets usage', () => {
-    before(async () => {
-      app.initialize()
-    })
-
-    it('should be incremented by any address', async () => {
-      await app.increment(1, { from: secondAccount })
-      assert.equal(await app.value(), 1)
-    })
-
-    it('should not be decremented if already 0', async () => {
-      app.initialize()
-      return assertRevert(async () => {
-        return app.decrement(1)
-      })
-    })
-
-    it('should add widgets', async () => {})
-  })
-
-  context('Not authorized', async () => {})
 })
