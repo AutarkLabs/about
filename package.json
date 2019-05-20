@@ -12,6 +12,7 @@
     "@aragon/cli": "^5.4.0",
     "@aragon/test-helpers": "^1.0.1",
     "babel-eslint": "^10.0.1",
+    "coveralls": "^3.0.3",
     "cross-env": "^5.2.0",
     "eslint": "^5.13.0",
     "eslint-config-prettier": "^4.0.0",
@@ -46,6 +47,7 @@
     "lint": "eslint . & solium --dir ./contracts",
     "lint:fix": "eslint . --fix & solium --dir ./contracts --fix",
     "coverage": "cross-env SOLIDITY_COVERAGE=true npm run ganache-cli:test",
+    "coveralls": "cat coverage/lcov.info | npx coveralls",
     "ganache-cli:test": "sh ./node_modules/@aragon/test-helpers/ganache-cli.sh"
   }
 }
