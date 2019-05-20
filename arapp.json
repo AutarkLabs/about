@@ -2,12 +2,22 @@
   "roles": [
     {
       "name": "Increment the counter",
-      "id": "INCREMENT_ROLE",
+      "id": "ADD_ROLE",
       "params": []
     },
     {
       "name": "Decrement the counter",
-      "id": "DECREMENT_ROLE",
+      "id": "REMOVE_ROLE",
+      "params": []
+    },
+    {
+      "name": "Decrement the counter",
+      "id": "REORDER_ROLE",
+      "params": []
+    },
+    {
+      "name": "Decrement the counter",
+      "id": "UPDATE_ROLE",
       "params": []
     }
   ],
@@ -29,5 +39,5 @@
       "network": "mainnet"
     }
   },
-  "path": "contracts/CounterApp.sol"
+  "path": "contracts/HomePage.sol"
 }
