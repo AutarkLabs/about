@@ -5,8 +5,7 @@ dist: 'trusty'
 # these are executed in order. each must pass for the next to be run
 stages:
   - precache # warm up cache for default Node.js version
-  - lint # lint code and docs
-  - test # all tests
+  - lint-n-test # lint and run tests
 
 # defaults
 language: node_js
@@ -21,14 +20,11 @@ jobs:
     - stage: precache
       script: true
 
-    - stage: lint
-      name: Lint contracts and frontend apps
-      install: pwd # override to avoid npm i again
-      script: npm run lint
-
-    - stage: test
-      script: travis_wait 60 npm run coverage
-      name: Home app tests and coverage report
+    - stage: lint-n-test
+      script:
+        - npm run lint
+        - travis_wait 60 npm run coverage
+      name: Home app lint, tests and coverage report
       after_success: npm run coveralls
 
 notifications:
