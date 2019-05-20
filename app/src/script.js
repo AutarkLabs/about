@@ -1,7 +1,7 @@
 import '@babel/polyfill'
 import Aragon from '@aragon/client'
 import 'rxjs/add/observable/of'
-import { first, pluck } from 'rxjs/operators'
+import { first } from 'rxjs/operators'
 
 const app = new Aragon()
 let appState
@@ -79,7 +79,7 @@ const loadWidgetData = async priority => {
     app.call('getWidget', priority).subscribe(
       widget => {
         if (!widget) {
-          reject()
+          reject(new Error('getWidget failed'))
         } else {
           resolve({
             addr: widget[0],
