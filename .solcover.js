@@ -3,5 +3,7 @@ module.exports = {
     copyPackages: [],
     skipFiles: [
         'test',
+        'misc/Migrations.sol',
+        'Template.sol'
     ]
 }
