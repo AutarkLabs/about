@@ -37,8 +37,8 @@ const Editor = (props) => {
         options={{
           mode: 'markdown',
           theme: 'material',
-          //lineNumbers: true,
         }}
+        editorDidMount={editor => {props.onCodeMirrorInit(editor)}}
         onChange={(editor, data, value) => {props.onChange(value)}}
       />
     </div>
