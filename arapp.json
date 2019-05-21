@@ -1,22 +1,22 @@
 {
   "roles": [
     {
-      "name": "Increment the counter",
+      "name": "Add a widget",
       "id": "ADD_ROLE",
       "params": []
     },
     {
-      "name": "Decrement the counter",
+      "name": "Remove a widget",
       "id": "REMOVE_ROLE",
       "params": []
     },
     {
-      "name": "Decrement the counter",
+      "name": "Reorder widgets",
       "id": "REORDER_ROLE",
       "params": []
     },
     {
-      "name": "Decrement the counter",
+      "name": "Update a widget",
       "id": "UPDATE_ROLE",
       "params": []
     }
