@@ -29,10 +29,15 @@ const mockedText = `
   
   __something__
 `
+let codemirrorInitialInstance = null
 
 const PanelContent = () => {
   const [unsavedText, setUnsavedText] = useState(mockedText)
   const [screenIndex, setScreenIndex] = useState(0)
+
+  const [codemirrorInstance, setCodemirrorInstance] = useState(
+    codemirrorInitialInstance
+  )
 
   const handleChange = _screenIndex => {
     setScreenIndex(_screenIndex)
@@ -40,6 +45,15 @@ const PanelContent = () => {
 
   const handleEditorChange = _unsavedText => {
     setUnsavedText(_unsavedText)
+  }
+
+  const onCodeMirrorInit = _codemirrorInstance => {
+    setCodemirrorInstance(_codemirrorInstance)
+  }
+  const setSelectionBold = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '**' + codemirrorInstance.doc.getSelection() + '**'
+    )
   }
 
   return (
@@ -51,8 +65,12 @@ const PanelContent = () => {
       }}
     >
       <TypeInput />
-      <SidePanelSeparator style={{ margin: '15px -30px' }} />
-      <EditorTabBar handleChange={handleChange} screenIndex={screenIndex} />
+      <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
+      <EditorTabBar
+        handleChange={handleChange}
+        screenIndex={screenIndex}
+        setSelectionBold={setSelectionBold}
+      />
       <SidePanelSeparator
         style={{
           margin: '-31px -30px 15px',
@@ -60,6 +78,7 @@ const PanelContent = () => {
       />
       <EditorTabView
         handleEditorChange={handleEditorChange}
+        onCodeMirrorInit={onCodeMirrorInit}
         screenIndex={screenIndex}
         unsavedText={unsavedText}
       />

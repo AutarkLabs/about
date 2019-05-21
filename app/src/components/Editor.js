@@ -39,6 +39,9 @@ const Editor = props => {
           mode: 'markdown',
           theme: 'material',
         }}
+        editorDidMount={editor => {
+          props.onCodeMirrorInit(editor)
+        }}
         onChange={(editor, data, value) => {
           props.onChange(value)
         }}
