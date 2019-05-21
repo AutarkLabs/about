@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Button, DropDown, Field, SidePanelSeparator, TabBar } from '@aragon/ui'
+import { Button, SidePanelSeparator } from '@aragon/ui'
 
-import Editor from './Editor'
-import Preview from './Preview'
+import TypeInput from './TypeInput'
+import EditorTabBar from './EditorTabBar'
+import EditorTabView from './EditorTabView'
 
 const mockedText = `
   # Title
@@ -50,47 +50,19 @@ const PanelContent = ({ onChange, onUpdate, value }) => {
         flex: '1',
       }}
     >
-      <Field label="Type">
-        <DropDown
-          items={[
-            'Custom markdown',
-            'External URL (.md file)',
-            'IPFS hash (.md file)',
-          ]}
-          active={0}
-          onChange={() => {}}
-        />
-      </Field>
+      <TypeInput />
       <SidePanelSeparator style={{ margin: '15px -30px' }} />
-      <TabBarWrapper>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingRight: '20px',
-          }}
-        >
-          <TabBar
-            items={['Write', 'Preview']}
-            selected={screenIndex}
-            onChange={handleChange}
-          />
-          Edit ToolBar
-        </div>
-      </TabBarWrapper>
+      <EditorTabBar handleChange={handleChange} screenIndex={screenIndex} />
       <SidePanelSeparator
         style={{
           margin: '-31px -30px 15px',
         }}
       />
-
-      <div style={{ flex: '1' }}>
-        {screenIndex === 0 && (
-          <Editor value={unsavedText} onChange={handleEditorChange} />
-        )}
-        {screenIndex === 1 && <Preview value={unsavedText} />}
-      </div>
+      <EditorTabView
+        handleEditorChange={handleEditorChange}
+        screenIndex={screenIndex}
+        unsavedText={unsavedText}
+      />
       <SidePanelSeparator style={{ margin: '15px -30px' }} />
       <Button mode="strong" wide>
         Update
@@ -111,9 +83,5 @@ const PanelContent = ({ onChange, onUpdate, value }) => {
 //     this.setState({ ...initialState })
 //   }
 // }
-
-const TabBarWrapper = styled.div`
-  margin: 0 -30px 30px;
-`
 
 export default PanelContent

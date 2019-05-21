@@ -14,8 +14,8 @@ var markdown = require('markdown-it')({
   linkify: true,
   typographer: true,
 })
-require('codemirror/lib/codemirror.css');
-require('codemirror/mode/markdown/markdown');
+require('codemirror/lib/codemirror.css')
+require('codemirror/mode/markdown/markdown')
 
 // import dompurify from 'dompurify';
 
@@ -29,17 +29,19 @@ const mock = `
 - **Italics**
 `
 
-const Editor = (props) => {
+const Editor = props => {
   return (
     <div>
-      <CodeMirror style={{ width: '100%'}}
+      <CodeMirror
+        style={{ width: '100%' }}
         value={props.value}
         options={{
           mode: 'markdown',
           theme: 'material',
-          //lineNumbers: true,
         }}
-        onChange={(editor, data, value) => {props.onChange(value)}}
+        onChange={(editor, data, value) => {
+          props.onChange(value)
+        }}
       />
     </div>
   )
