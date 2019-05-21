@@ -23,7 +23,7 @@ const cardsData = {
 const Widget = ({ id, title, content, handleClick }) => (
   <StyledCard height="fit-content">
     <CardContent>
-      <EditButton onClick={handleClick}>
+      <EditButton onClick={handleClick(id)}>
         <IconPencil />
       </EditButton>
       <h1>{title}</h1>
@@ -59,11 +59,13 @@ function App() {
         >
           <WidgetsLayout>
             <Widget
+              id={0}
               title={cardsData.left.title}
               content={cardsData.left.content}
               handleClick={handleClick}
             />
             <Widget
+              id={1}
               title={cardsData.right.title}
               content={cardsData.right.content}
               handleClick={handleClick}
