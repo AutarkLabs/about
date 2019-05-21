@@ -37,7 +37,7 @@ __something__
 
 // import dompurify from 'dompurify';
 
-const Preview = () => {
+const Preview = (props) => {
   return (
     <div
       style={{
@@ -48,7 +48,7 @@ const Preview = () => {
       }}
     >
       <MarkdownWrapper>
-        <MDReactComponent text={markdownContent} />
+        <MDReactComponent text={props.value} />
       </MarkdownWrapper>
     </div>
   )

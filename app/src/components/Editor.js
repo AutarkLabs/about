@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
 // import styled from 'styled-components'
@@ -14,7 +14,7 @@ var markdown = require('markdown-it')({
   linkify: true,
   typographer: true,
 })
-
+require('codemirror/lib/codemirror.css');
 // https://github.com/scniro/react-codemirror2
 
 // import dompurify from 'dompurify';
@@ -29,17 +29,17 @@ const mock = `
 - **Italics**
 `
 
-const Editor = () => {
+const Editor = (props) => {
   return (
-    <div style={{ maxWidth: '100%', overflow: 'hidden', display: 'flex' }}>
-      <CodeMirror
-        value={mock}
+    <div>
+      <CodeMirror style={{ width: '100%'}}
+        value={props.value}
         options={{
           mode: 'markdown',
           theme: 'material',
           lineNumbers: true,
         }}
-        onChange={(editor, data, value) => {}}
+        onChange={(editor, data, value) => {props.onChange(value)}}
       />
     </div>
   )

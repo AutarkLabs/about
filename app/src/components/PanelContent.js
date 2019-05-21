@@ -7,6 +7,28 @@ import Preview from './Preview'
 
 const initialState = {
   screenIndex: 0,
+  unsavedText: `
+  # Title
+
+  ## Subtitle
+  
+  ### H3
+  
+  - List
+  - Item
+  - Other
+  
+  - [ ] Task
+  - [x] Completed
+  
+  [Link](#)
+  
+  *Emojis!* 🦄 🦅 🚀
+  
+  **italics**
+  
+  __something__
+`,
 }
 
 class PanelContent extends React.Component {
@@ -31,8 +53,12 @@ class PanelContent extends React.Component {
     this.setState({ screenIndex })
   }
 
+  handleEditorChange = unsavedText => {
+    this.setState({ unsavedText })
+  }
+
   render() {
-    const { screenIndex } = this.state
+    const { screenIndex, unsavedText } = this.state
     // const { opened, tokens, onWithdraw, onDeposit, proxyAddress } = this.props
     return (
       <div
@@ -78,8 +104,8 @@ class PanelContent extends React.Component {
         />
 
         <div style={{ flex: '1' }}>
-          {/* {screenIndex === 0 && <Editor />} */}
-          {screenIndex === 0 && <Preview />}
+         {screenIndex === 0 && <Editor value={unsavedText} onChange={this.handleEditorChange} />} 
+          {screenIndex === 1 && <Preview value={unsavedText} />}
         </div>
         <SidePanelSeparator style={{ margin: '15px -30px' }} />
         <Button mode="strong" wide>
