@@ -1,17 +1,11 @@
 import React, { useState } from 'react'
 // import { useAragonApi } from '@aragon/api-react'
-import {
-  Main,
-  AppBar,
-  AppView,
-  Button,
-  Card,
-  IconAdd,
-  SidePanel,
-} from '@aragon/ui'
+import { Main, AppBar, AppView, Button, Card, SidePanel } from '@aragon/ui'
 import styled from 'styled-components'
+import IconPencil from './shared/assets/IconPencil'
 
 import PanelContent from './components/PanelContent'
+import Preview from './components/Preview'
 
 const cardsData = {
   left: {
@@ -26,6 +20,18 @@ const cardsData = {
   },
 }
 
+const Widget = ({ id, title, content, handleClick }) => (
+  <StyledCard height="fit-content">
+    <CardContent>
+      <EditButton onClick={handleClick}>
+        <IconPencil />
+      </EditButton>
+      <h1>{title}</h1>
+      <Preview content={content} />
+    </CardContent>
+  </StyledCard>
+)
+
 function App() {
   const [panelVisible, setPanelVisible] = useState(true)
   // const { api, appState } = useAragonApi()
@@ -39,6 +45,7 @@ function App() {
   const closePanel = () => {
     setPanelVisible(false)
   }
+
   return (
     <Main>
       <BaseLayout>
@@ -51,24 +58,16 @@ function App() {
           }
         >
           <WidgetsLayout>
-            <StyledCard height="fit-content">
-              <CardContent>
-                <EditButton onClick={handleClick('first')}>
-                  <IconAdd />
-                </EditButton>
-                <h1>{cardsData.left.title}</h1>
-                <span>{cardsData.left.content}</span>
-              </CardContent>
-            </StyledCard>
-            <StyledCard height="fit-content">
-              <CardContent>
-                <EditButton onClick={handleClick('second')}>
-                  <IconAdd />
-                </EditButton>
-                <h1>{cardsData.right.title}</h1>
-                <span>{cardsData.right.content}</span>
-              </CardContent>
-            </StyledCard>
+            <Widget
+              title={cardsData.left.title}
+              content={cardsData.left.content}
+              handleClick={handleClick}
+            />
+            <Widget
+              title={cardsData.right.title}
+              content={cardsData.right.content}
+              handleClick={handleClick}
+            />
           </WidgetsLayout>
         </AppView>
       </BaseLayout>
@@ -100,13 +99,12 @@ const WidgetsLayout = styled.div`
   grid-template-columns: 70% 30%;
   grid-auto-flow: column;
   grid-gap: 30px;
-  margin-right:30px;
+  margin-right: 30px;
 
   @media only screen and (max-width: 768px) {
     display: block;
-    margin-right:0;
+    margin-right: 0;
   }
-
 `
 
 const CardContent = styled.div`
@@ -114,8 +112,8 @@ const CardContent = styled.div`
 `
 
 const StyledCard = styled(Card)`
-  width:100%;
-  margin-bottom:30px;
+  width: 100%;
+  margin-bottom: 30px;
 `
 
 const EditButton = styled.span`

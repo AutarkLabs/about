@@ -2,59 +2,32 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { theme } from '@aragon/ui'
-// import { WidgetCardWrapper, WidgetCard, WidgetCardTitle, WidgetCardBody, BackgroundOverlay, EditableDiv } from '../../style'
-// import { ipfsGet } from '../../utils/ipfs-helper'
-// import { stringToContentEditable, contentEditableToString } from '../../utils/content-editable'
-// import EditButton from './EditButton'
-// import  {ipfsAdd}  from '../../utils/ipfs-helper'
-// Load markdown css
-// import '../../assets/markdown.css'
 
 import MDReactComponent from 'markdown-react-js'
 
-const markdownContent = `
-# Title
-
-## Subtitle
-
-### H3
-
-- List
-- Item
-- Other
-
-- [ ] Task
-- [x] Completed
-
-[Link](#)
-
-*Emojis!* 🦄 🦅 🚀
-
-**italics**
-
-__something__
-`
-
-// import dompurify from 'dompurify';
-
-const Preview = (props) => {
+const Preview = ({ content }) => {
   return (
     <div
       style={{
         width: '100%',
         height: '100%',
         bottom: '0',
-        // backgroundColor: '#222',
       }}
     >
       <MarkdownWrapper>
-        <MDReactComponent text={props.value} />
+        <MDReactComponent text={content} />
       </MarkdownWrapper>
     </div>
   )
 }
 
-Preview.propTypes = {}
+Preview.defaultProps = {
+  content: '',
+}
+
+Preview.propTypes = {
+  content: PropTypes.string,
+}
 
 const MarkdownWrapper = styled.div`
   h1,

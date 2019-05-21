@@ -30,7 +30,7 @@ const mockedText = `
   __something__
 `
 
-const PanelContent = ({ onChange, onUpdate, value }) => {
+const PanelContent = () => {
   const [unsavedText, setUnsavedText] = useState(mockedText)
   const [screenIndex, setScreenIndex] = useState(0)
 
@@ -71,11 +71,11 @@ const PanelContent = ({ onChange, onUpdate, value }) => {
   )
 }
 
-// PanelContent.propTypes = {
-//   onChange: PropTypes.func.isRequired,
-//   onUpdate: PropTypes.func.isRequired,
-//   value: PropTypes.text.isRequired,
-// }
+PanelContent.propTypes = {
+  // onChange: PropTypes.func.isRequired,
+  // onUpdate: PropTypes.func.isRequired,
+  // value: PropTypes.string.isRequired,
+}
 
 // componentWillReceiveProps({ opened }) {
 //   if (opened && !this.props.opened) {
