@@ -10,8 +10,13 @@ import Preview from './components/Preview'
 const cardsData = {
   left: {
     title: 'Welcome to Autark',
-    content:
-      'Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.<br>To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.<br>We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.<br>In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become (or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80% use case.<br>The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.<br>Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.',
+    content: `# Hello
+
+## This is markdown
+
+  - Ok
+  - * Bold *
+      - ** Italics ** Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker - autonomy, and access to tools that support the global development of complex mega - projects.< br > To us, complex mega - projects can mean autonomous cities, next - generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships.There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.< br > We will be calling this Aragon suite of project and human - coordination tools Open Enterprise, as DAOs that are solving mega - projects are the definition of an open enterprise.< br > In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become(or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80 % use case.<br>The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.<br>Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.`,
   },
   right: {
     title: 'More text goes here',
@@ -34,8 +39,8 @@ const Widget = ({ id, title, content, handleClick }) => (
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(true)
-  // const { api, appState } = useAragonApi()
-  // const { count, syncing } = appState
+  // const {api, appState } = useAragonApi()
+  // const {count, syncing } = appState
   const handleClick = param => e => {
     // console.log('Event', e)
     console.log('Param', param)
@@ -87,7 +92,7 @@ function App() {
 const BaseLayout = styled.div`
   display: flex;
   /* align-items: center;
-  justify-content: center; */
+    justify-content: center; */
   height: 100vh;
   flex-direction: column;
 `
@@ -126,7 +131,7 @@ const EditButton = styled.span`
     opacity: 1;
   }
 `
-// const Syncing = styled.div.attrs({ children: 'Syncing…' })`
+// const Syncing = styled.div.attrs({children: 'Syncing…' })`
 //   position: absolute;
 //   top: 15px;
 //   right: 20px;

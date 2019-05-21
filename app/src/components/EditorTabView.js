@@ -10,7 +10,7 @@ const EditorTabView = ({
   screenIndex,
   unsavedText,
 }) => (
-  <div style={{ flex: '1' }}>
+  <div style={{ flex: '1', padding: '0', margin: '0', width: '100%' }}>
     {screenIndex === 0 && (
       <Editor
         content={unsavedText}
