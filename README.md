@@ -17,7 +17,7 @@ To start development environment:
 2. Run parcel server for frontend development (it also builds the frontend)
 
    ```sh
-   npm run devserver
+   npm run dev
    ```
 
 3. On a second terminal launch script watcher for background worker development
