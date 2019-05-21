@@ -31,7 +31,8 @@
   },
   "scripts": {
     "clean": "git clean -fXd",
-    "copy-public-assets": "rsync -rtu ./app/public/ ./dist",
+    "dev": "npm run build && cd app && npm run devserver && cd ..",
+    "watch:script": "cd app && npm run watch:script && cd ..",
     "start": "npm run start:ipfs",
     "start:ipfs": "aragon run",
     "start:http": "aragon run --http localhost:8001 --http-served-from ./dist",
@@ -42,7 +43,7 @@
     "test": "cross-env TRUFFLE_TEST=true npm run ganache-cli:test",
     "test:script": "ava app/src/*.test.js --verbose",
     "compile": "aragon contracts compile",
-    "build": "cd app && npm run build && cd .. && npm run copy-public-assets",
+    "build": "cd app && npm run build && cd ..",
     "publish:patch": "aragon apm publish patch --files dist/",
     "publish:minor": "aragon apm publish minor --files dist/",
     "publish:major": "aragon apm publish major --files dist/",
