@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+
 import { Button, DropDown, Field, SidePanelSeparator, TabBar } from '@aragon/ui'
 
 import Editor from './Editor'
 import Preview from './Preview'
 
-const initialState = {
-  screenIndex: 0,
-  unsavedText: `
+const mockedText = `
   # Title
 
   ## Subtitle
@@ -28,93 +28,89 @@ const initialState = {
   **italics**
   
   __something__
-`,
-}
+`
 
-class PanelContent extends React.Component {
-  static defaultProps = {
-    onWithdraw: () => {},
-    onDeposit: () => {},
-    proxyAddress: null,
+const PanelContent = ({ onChange, onUpdate, value }) => {
+  const [unsavedText, setUnsavedText] = useState(mockedText)
+  const [screenIndex, setScreenIndex] = useState(0)
+
+  const handleChange = _screenIndex => {
+    setScreenIndex(_screenIndex)
   }
 
-  state = {
-    ...initialState,
+  const handleEditorChange = _unsavedText => {
+    setUnsavedText(_unsavedText)
   }
 
-  componentWillReceiveProps({ opened }) {
-    if (opened && !this.props.opened) {
-      // Reset the state on the panel re-opening, to avoid flickering when it's still closing
-      this.setState({ ...initialState })
-    }
-  }
-
-  handleChange = screenIndex => {
-    this.setState({ screenIndex })
-  }
-
-  handleEditorChange = unsavedText => {
-    this.setState({ unsavedText })
-  }
-
-  render() {
-    const { screenIndex, unsavedText } = this.state
-    // const { opened, tokens, onWithdraw, onDeposit, proxyAddress } = this.props
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flex: '1',
-        }}
-      >
-        <Field label="Type">
-          <DropDown
-            items={[
-              'Custom markdown',
-              'External URL (.md file)',
-              'IPFS hash (.md file)',
-            ]}
-            active={0}
-            onChange={() => {}}
-          />
-        </Field>
-        <SidePanelSeparator style={{ margin: '15px -30px' }} />
-        <TabBarWrapper>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingRight: '20px',
-            }}
-          >
-            <TabBar
-              items={['Write', 'Preview']}
-              selected={screenIndex}
-              onChange={this.handleChange}
-            />
-            Edit ToolBar
-          </div>
-        </TabBarWrapper>
-        <SidePanelSeparator
-          style={{
-            margin: '-31px -30px 15px',
-          }}
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '1',
+      }}
+    >
+      <Field label="Type">
+        <DropDown
+          items={[
+            'Custom markdown',
+            'External URL (.md file)',
+            'IPFS hash (.md file)',
+          ]}
+          active={0}
+          onChange={() => {}}
         />
-
-        <div style={{ flex: '1' }}>
-         {screenIndex === 0 && <Editor value={unsavedText} onChange={this.handleEditorChange} />} 
-          {screenIndex === 1 && <Preview value={unsavedText} />}
+      </Field>
+      <SidePanelSeparator style={{ margin: '15px -30px' }} />
+      <TabBarWrapper>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingRight: '20px',
+          }}
+        >
+          <TabBar
+            items={['Write', 'Preview']}
+            selected={screenIndex}
+            onChange={handleChange}
+          />
+          Edit ToolBar
         </div>
-        <SidePanelSeparator style={{ margin: '15px -30px' }} />
-        <Button mode="strong" wide>
-          Update
-        </Button>
+      </TabBarWrapper>
+      <SidePanelSeparator
+        style={{
+          margin: '-31px -30px 15px',
+        }}
+      />
+
+      <div style={{ flex: '1' }}>
+        {screenIndex === 0 && (
+          <Editor value={unsavedText} onChange={handleEditorChange} />
+        )}
+        {screenIndex === 1 && <Preview value={unsavedText} />}
       </div>
-    )
-  }
+      <SidePanelSeparator style={{ margin: '15px -30px' }} />
+      <Button mode="strong" wide>
+        Update
+      </Button>
+    </div>
+  )
 }
+
+// PanelContent.propTypes = {
+//   onChange: PropTypes.func.isRequired,
+//   onUpdate: PropTypes.func.isRequired,
+//   value: PropTypes.text.isRequired,
+// }
+
+// componentWillReceiveProps({ opened }) {
+//   if (opened && !this.props.opened) {
+//     // Reset the state on the panel re-opening, to avoid flickering when it's still closing
+//     this.setState({ ...initialState })
+//   }
+// }
 
 const TabBarWrapper = styled.div`
   margin: 0 -30px 30px;
