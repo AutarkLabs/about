@@ -34,7 +34,7 @@ const Editor = props => {
     <div>
       <CodeMirror
         style={{ width: '100%' }}
-        value={props.value}
+        value={props.content}
         options={{
           mode: 'markdown',
           theme: 'material',

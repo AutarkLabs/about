@@ -13,12 +13,12 @@ const EditorTabView = ({
   <div style={{ flex: '1' }}>
     {screenIndex === 0 && (
       <Editor
-        value={unsavedText}
+        content={unsavedText}
         onChange={handleEditorChange}
         onCodeMirrorInit={onCodeMirrorInit}
       />
     )}
-    {screenIndex === 1 && <Preview value={unsavedText} />}
+    {screenIndex === 1 && <Preview content={unsavedText} />}
   </div>
 )
 
