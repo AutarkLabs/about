@@ -1,6 +1,6 @@
 /* global artifacts context contract before beforeEach it assert */
 const { assertRevert } = require('@aragon/test-helpers/assertThrow')
-const HomePage = artifacts.require('HomePage.sol')
+const HomePage = artifacts.require('HomePage')
 const DAOFactory = artifacts.require(
   '@aragon/core/contracts/factory/DAOFactory'
 )

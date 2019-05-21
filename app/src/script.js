@@ -51,7 +51,7 @@ const refreshAllWidgets = async ({ entries = [] }) => {
     // Clear all entries
     entries = []
     var widgetNumber = await app
-      .call('getWidgetsLength')
+      .call('getWCount')
       .pipe(first())
       .toPromise()
     for (var i = 0; i <= widgetNumber; i++) {

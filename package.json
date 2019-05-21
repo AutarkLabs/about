@@ -1,5 +1,5 @@
 {
-  "name": "home",
+  "name": "aragon-home",
   "version": "1.0.0",
   "description": "",
   "dependencies": {
@@ -11,6 +11,7 @@
   "devDependencies": {
     "@aragon/cli": "^5.4.0",
     "@aragon/test-helpers": "^1.0.1",
+    "ava": "^1.4.1",
     "babel-eslint": "^10.0.1",
     "coveralls": "^3.0.3",
     "cross-env": "^5.2.0",
@@ -38,6 +39,7 @@
     "prepare": "cd app && npm install && cd ..",
     "start:app": "cd app && npm start && cd ..",
     "test": "cross-env TRUFFLE_TEST=true npm run ganache-cli:test",
+    "test:script": "ava app/src/*.test.js --verbose",
     "compile": "aragon contracts compile",
     "build": "cd app && npm run build && cd ..",
     "publish:patch": "aragon apm publish patch",
@@ -49,5 +51,9 @@
     "coverage": "cross-env SOLIDITY_COVERAGE=true npm run ganache-cli:test",
     "coveralls": "cat coverage/lcov.info | npx coveralls",
     "ganache-cli:test": "sh ./node_modules/@aragon/test-helpers/ganache-cli.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutarkLabs/aragon-home.git"
   }
 }
