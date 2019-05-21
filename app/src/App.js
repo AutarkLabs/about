@@ -11,6 +11,8 @@ import {
 } from '@aragon/ui'
 import styled from 'styled-components'
 
+import PanelContent from './components/PanelContent'
+
 const cardsData = {
   left: {
     title: 'Welcome to Autark',
@@ -36,7 +38,7 @@ const EditButton = styled.span`
 `
 
 function App() {
-  const [panelVisible, setPanelVisible] = useState(false)
+  const [panelVisible, setPanelVisible] = useState(true)
   // const { api, appState } = useAragonApi()
   // const { count, syncing } = appState
   const handleClick = param => e => {
@@ -86,13 +88,7 @@ function App() {
         onClose={closePanel}
         title="Content Block Editor"
       >
-        {/* <NewTransferPanelContent
-                opened={newTransferOpened}
-                tokens={tokens}
-                onWithdraw={this.handleWithdraw}
-                onDeposit={this.handleDeposit}
-                proxyAddress={proxyAddress}
-              /> */}
+        <PanelContent />
       </SidePanel>
     </Main>
   )
