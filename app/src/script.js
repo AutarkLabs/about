@@ -1,6 +1,5 @@
 import '@babel/polyfill'
-import Aragon from '@aragon/client'
-import 'rxjs/add/observable/of'
+import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
 
 const app = new Aragon()
