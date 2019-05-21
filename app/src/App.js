@@ -26,17 +26,6 @@ const cardsData = {
   },
 }
 
-const StyledCard = styled(Card)``
-
-const EditButton = styled.span`
-  opacity: 0;
-  transition: opacity 0.25s;
-
-  ${StyledCard}:hover & {
-    opacity: 1;
-  }
-`
-
 function App() {
   const [panelVisible, setPanelVisible] = useState(true)
   // const { api, appState } = useAragonApi()
@@ -62,7 +51,7 @@ function App() {
           }
         >
           <WidgetsLayout>
-            <StyledCard height="fit-content" width="100%">
+            <StyledCard height="fit-content">
               <CardContent>
                 <EditButton onClick={handleClick('first')}>
                   <IconAdd />
@@ -71,7 +60,7 @@ function App() {
                 <span>{cardsData.left.content}</span>
               </CardContent>
             </StyledCard>
-            <StyledCard height="fit-content" width="calc(100% - 30px)">
+            <StyledCard height="fit-content">
               <CardContent>
                 <EditButton onClick={handleClick('second')}>
                   <IconAdd />
@@ -111,12 +100,32 @@ const WidgetsLayout = styled.div`
   grid-template-columns: 70% 30%;
   grid-auto-flow: column;
   grid-gap: 30px;
+  margin-right:30px;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+    margin-right:0;
+  }
+
 `
 
 const CardContent = styled.div`
   padding: 24px;
 `
 
+const StyledCard = styled(Card)`
+  width:100%;
+  margin-bottom:30px;
+`
+
+const EditButton = styled.span`
+  opacity: 0;
+  transition: opacity 0.25s;
+
+  ${StyledCard}:hover & {
+    opacity: 1;
+  }
+`
 // const Syncing = styled.div.attrs({ children: 'Syncing…' })`
 //   position: absolute;
 //   top: 15px;
