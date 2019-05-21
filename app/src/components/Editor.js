@@ -15,7 +15,7 @@ var markdown = require('markdown-it')({
   typographer: true,
 })
 require('codemirror/lib/codemirror.css');
-// https://github.com/scniro/react-codemirror2
+require('codemirror/mode/markdown/markdown');
 
 // import dompurify from 'dompurify';
 
@@ -37,7 +37,7 @@ const Editor = (props) => {
         options={{
           mode: 'markdown',
           theme: 'material',
-          lineNumbers: true,
+          //lineNumbers: true,
         }}
         onChange={(editor, data, value) => {props.onChange(value)}}
       />
