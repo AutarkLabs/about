@@ -71,7 +71,7 @@ Here's our logo (hover to see the title text):
 `
 
 let codemirrorInitialInstance = null
-let editorTypeInitial = 1
+let editorTypeInitial = 0
 let externalUrlInitial = ""
 let ipfsHashInitial = ""
 
@@ -219,6 +219,7 @@ const BottomPanel = styled.div`
   flex: 0 0 auto;
   padding-bottom: 15px;
 `
+
 const TopPanel = styled.div`
   flex: 0 0 auto;
 `

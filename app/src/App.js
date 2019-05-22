@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 // import { useAragonApi } from '@aragon/api-react'
-import { Main, AppBar, AppView, Button, Card, SidePanel } from '@aragon/ui'
-import styled from 'styled-components'
+import { Main, AppBar, AppView, Button, Card, SidePanel, Text } from '@aragon/ui'
+import styled, { css }  from 'styled-components'
 import IconPencil from './shared/assets/IconPencil'
-
+import { theme } from '@aragon/ui'
 import PanelContent from './components/PanelContent'
 import Preview from './components/Preview'
 
@@ -25,30 +25,34 @@ const cardsData = {
   },
 }
 
-const Widget = ({ id, title, content, handleClick }) => (
+const Widget = ({ id, title, content, handleClick , active }) => (
   <StyledCard height="fit-content">
     <CardContent>
-      <EditButton onClick={handleClick(id)}>
+      <EditButton mode="text" onClick={handleClick(id)} active={active}>
         <IconPencil />
       </EditButton>
-      <h1>{title}</h1>
+      <Text size="xxlarge" style={{display:'block',paddingBottom:'10px',paddingRight: '50px'}}>{title}</Text>
       <Preview content={content} />
     </CardContent>
   </StyledCard>
 )
 
 function App() {
-  const [panelVisible, setPanelVisible] = useState(true)
+  const [panelVisible, setPanelVisible] = useState(false)
+  const [editMode, setEditMode] = useState(false)
   // const {api, appState } = useAragonApi()
   // const {count, syncing } = appState
   const handleClick = param => e => {
-    // console.log('Event', e)
-    console.log('Param', param)
     setPanelVisible(true)
   }
 
   const closePanel = () => {
     setPanelVisible(false)
+  }
+
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode)
   }
 
   return (
@@ -58,7 +62,9 @@ function App() {
           appBar={
             <AppBar
               title="Welcome!"
-              endContent={<Button mode="strong">Edit Page</Button>}
+              endContent={
+                <Button mode={editMode?'outline':'strong'} onClick={toggleEditMode}>{editMode?'Cancel and Exit':'Edit Page'}</Button>
+              }
             />
           }
         >
@@ -68,12 +74,14 @@ function App() {
               title={cardsData.left.title}
               content={cardsData.left.content}
               handleClick={handleClick}
+              active={editMode}
             />
             <Widget
               id={1}
               title={cardsData.right.title}
               content={cardsData.right.content}
               handleClick={handleClick}
+              active={editMode}
             />
           </WidgetsLayout>
         </AppView>
@@ -93,8 +101,6 @@ function App() {
 
 const BaseLayout = styled.div`
   display: flex;
-  /* align-items: center;
-    justify-content: center; */
   height: 100vh;
   flex-direction: column;
 `
@@ -137,20 +143,34 @@ const SidePanelContainer = styled.div`
   }
 `
 
-
-
 const StyledCard = styled(Card)`
   width: 100%;
   margin-bottom: 30px;
+  position:relative;
 `
 
-const EditButton = styled.span`
+const EditButton = styled(Button)`
+  position:absolute;
+  right:0;
+  top:0;
   opacity: 0;
   transition: opacity 0.25s;
-
-  ${StyledCard}:hover & {
-    opacity: 1;
+  color:30px;
+  z-index: -999;
+  padding:18px;
+  margin:10px;
+  > svg{
+    transition: fill 0.3s ease;
   }
+
+  :hover> svg{
+    fill: ${theme.accent};
+  }
+
+  ${props => props.active && css`
+    opacity: 1;
+    z-index: 1;
+  `}
 `
 // const Syncing = styled.div.attrs({children: 'Syncing…' })`
 //   position: absolute;

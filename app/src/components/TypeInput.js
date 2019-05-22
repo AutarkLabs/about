@@ -10,7 +10,7 @@ const TypeInput = ({ value, onChange }) => (
         'IPFS hash (.md file)',
       ]}
       active={value}
-      onChange={(index) => {console.log(index);onChange(index)}}
+      onChange={(index) => {onChange(index)}}
     />
   </Field>
 )

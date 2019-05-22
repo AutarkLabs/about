@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import Editor from './Editor'
 import Preview from './Preview'
+import {SideBarScrollbarContainer} from '../styles'
 
 const EditorTabView = ({
   handleEditorChange,
@@ -28,15 +29,19 @@ const EditorTabView = ({
         height: '100%',
       }}
     >
-      {screenIndex === 0 && (
-        <Editor
-          instance={instance}
-          content={unsavedText}
-          onChange={handleEditorChange}
-          onCodeMirrorInit={onCodeMirrorInit}
-        />
-      )}
-      {screenIndex === 1 && <Preview content={unsavedText} />}
+      <SideBarScrollbarContainer>
+
+        {screenIndex === 0 && (
+          <Editor
+            instance={instance}
+            content={unsavedText}
+            onChange={handleEditorChange}
+            onCodeMirrorInit={onCodeMirrorInit}
+          />
+        )}
+
+        {screenIndex === 1 && <Preview content={unsavedText} />}
+      </SideBarScrollbarContainer>
     </div>
   </div>
 )

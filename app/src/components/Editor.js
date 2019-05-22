@@ -7,7 +7,6 @@ import 'codemirror/theme/elegant.css'
 // ambiance ambiance-mobile elegant idea neat neo ttcn xq-light 3024-day
 
 // import dompurify from 'dompurify';
-import {SideBarScrollbarContainer} from '../styles'
 
 const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   useEffect(() => {
@@ -15,7 +14,6 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   }, [instance])
 
   return (
-    <SideBarScrollbarContainer>
       <CodeMirror
         value={content}
         options={{
@@ -34,7 +32,6 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
           onChange(value)
         }}
       />
-    </SideBarScrollbarContainer>
   )
 }
 
