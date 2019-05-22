@@ -7,23 +7,77 @@ import { theme } from '@aragon/ui'
 import PanelContent from './components/PanelContent'
 import Preview from './components/Preview'
 
-const cardsData = {
-  left: {
+const cards = [
+  {
     title: 'Welcome to Autark',
-    content: `# Hello
+    content: `[![Image of Yaktocat](https://static.wixstatic.com/media/aa0ae4_df121a9c9e8f464a97abfbcf2f77318d~mv2.png/v1/fill/w_180,h_37,al_c,q_80,usm_0.66_1.00_0.01/autarklogo.webp)](https://www.autark.xyz)
 
-## This is markdown
+[Visit website 🦄 🦅 🚀](https://www.autark.xyz)
 
-  - Ok
-  - * Bold *
-      - ** Italics ** Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker - autonomy, and access to tools that support the global development of complex mega - projects.< br > To us, complex mega - projects can mean autonomous cities, next - generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships.There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.< br > We will be calling this Aragon suite of project and human - coordination tools Open Enterprise, as DAOs that are solving mega - projects are the definition of an open enterprise.< br > In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become(or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80 % use case.<br>The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.<br>Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.`,
+Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker - autonomy, and access to tools that support the global development of complex mega - projects.
+    
+To us, complex mega - projects can mean autonomous cities, next - generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.
+
+We will be calling this Aragon suite of project and human - coordination tools Open Enterprise, as DAOs that are solving mega - projects are the definition of an open enterprise.
+
+In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become(or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80 % use case.
+
+The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.
+**Privacy**, **internationalization**, and **accessibility** are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.
+
+## Our Featured Work
+    
+- Projects
+- Allocations
+- Address Book
+- Range Voting
+- Rewards
+- [x] Completed
+- [ ] Home
+- ~~something~~
+  
+  
+
+
+\`\`\`javascript
+for (var i = 0; i < items.length; i++) {
+    console.log(items[i], i); // log them
+}
+\`\`\`
+
+### And now:
+
+
+\`\`\`html
+<head>
+  <script>
+    const myFunc = 5;
+    function hello(param1) {
+      doSomething()
+    }
+  </script>
+</head>
+<body>
+  <h1>Hello</h1>
+  <div class='hello' style="width=5px;">
+    Content
+  </div>
+</body>
+\`\`\`
+`,
   },
-  right: {
+  {
+    title: 'Welcome to Autark',
     title: 'More text goes here',
     content:
-      'Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.<br>To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.<br>We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.<br>In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become (or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80% use case.<br>The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.<br>Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.',
-  },
-}
+      `Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.
+      To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.
+      We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.
+      In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become (or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80% use case.
+      The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.
+      Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.`,
+  }
+]
 
 const Widget = ({ id, title, content, handleClick , active }) => (
   <StyledCard height="fit-content">
@@ -40,16 +94,17 @@ const Widget = ({ id, title, content, handleClick , active }) => (
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const [selectedWidget, seSelectedWidget] = useState(0)
   // const {api, appState } = useAragonApi()
   // const {count, syncing } = appState
-  const handleClick = param => e => {
+  const handleClick = index => e => {
+    seSelectedWidget(index);
     setPanelVisible(true)
   }
 
   const closePanel = () => {
     setPanelVisible(false)
   }
-
 
   const toggleEditMode = () => {
     setEditMode(!editMode)
@@ -71,15 +126,15 @@ function App() {
           <WidgetsLayout>
             <Widget
               id={0}
-              title={cardsData.left.title}
-              content={cardsData.left.content}
+              title={cards[0].title}
+              content={cards[0].content}
               handleClick={handleClick}
               active={editMode}
             />
             <Widget
               id={1}
-              title={cardsData.right.title}
-              content={cardsData.right.content}
+              title={cards[1].title}
+              content={cards[1].content}
               handleClick={handleClick}
               active={editMode}
             />
@@ -92,7 +147,8 @@ function App() {
         title="Content Block Editor"
       >
         <SidePanelContainer>
-          <PanelContent />
+          
+          <PanelContent title={cards[selectedWidget].title} content={cards[selectedWidget].content}/>
         </SidePanelContainer>
       </SidePanel>
     </Main>

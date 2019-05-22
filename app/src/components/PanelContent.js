@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -10,73 +10,13 @@ import EditorTabView from './EditorTabView'
 import {SideBarScrollbarContainer} from '../styles'
 import EditorTextInput from './Utils/EditorTextInput'
 
-const mockedText = `GitHub Flavored Markdown
-========================
-
-# Title
-
-## Subtitle
-  
-### H3
-  
-- List
-- Item
-- Other
-  
-- [ ] Task
-- [x] Completed
-  
-[Link](#)
-  
-*italic!* 🦄 🦅 🚀
-:+1:
-  
-**bold**
-  
-~~something~~
-
-\`\`\`javascript
-for (var i = 0; i < items.length; i++) {
-    console.log(items[i], i); // log them
-}
-\`\`\`
-
-### And now:
-
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
-
-\`\`\`html
-<head>
-  <script>
-    const myFunc = 5;
-    function hello(param1) {
-      doSomething()
-    }
-  </script>
-</head>
-<body>
-  <h1>Hello</h1>
-  <div class='hello' style="width=5px;">
-    Content
-  </div>
-</body>
-\`\`\`
-  
-[I'm an inline-style link](https://www.google.com)
-
-Here's our logo (hover to see the title text):
-![alt text][logo]
-
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
-`
-
 let codemirrorInitialInstance = null
 let editorTypeInitial = 0
 let externalUrlInitial = ""
 let ipfsHashInitial = ""
 
-const PanelContent = () => {
-  const [unsavedText, setUnsavedText] = useState(mockedText)
+const PanelContent = ({content}) => {
+  const [unsavedText, setUnsavedText] = useState(content)
   const [screenIndex, setScreenIndex] = useState(0)
   const [editorType, setEditorType] = useState(editorTypeInitial)
   const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
@@ -85,6 +25,9 @@ const PanelContent = () => {
   const [codemirrorInstance, setCodemirrorInstance] = useState(
     codemirrorInitialInstance
   )
+  useEffect(() => {
+    setUnsavedText(content)
+  })
 
   const handleChange = _screenIndex => {
     setScreenIndex(_screenIndex)
