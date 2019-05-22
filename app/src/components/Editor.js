@@ -4,6 +4,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/gfm/gfm'
 import 'codemirror/theme/idea.css'
+import 'codemirror/mode/javascript/javascript'
 // ambiance ambiance-mobile elegant idea neat neo ttcn xq-light 3024-day
 
 // import dompurify from 'dompurify';
