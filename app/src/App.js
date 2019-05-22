@@ -61,7 +61,7 @@ function App() {
         <AppView
           appBar={
             <AppBar
-              title="Welcome!"
+              title="Home"
               endContent={
                 <Button mode={editMode?'outline':'strong'} onClick={toggleEditMode}>{editMode?'Cancel and Exit':'Edit Page'}</Button>
               }
