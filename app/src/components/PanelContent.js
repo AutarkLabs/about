@@ -10,27 +10,59 @@ import EditorTabView from './EditorTabView'
 import {SideBarScrollbarContainer} from '../styles'
 import EditorTextInput from './Utils/EditorTextInput'
 
-const mockedText = `# Title
+const mockedText = `
+GitHub Flavored Markdown
+========================
+
+# Title
 
 ## Subtitle
-
+  
 ### H3
-
+  
 - List
 - Item
 - Other
-
+  
 - [ ] Task
 - [x] Completed
-
+  
 [Link](#)
+  
+*italic!* 🦄 🦅 🚀
+:+1:
+  
+**bold**
+  
+~~something~~
 
-*Emojis!* 🦄 🦅 🚀
+\`\`\`javascript
+for (var i = 0; i < items.length; i++) {
+    console.log(items[i], i); // log them
+}
+\`\`\`
 
-**italics**
+### And now:
 
-__something__
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
+\`\`\`html
+<head>
+  <script>
+    const myFunc = 5;
+    function hello(param1) {
+      doSomething()
+    }
+  </script>
+</head>
+<body>
+  <h1>Hello</h1>
+  <div class='hello' style="width=5px;">
+    Content
+  </div>
+</body>
+\`\`\`
+  
 [I'm an inline-style link](https://www.google.com)
 
 Here's our logo (hover to see the title text):
@@ -130,7 +162,7 @@ const PanelContent = () => {
       {editorType=== 2 && 
         <SideBarScrollbarContainer>
           <EditorTextInput
-            hash="Hash"
+            label="Hash"
             value={ipfsHash}
             onChange={handleIpfsHashChange}
           />
@@ -164,13 +196,12 @@ PanelContent.propTypes = {
 const PanelContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height:100%;
+  height: 100%;
 `
-
 
 const BottomPanel = styled.div`
   flex: 0 0 auto;
-  padding-bottom:15px;
+  padding-bottom: 15px;
 `
 const TopPanel = styled.div`
   flex: 0 0 auto;
