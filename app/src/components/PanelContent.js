@@ -10,8 +10,7 @@ import EditorTabView from './EditorTabView'
 import {SideBarScrollbarContainer} from '../styles'
 import EditorTextInput from './Utils/EditorTextInput'
 
-const mockedText = `
-GitHub Flavored Markdown
+const mockedText = `GitHub Flavored Markdown
 ========================
 
 # Title
@@ -117,6 +116,24 @@ const PanelContent = () => {
     )
   }
 
+  const saveBlock = () => {
+    let ipfsAddr = "";
+    switch(editorType){
+      case 0:
+          ipfsAddr = "IPFSADDR";
+        break;
+      case 1:
+          ipfsAddr = externalUrl;
+        break;
+      case 2:
+          ipfsAddr = ipfsHash;
+        break
+        default:
+          break
+    }
+    console.log(ipfsAddr);
+  }
+
   return (
     <PanelContainer>
       <TopPanel>
@@ -141,38 +158,37 @@ const PanelContent = () => {
         }
       </TopPanel>
       <CenterPanel>
-      {editorType=== 0 && 
-        <EditorTabView
-          handleEditorChange={handleEditorChange}
-          onCodeMirrorInit={onCodeMirrorInit}
-          screenIndex={screenIndex}
-          unsavedText={unsavedText}
-          instance={codemirrorInstance}
-        />
-      }
-      {editorType=== 1 && 
-        <SideBarScrollbarContainer>
-          <EditorTextInput
-            label="Url"
-            value={externalUrl}
-            onChange={handleExternalUrlChange}
+        {editorType=== 0 && 
+          <EditorTabView
+            handleEditorChange={handleEditorChange}
+            onCodeMirrorInit={onCodeMirrorInit}
+            screenIndex={screenIndex}
+            unsavedText={unsavedText}
+            instance={codemirrorInstance}
           />
-        </SideBarScrollbarContainer>
-      }
-      {editorType=== 2 && 
-        <SideBarScrollbarContainer>
-          <EditorTextInput
-            label="Hash"
-            value={ipfsHash}
-            onChange={handleIpfsHashChange}
-          />
-        </SideBarScrollbarContainer>
-      }
-        
+        }
+        {editorType=== 1 && 
+          <SideBarScrollbarContainer>
+            <EditorTextInput
+              label="Url"
+              value={externalUrl}
+              onChange={handleExternalUrlChange}
+            />
+          </SideBarScrollbarContainer>
+        }
+        {editorType=== 2 && 
+          <SideBarScrollbarContainer>
+            <EditorTextInput
+              label="Hash"
+              value={ipfsHash}
+              onChange={handleIpfsHashChange}
+            />
+          </SideBarScrollbarContainer>
+        }
       </CenterPanel>
       <BottomPanel>
         <SidePanelSeparator style={{ margin: '0 -30px 15px' }} />
-        <Button mode="strong" wide>
+        <Button mode="strong" wide onClick={saveBlock}>
           Update
         </Button>
       </BottomPanel>

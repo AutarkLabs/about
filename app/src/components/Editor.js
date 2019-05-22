@@ -22,6 +22,7 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
           mode: 'gfm',
           theme: 'elegant',
           lineWrapping: true,
+          autofocus: true,
         }}
         editorDidMount={editor => {
           onCodeMirrorInit(editor)
