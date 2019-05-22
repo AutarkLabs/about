@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/markdown/markdown'
-import 'codemirror/theme/material.css'
+// Dark mode css
+//import 'codemirror/theme/material.css'
 
 // import dompurify from 'dompurify';
 
@@ -13,12 +14,20 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   }, [instance])
 
   return (
-    <div>
+    <div style={{
+        width: '100%',
+        height: '100%',
+        bottom: '0',
+        overflowY: 'auto',
+        padding: '30px',
+      }}
+    >
       <CodeMirror
         value={content}
         options={{
           mode: 'markdown',
           theme: 'material',
+          lineWrapping: true,
         }}
         editorDidMount={editor => {
           onCodeMirrorInit(editor)
