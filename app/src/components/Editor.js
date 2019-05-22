@@ -1,30 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Controlled as CodeMirror } from 'react-codemirror2'
-
-require('codemirror/lib/codemirror.css')
-require('codemirror/mode/markdown/markdown')
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/markdown/markdown'
+import 'codemirror/theme/material.css'
 
 // import dompurify from 'dompurify';
 
-const Editor = props => {
+const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
+  useEffect(() => {
+    instance && instance.setSize('100%', '100%')
+  }, [instance])
+
   return (
     <div>
       <CodeMirror
-        style={{ width: '100%' }}
-        value={props.content}
+        value={content}
         options={{
           mode: 'markdown',
           theme: 'material',
         }}
         editorDidMount={editor => {
-          props.onCodeMirrorInit(editor)
+          onCodeMirrorInit(editor)
         }}
         onBeforeChange={(editor, data, value) => {
-          props.onChange(value)
+          onChange(value)
         }}
         onChange={(editor, data, value) => {
-          props.onChange(value)
+          onChange(value)
         }}
       />
     </div>

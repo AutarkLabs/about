@@ -70,7 +70,7 @@ const PanelContent = () => {
         />
         <SidePanelSeparator
           style={{
-            margin: '-31px -30px 15px',
+            margin: '-31px -30px 0',
           }}
         />
       </TopPanel>
@@ -80,10 +80,11 @@ const PanelContent = () => {
           onCodeMirrorInit={onCodeMirrorInit}
           screenIndex={screenIndex}
           unsavedText={unsavedText}
+          instance={codemirrorInstance}
         />
       </CenterPanel>
       <BottomPanel>
-        <SidePanelSeparator style={{ margin: '15px -30px' }} />
+        <SidePanelSeparator style={{ margin: '0 -30px 15px' }} />
         <Button mode="strong" wide>
           Update
         </Button>
@@ -91,6 +92,28 @@ const PanelContent = () => {
     </PanelContainer>
   )
 }
+
+const PanelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+`
+
+const BottomPanel = styled.div`
+  flex: 0 0 auto;
+  background: red;
+`
+const TopPanel = styled.div`
+  flex: 0 0 auto;
+  background: red;
+`
+
+const CenterPanel = styled.div`
+  flex: 1 1 auto;
+  background: green;
+`
 
 PanelContent.propTypes = {
   // onChange: PropTypes.func.isRequired,
