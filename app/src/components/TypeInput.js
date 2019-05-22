@@ -1,7 +1,7 @@
 import React from 'react'
 import { DropDown, Field } from '@aragon/ui'
 
-const TypeInput = () => (
+const TypeInput = ({ value, onChange }) => (
   <Field label="Type">
     <DropDown
       items={[
@@ -9,8 +9,8 @@ const TypeInput = () => (
         'External URL (.md file)',
         'IPFS hash (.md file)',
       ]}
-      active={0}
-      onChange={() => {}}
+      active={value}
+      onChange={(index) => {console.log(index);onChange(index)}}
     />
   </Field>
 )

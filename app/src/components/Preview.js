@@ -4,22 +4,15 @@ import styled from 'styled-components'
 import { theme } from '@aragon/ui'
 
 import MDReactComponent from 'markdown-react-js'
+import {SideBarScrollbarContainer} from '../styles'
 
 const Preview = ({ content }) => {
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        bottom: '0',
-        overflowY: 'auto',
-        padding: '30px',
-      }}
-    >
+    <SideBarScrollbarContainer>
       <MarkdownWrapper>
         <MDReactComponent text={content} />
       </MarkdownWrapper>
-    </div>
+    </SideBarScrollbarContainer>
   )
 }
 

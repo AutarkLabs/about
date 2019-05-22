@@ -7,6 +7,7 @@ import 'codemirror/mode/markdown/markdown'
 //import 'codemirror/theme/material.css'
 
 // import dompurify from 'dompurify';
+import {SideBarScrollbarContainer} from '../styles'
 
 const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   useEffect(() => {
@@ -14,14 +15,7 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   }, [instance])
 
   return (
-    <div style={{
-        width: '100%',
-        height: '100%',
-        bottom: '0',
-        overflowY: 'auto',
-        padding: '30px',
-      }}
-    >
+    <SideBarScrollbarContainer>
       <CodeMirror
         value={content}
         options={{
@@ -39,7 +33,7 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
           onChange(value)
         }}
       />
-    </div>
+    </SideBarScrollbarContainer>
   )
 }
 

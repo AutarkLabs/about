@@ -7,6 +7,8 @@ import { Button, SidePanelSeparator } from '@aragon/ui'
 import TypeInput from './TypeInput'
 import EditorTabBar from './EditorTabBar'
 import EditorTabView from './EditorTabView'
+import {SideBarScrollbarContainer} from '../styles'
+import EditorTextInput from './Utils/EditorTextInput'
 
 const mockedText = `# Title
 
@@ -38,10 +40,16 @@ Here's our logo (hover to see the title text):
 `
 
 let codemirrorInitialInstance = null
+let editorTypeInitial = 1
+let externalUrlInitial = ""
+let ipfsHashInitial = ""
 
 const PanelContent = () => {
   const [unsavedText, setUnsavedText] = useState(mockedText)
   const [screenIndex, setScreenIndex] = useState(0)
+  const [editorType, setEditorType] = useState(editorTypeInitial)
+  const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
+  const [ipfsHash, setIpfsHash] = useState(ipfsHashInitial)
 
   const [codemirrorInstance, setCodemirrorInstance] = useState(
     codemirrorInitialInstance
@@ -55,9 +63,22 @@ const PanelContent = () => {
     setUnsavedText(_unsavedText)
   }
 
+  const handleEditorTypeChange = _editorType => {
+    setEditorType(_editorType)
+  }
+
+  const handleExternalUrlChange = _externalUrl => {
+    setExternalUrl(_externalUrl)
+  }
+  
+  const handleIpfsHashChange = _ipfsHash => {
+    setIpfsHash(_ipfsHash)
+  }
+
   const onCodeMirrorInit = _codemirrorInstance => {
     setCodemirrorInstance(_codemirrorInstance)
   }
+
   const setSelectionBold = () => {
     codemirrorInstance.doc.replaceSelection(
       '**' + codemirrorInstance.doc.getSelection() + '**'
@@ -67,20 +88,28 @@ const PanelContent = () => {
   return (
     <PanelContainer>
       <TopPanel>
-        <TypeInput />
+        <TypeInput 
+          value={editorType}
+          onChange={handleEditorTypeChange}
+        />
         <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
-        <EditorTabBar
-          handleChange={handleChange}
-          screenIndex={screenIndex}
-          setSelectionBold={setSelectionBold}
-        />
-        <SidePanelSeparator
-          style={{
-            margin: '-31px -30px 0',
-          }}
-        />
+        {editorType=== 0 && 
+          <div>
+            <EditorTabBar
+              handleChange={handleChange}
+              screenIndex={screenIndex}
+              setSelectionBold={setSelectionBold}
+            />
+            <SidePanelSeparator
+              style={{
+                margin: '-31px -30px 0',
+              }}
+            />
+          </div>
+        }
       </TopPanel>
       <CenterPanel>
+      {editorType=== 0 && 
         <EditorTabView
           handleEditorChange={handleEditorChange}
           onCodeMirrorInit={onCodeMirrorInit}
@@ -88,6 +117,26 @@ const PanelContent = () => {
           unsavedText={unsavedText}
           instance={codemirrorInstance}
         />
+      }
+      {editorType=== 1 && 
+        <SideBarScrollbarContainer>
+          <EditorTextInput
+            label="Url"
+            value={externalUrl}
+            onChange={handleExternalUrlChange}
+          />
+        </SideBarScrollbarContainer>
+      }
+      {editorType=== 2 && 
+        <SideBarScrollbarContainer>
+          <EditorTextInput
+            hash="Hash"
+            value={ipfsHash}
+            onChange={handleIpfsHashChange}
+          />
+        </SideBarScrollbarContainer>
+      }
+        
       </CenterPanel>
       <BottomPanel>
         <SidePanelSeparator style={{ margin: '0 -30px 15px' }} />

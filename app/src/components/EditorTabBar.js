@@ -14,21 +14,21 @@ import { Button, TabBar } from '@aragon/ui'
 
 const EditorTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
   <TabBarWrapper>
-            <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingRight: '20px',
-        }}
-      >
-        <TabBar
-          items={['Write', 'Preview']}
-          selected={screenIndex}
-          onChange={handleChange}
-        />
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: '20px',
+      }}
+    >
+      <TabBar
+        items={['Write', 'Preview']}
+        selected={screenIndex}
+        onChange={handleChange}
+      />
 
-    {screenIndex===0&&
+      {screenIndex===0&&
         <EditToolBar>
           <EditToolBarButton onClick={setSelectionBold} compact>
             <Octicon icon={TextSize} />
@@ -54,10 +54,8 @@ const EditorTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
           </EditToolBarButton>
           <EditToolBarSeparator />
         </EditToolBar>
-  
-  }
-        </div>
-
+      }
+    </div>
   </TabBarWrapper>
 )
 
