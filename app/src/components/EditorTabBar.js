@@ -14,45 +14,50 @@ import { Button, TabBar } from '@aragon/ui'
 
 const EditorTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
   <TabBarWrapper>
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingRight: '20px',
-      }}
-    >
-      <TabBar
-        items={['Write', 'Preview']}
-        selected={screenIndex}
-        onChange={handleChange}
-      />
-      <EditToolBar>
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={TextSize} />
-        </EditToolBarButton>
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={Bold} />
-        </EditToolBarButton>
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={Italic} />
-        </EditToolBarButton>
-        <EditToolBarSeparator />
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={Quote} />
-        </EditToolBarButton>
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={Code} />
-        </EditToolBarButton>
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={Link} />
-        </EditToolBarButton>
-        <EditToolBarButton onClick={setSelectionBold} compact>
-          <Octicon icon={ListUnordered} />
-        </EditToolBarButton>
-        <EditToolBarSeparator />
-      </EditToolBar>
-    </div>
+            <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingRight: '20px',
+        }}
+      >
+        <TabBar
+          items={['Write', 'Preview']}
+          selected={screenIndex}
+          onChange={handleChange}
+        />
+
+    {screenIndex===0&&
+        <EditToolBar>
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={TextSize} />
+          </EditToolBarButton>
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={Bold} />
+          </EditToolBarButton>
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={Italic} />
+          </EditToolBarButton>
+          <EditToolBarSeparator />
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={Quote} />
+          </EditToolBarButton>
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={Code} />
+          </EditToolBarButton>
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={Link} />
+          </EditToolBarButton>
+          <EditToolBarButton onClick={setSelectionBold} compact>
+            <Octicon icon={ListUnordered} />
+          </EditToolBarButton>
+          <EditToolBarSeparator />
+        </EditToolBar>
+  
+  }
+        </div>
+
   </TabBarWrapper>
 )
 
