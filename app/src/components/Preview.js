@@ -13,6 +13,7 @@ const Preview = ({ content }) => {
         height: '100%',
         bottom: '0',
         overflowY: 'auto',
+        padding: '30px',
       }}
     >
       <MarkdownWrapper>

@@ -15,7 +15,6 @@ const EditorTabView = ({
     style={{
       flex: '1 1 auto',
       margin: '0',
-      background: '#111',
       padding: '0',
       height: '100%',
     }}

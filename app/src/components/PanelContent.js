@@ -8,27 +8,33 @@ import TypeInput from './TypeInput'
 import EditorTabBar from './EditorTabBar'
 import EditorTabView from './EditorTabView'
 
-const mockedText = `
-  # Title
+const mockedText = `# Title
 
-  ## Subtitle
-  
-  ### H3
-  
-  - List
-  - Item
-  - Other
-  
-  - [ ] Task
-  - [x] Completed
-  
-  [Link](#)
-  
-  *Emojis!* 🦄 🦅 🚀
-  
-  **italics**
-  
-  __something__
+## Subtitle
+
+### H3
+
+- List
+- Item
+- Other
+
+- [ ] Task
+- [x] Completed
+
+[Link](#)
+
+*Emojis!* 🦄 🦅 🚀
+
+**italics**
+
+__something__
+
+[I'm an inline-style link](https://www.google.com)
+
+Here's our logo (hover to see the title text):
+![alt text][logo]
+
+[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
 `
 
 let codemirrorInitialInstance = null
@@ -125,6 +131,8 @@ const CenterPanel = styled.div`
   flex: 1 1 auto;
   overflow-y: auto;
   margin-right: -30px;
+  margin-left: -30px;
+  z-index: 1;
 `
 
 export default PanelContent
