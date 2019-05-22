@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import { Button, SidePanelSeparator } from '@aragon/ui'
 
@@ -29,6 +30,7 @@ const mockedText = `
   
   __something__
 `
+
 let codemirrorInitialInstance = null
 
 const PanelContent = () => {
@@ -57,36 +59,36 @@ const PanelContent = () => {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: '1',
-      }}
-    >
-      <TypeInput />
-      <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
-      <EditorTabBar
-        handleChange={handleChange}
-        screenIndex={screenIndex}
-        setSelectionBold={setSelectionBold}
-      />
-      <SidePanelSeparator
-        style={{
-          margin: '-31px -30px 15px',
-        }}
-      />
-      <EditorTabView
-        handleEditorChange={handleEditorChange}
-        onCodeMirrorInit={onCodeMirrorInit}
-        screenIndex={screenIndex}
-        unsavedText={unsavedText}
-      />
-      <SidePanelSeparator style={{ margin: '15px -30px' }} />
-      <Button mode="strong" wide>
-        Update
-      </Button>
-    </div>
+    <PanelContainer>
+      <TopPanel>
+        <TypeInput />
+        <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
+        <EditorTabBar
+          handleChange={handleChange}
+          screenIndex={screenIndex}
+          setSelectionBold={setSelectionBold}
+        />
+        <SidePanelSeparator
+          style={{
+            margin: '-31px -30px 15px',
+          }}
+        />
+      </TopPanel>
+      <CenterPanel>
+        <EditorTabView
+          handleEditorChange={handleEditorChange}
+          onCodeMirrorInit={onCodeMirrorInit}
+          screenIndex={screenIndex}
+          unsavedText={unsavedText}
+        />
+      </CenterPanel>
+      <BottomPanel>
+        <SidePanelSeparator style={{ margin: '15px -30px' }} />
+        <Button mode="strong" wide>
+          Update
+        </Button>
+      </BottomPanel>
+    </PanelContainer>
   )
 }
 
@@ -102,5 +104,26 @@ PanelContent.propTypes = {
 //     this.setState({ ...initialState })
 //   }
 // }
+
+const PanelContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height:100%;
+`
+
+
+const BottomPanel = styled.div`
+  flex: 0 0 auto;
+  padding-bottom:15px;
+`
+const TopPanel = styled.div`
+  flex: 0 0 auto;
+`
+
+const CenterPanel = styled.div`
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-right: -30px;
+`
 
 export default PanelContent

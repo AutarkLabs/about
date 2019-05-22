@@ -71,6 +71,7 @@ const EditToolBarButton = styled(Button)`
   padding: 0;
   margin: 0;
 `
+
 const EditToolBarSeparator = styled.div`
   display: inline-block;
   width: 10px;

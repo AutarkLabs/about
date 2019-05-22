@@ -83,7 +83,9 @@ function App() {
         onClose={closePanel}
         title="Content Block Editor"
       >
-        <PanelContent />
+        <SidePanelContainer>
+          <PanelContent />
+        </SidePanelContainer>
       </SidePanel>
     </Main>
   )
@@ -117,6 +119,25 @@ const WidgetsLayout = styled.div`
 const CardContent = styled.div`
   padding: 24px;
 `
+
+// With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
+const SidePanelContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  left: 30px;
+  top: 60px;
+
+  @media only screen and (max-height: 380px) {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+  }
+`
+
+
 
 const StyledCard = styled(Card)`
   width: 100%;
