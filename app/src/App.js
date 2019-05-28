@@ -142,32 +142,6 @@ We're going on tour! Catch us at these locations.
 |  2019-06-07 | Oslo   |
 
 Would you like us to come to your city? [Get in touch](mailto:autark@autark.xyz)
-
-# Todo
-
-- [ ] This
-- [ ] That
-- [x] The other
-
-# Yalda's test
-
-0. Item 1
-1. Test
-2. Test
-   - [ ] bullet under list
-      - [ ] bullet
-3. Test
-4. Test
-   1. Test
-
-* Test
-* Test
-  * Test
-1. Test
-2. Test
-   * Test
-     -  bullet
-
 `,
   },
   {
