@@ -7,9 +7,9 @@ import MDReactComponent from 'markdown-react-js'
 
 const Preview = ({ content }) => {
   return (
-      <MarkdownWrapper>
-        <MDReactComponent text={content} />
-      </MarkdownWrapper>
+    <MarkdownWrapper>
+      <MDReactComponent text={content} />
+    </MarkdownWrapper>
   )
 }
 
