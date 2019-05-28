@@ -35,6 +35,8 @@ The Open Enterprise roadmap will be a continuation of the Planning Suite, with a
 
 ## Our Featured Work
 
+Here are some of our efforts.
+
 - Projects
 - Allocations
 - Address Book
@@ -44,6 +46,7 @@ The Open Enterprise roadmap will be a continuation of the Planning Suite, with a
 - [ ] Home
 - ~~something~~
 
+We might do some other stuff someday.
 
 ## Bad things
 
@@ -117,10 +120,28 @@ This is a complex nested list with images, pushing Markdown to its limits:
      1. Select the dropdown
      2. Pick someone from your address book
 
+        > creativity and hard work is driven by ambition. And ambition isn’t helped by constant affirmation. You have to almost get to a place where you’re unhappy with everything.
+        >
+        >> quotes in quotes in quotes
+        >>> omg
+
    * you can add new addresses
 
      ![screenshot of adding a new address](https://static.wixstatic.com/media/aa0ae4_03775d51618044b1999938eab7ded51e~mv2_d_2732_1760_s_2.png/v1/fill/w_1684,h_1084,al_c,q_85,usm_0.66_1.00_0.01/address2.webp)
 
+
+# Tour dates
+
+We're going on tour! Catch us at these locations.
+
+| When        | Where  |
+|-------------|--------|
+|  2019-05-30 | Paris  |
+|  2019-06-01 | London |
+|  2019-06-03 | Madrid |
+|  2019-06-07 | Oslo   |
+
+Would you like us to come to your city? [Get in touch](mailto:autark@autark.xyz)
 `,
   },
   {
