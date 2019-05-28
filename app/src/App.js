@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
 // import { useAragonApi } from '@aragon/api-react'
-import { Main, AppBar, AppView, Button, Card, SidePanel, Text } from '@aragon/ui'
-import styled, { css }  from 'styled-components'
+import {
+  Main,
+  AppBar,
+  AppView,
+  Button,
+  Card,
+  SidePanel,
+  Text,
+} from '@aragon/ui'
+import styled, { css } from 'styled-components'
 import IconPencil from './shared/assets/IconPencil'
 import { theme } from '@aragon/ui'
 import PanelContent from './components/PanelContent'
@@ -15,7 +23,7 @@ const cards = [
 [Visit website 🦄 🦅 🚀](https://www.autark.xyz)
 
 Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker - autonomy, and access to tools that support the global development of complex mega - projects.
-    
+
 To us, complex mega - projects can mean autonomous cities, next - generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.
 
 We will be calling this Aragon suite of project and human - coordination tools Open Enterprise, as DAOs that are solving mega - projects are the definition of an open enterprise.
@@ -26,7 +34,7 @@ The Open Enterprise roadmap will be a continuation of the Planning Suite, with a
 **Privacy**, **internationalization**, and **accessibility** are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.
 
 ## Our Featured Work
-    
+
 - Projects
 - Allocations
 - Address Book
@@ -116,23 +124,31 @@ This is a complex nested list with images, pushing Markdown to its limits:
   {
     title: 'Welcome to Autark',
     title: 'More text goes here',
-    content:
-      `Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.
+    content: `Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.
       To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.
       We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.
       In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become (or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80% use case.
       The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.
       Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.`,
-  }
+  },
 ]
 
-const Widget = ({ id, title, content, handleClick , active }) => (
+const Widget = ({ id, title, content, handleClick, active }) => (
   <StyledCard height="fit-content">
     <CardContent>
       <EditButton mode="text" onClick={handleClick(id)} active={active}>
         <IconPencil />
       </EditButton>
-      <Text size="xxlarge" style={{display:'block',paddingBottom:'10px',paddingRight: '50px'}}>{title}</Text>
+      <Text
+        size="xxlarge"
+        style={{
+          display: 'block',
+          paddingBottom: '10px',
+          paddingRight: '50px',
+        }}
+      >
+        {title}
+      </Text>
       <Preview content={content} />
     </CardContent>
   </StyledCard>
@@ -145,7 +161,7 @@ function App() {
   // const {api, appState } = useAragonApi()
   // const {count, syncing } = appState
   const handleClick = index => e => {
-    seSelectedWidget(index);
+    seSelectedWidget(index)
     setPanelVisible(true)
   }
 
@@ -165,7 +181,12 @@ function App() {
             <AppBar
               title="Home"
               endContent={
-                <Button mode={editMode?'outline':'strong'} onClick={toggleEditMode}>{editMode?'Cancel and Exit':'Edit Page'}</Button>
+                <Button
+                  mode={editMode ? 'outline' : 'strong'}
+                  onClick={toggleEditMode}
+                >
+                  {editMode ? 'Cancel and Exit' : 'Edit Page'}
+                </Button>
               }
             />
           }
@@ -194,8 +215,10 @@ function App() {
         title="Content Block Editor"
       >
         <SidePanelContainer>
-          
-          <PanelContent title={cards[selectedWidget].title} content={cards[selectedWidget].content}/>
+          <PanelContent
+            title={cards[selectedWidget].title}
+            content={cards[selectedWidget].content}
+          />
         </SidePanelContainer>
       </SidePanel>
     </Main>
@@ -249,31 +272,33 @@ const SidePanelContainer = styled.div`
 const StyledCard = styled(Card)`
   width: 100%;
   margin-bottom: 30px;
-  position:relative;
+  position: relative;
 `
 
 const EditButton = styled(Button)`
-  position:absolute;
-  right:0;
-  top:0;
+  position: absolute;
+  right: 0;
+  top: 0;
   opacity: 0;
   transition: opacity 0.25s;
-  color:30px;
+  color: 30px;
   z-index: -999;
-  padding:18px;
-  margin:10px;
-  > svg{
+  padding: 18px;
+  margin: 10px;
+  > svg {
     transition: fill 0.3s ease;
   }
 
-  :hover> svg{
+  :hover > svg {
     fill: ${theme.accent};
   }
 
-  ${props => props.active && css`
-    opacity: 1;
-    z-index: 1;
-  `}
+  ${props =>
+    props.active &&
+    css`
+      opacity: 1;
+      z-index: 1;
+    `}
 `
 // const Syncing = styled.div.attrs({children: 'Syncing…' })`
 //   position: absolute;
