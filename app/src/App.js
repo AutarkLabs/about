@@ -53,6 +53,8 @@ Our markdown renderer shouldn't put these in as-is, or it would open our users t
 
 <img src="http://badthings.net" />
 
+[This is a malicious link. Click it!](https://mathiasbynens.github.io/rel-noopener/malicious.html)
+
 
 ### And now:
 
