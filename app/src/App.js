@@ -35,18 +35,24 @@ The Open Enterprise roadmap will be a continuation of the Planning Suite, with a
 - [x] Completed
 - [ ] Home
 - ~~something~~
-  
-  
 
+
+## Bad things
+
+Our markdown renderer shouldn't put these in as-is, or it would open our users to cross-site scripting (XSS) attacks.
+
+<script>alert('omg')</script>
+
+<img src="http://badthings.net" />
+
+
+### And now:
 
 \`\`\`javascript
 for (var i = 0; i < items.length; i++) {
     console.log(items[i], i); // log them
 }
 \`\`\`
-
-### And now:
-
 
 \`\`\`html
 <head>
@@ -64,6 +70,47 @@ for (var i = 0; i < items.length; i++) {
   </div>
 </body>
 \`\`\`
+
+## Our offerings
+
+This is a complex nested list with images, pushing Markdown to its limits:
+
+1. **Projects App**
+
+   * Projects can be added by connecting a Github repo
+
+   * Display the repo's issues within Aragon
+
+     ![projects app showing issue detail](https://static.wixstatic.com/media/aa0ae4_dc04b485ae8644f18d9c9deaf9e3c3e3~mv2_d_2732_1760_s_2.png/v1/fill/w_1684,h_1084,al_c,q_85,usm_0.66_1.00_0.01/projects2.webp)
+
+   * curate issues
+
+   * prioritize a roadmap.
+
+     There's so much to say about this. Roadmaps are essential for snackwave live-edge bespoke keffiyeh thundercats. Roof party whatever deep v glossier tumblr raw denim. Adaptogen 8-bit humblebrag heirloom helvetica craft beer bushwick pok pok iceland blue bottle quinoa. Mlkshk glossier air plant thundercats.
+
+     YOLO viral blue bottle, slow-carb four loko occupy forage photo booth beard fanny pack pour-over subway tile. Pug jean shorts artisan, mustache locavore crucifix you probably haven't heard of them. Yuccie chartreuse normcore ennui pour-over cornhole organic prism food truck tousled godard coloring book woke. La croix fashion axe kitsch letterpress, four dollar toast chartreuse kinfolk butcher kickstarter. Tattooed pinterest cray chartreuse, plaid gochujang flexitarian literally.
+
+   * collectively allocate bounties to multiple issues in a single action
+
+     ![projects app displaying issues with bounties](https://static.wixstatic.com/media/aa0ae4_5ca7651a805444ad81db006b96a1f00c~mv2_d_2732_1760_s_2.png/v1/fill/w_1684,h_1084,al_c,q_85,usm_0.66_1.00_0.01/projects1.webp)
+
+2. **Address Book**
+
+   * maintain a list of Ethereum addresses that are mapped to human-readable names
+
+     ![list of named addresses in Address Book](https://static.wixstatic.com/media/aa0ae4_4784da4bf9764f919afcd398345c05a1~mv2_d_2732_1760_s_2.png/v1/fill/w_1684,h_1084,al_c,q_85,usm_0.66_1.00_0.01/address1.webp)
+
+   * can then be used in "Address" dropdown fields throughout Aragon
+
+     0. Find somewhere that uses an address
+     1. Select the dropdown
+     2. Pick someone from your address book
+
+   * you can add new addresses
+
+     ![screenshot of adding a new address](https://static.wixstatic.com/media/aa0ae4_03775d51618044b1999938eab7ded51e~mv2_d_2732_1760_s_2.png/v1/fill/w_1684,h_1084,al_c,q_85,usm_0.66_1.00_0.01/address2.webp)
+
 `,
   },
   {
