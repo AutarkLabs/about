@@ -43,7 +43,7 @@ const MarkdownWrapper = styled.div`
     line-height: 1;
     cursor: text;
     position: relative;
-    margin: 1em 0 15px;
+    margin: 1em 0 0.5em;
     padding: 0;
   }
   h1 {
@@ -71,18 +71,15 @@ const MarkdownWrapper = styled.div`
   blockquote,
   table,
   pre {
-    margin: 3px 0;
+    margin: 1em 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   blockquote {
-    padding: 0 15px;
+    padding: 0 1em;
     border-left: 4px solid ${theme.textTertiary};
     color: ${theme.textTertiary};
-  }
-  blockquote > :first-child {
-    margin-top: 0;
-  }
-  blockquote > :last-child {
-    margin-bottom: 10px;
   }
 
   a {
@@ -110,30 +107,20 @@ const MarkdownWrapper = styled.div`
   th,
   td {
     border: 1px solid ${theme.contentBorder};
-    padding: 6px 13px;
+    padding: 0.5em 1em;
   }
   img {
     max-width: 95%;
   }
   pre {
-    margin: 0;
     background-color: ${theme.mainBackground};
     border-radius: 3px;
     overflow: auto;
-    padding: 16px;
+    padding: 1em;
   }
-  ul {
-    padding-left: 30px;
-  }
-  li:last-of-type {
-    padding-bottom: 1rem;
-  }
+  ul,
   ol {
-    padding-left: 30px;
-    padding-bottom: 1rem;
-  }
-  ol li ul:first-of-type {
-    margin-top: 0;
+    padding-left: 2em;
   }
 `
 
