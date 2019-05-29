@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { Button, SidePanelSeparator, Text } from '@aragon/ui'
@@ -24,7 +24,8 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
   const [editorType, setEditorType] = useState(editorTypeInitial)
   const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
   const [ipfsHash, setIpfsHash] = useState(ipfsHashInitial)
-  const [{ ipfsAddr, isLoading, isError }, saveIpfs] = ipfsAdd(null)
+  /* , isError */
+  const [{ ipfsAddr, isLoading }, saveIpfs] = ipfsAdd(null)
 
   const [codemirrorInstance, setCodemirrorInstance] = useState(
     codemirrorInitialInstance
@@ -32,7 +33,7 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
   useEffect(() => {
     if (ipfsAddr && savePending) {
       saveWidget(ipfsAddr, 0).subscribe(
-        res => {
+        _res => {
           setSavePending(false)
           closePanel()
         },

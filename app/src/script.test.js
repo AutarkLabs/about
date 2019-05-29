@@ -1,1 +1,3 @@
-import { ava } from 'ava'
+// import { ava } from 'ava'
+
+// TODO: service worker tests

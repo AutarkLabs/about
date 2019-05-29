@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
+// import PropTypes from 'prop-types'
 
 import { MarkdownEditor, MarkdownPreview } from '../../shared'
 import { SideBarScrollbarContainer } from '../../styles'

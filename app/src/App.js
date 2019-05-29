@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-// import { useAragonApi } from '@aragon/api-react'
+import { useAragonApi } from '@aragon/api-react'
 import { Main, AppBar, AppView, Button, SidePanel } from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
@@ -150,10 +150,11 @@ function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [selectedWidget, seSelectedWidget] = useState(0)
-  
-  const { api, appState } = useAragonApi()
-  const { count, syncing, app } = appState
-  
+
+  const { api } = useAragonApi()
+  // const { api, appState } = useAragonApi()
+  // const { count, syncing, app } = appState
+
   const handleClick = index => e => {
     seSelectedWidget(index)
     setPanelVisible(true)
@@ -246,9 +247,9 @@ const WidgetsLayout = styled.div`
   }
 `
 
-const CardContent = styled.div`
-  padding: 24px;
-`
+// const CardContent = styled.div`
+//   padding: 24px;
+// `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
 const SidePanelContainer = styled.div`
