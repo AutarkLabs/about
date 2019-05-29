@@ -171,7 +171,16 @@ function App() {
   const toggleEditMode = () => {
     setEditMode(!editMode)
   }
-
+  const widgetList = cards.map((widget, index) => (
+    // Only do this if items have no stable IDs
+    <Widget
+      key={index}
+      id={index}
+      content={widget.content}
+      handleClick={handleClick}
+      active={editMode}
+    />
+  ))
   return (
     <Main>
       <BaseLayout>
@@ -207,20 +216,7 @@ function App() {
             />
           }
         >
-          <WidgetsLayout>
-            <Widget
-              id={0}
-              content={cards[0].content}
-              handleClick={handleClick}
-              active={editMode}
-            />
-            <Widget
-              id={1}
-              content={cards[1].content}
-              handleClick={handleClick}
-              active={editMode}
-            />
-          </WidgetsLayout>
+          <WidgetsLayout>{widgetList}</WidgetsLayout>
         </AppView>
       </BaseLayout>
       <SidePanel
