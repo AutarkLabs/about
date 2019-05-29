@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 // import { useAragonApi } from '@aragon/api-react'
-import { Main, AppBar, AppView, Button, SidePanel, theme } from '@aragon/ui'
+import { Main, AppBar, AppView, Button, SidePanel } from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
@@ -150,8 +150,10 @@ function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [selectedWidget, seSelectedWidget] = useState(0)
-  // const {api, appState } = useAragonApi()
-  // const {count, syncing } = appState
+  
+  const { api, appState } = useAragonApi()
+  const { count, syncing, app } = appState
+  
   const handleClick = index => e => {
     seSelectedWidget(index)
     setPanelVisible(true)
@@ -159,6 +161,10 @@ function App() {
 
   const closePanel = () => {
     setPanelVisible(false)
+  }
+
+  const saveWidget = (ipfsAddr, index) => {
+    return api.addWidget(ipfsAddr)
   }
 
   const toggleEditMode = () => {
@@ -208,6 +214,8 @@ function App() {
           <PanelContent
             title={cards[selectedWidget].title}
             content={cards[selectedWidget].content}
+            saveWidget={saveWidget}
+            closePanel={closePanel}
           />
         </SidePanelContainer>
       </SidePanel>
