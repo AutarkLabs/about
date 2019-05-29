@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { SafeLink, theme } from '@aragon/ui'
+import { Checkbox, SafeLink, theme } from '@aragon/ui'
 
 import MDReactComponent from 'react-markdown'
 
@@ -11,10 +11,27 @@ const Link = ({ children, ...props }) => (
   </SafeLink>
 )
 
+const ListItem = ({ checked, children, ...props }) => {
+  let checkbox = null
+  if (checked !== null) {
+    checkbox = <Checkbox checked={checked} />
+  }
+
+  return React.createElement(
+    'li',
+    { className: checkbox ? 'task-list-item' : '' },
+    checkbox,
+    children
+  )
+}
+
 const Preview = ({ content }) => {
   return (
     <MarkdownWrapper>
-      <MDReactComponent source={content} renderers={{ link: Link }} />
+      <MDReactComponent
+        source={content}
+        renderers={{ link: Link, listItem: ListItem }}
+      />
     </MarkdownWrapper>
   )
 }
@@ -116,6 +133,16 @@ const MarkdownWrapper = styled.div`
   ul,
   ol {
     padding-left: 2em;
+  }
+  li.task-list-item {
+    list-style-type: none;
+    position: relative;
+    & > button:first-child {
+      position: absolute;
+      margin-left: 0;
+      margin-top: 5px;
+      right: 100%;
+    }
   }
 `
 
