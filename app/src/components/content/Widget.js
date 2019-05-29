@@ -26,6 +26,9 @@ Widget.propTypes = {
 
 const CardContent = styled.div`
   padding: 24px;
+  :hover > ${EditButton} {
+    opacity: 1;
+  }
 `
 
 const StyledCard = styled(Card)`
