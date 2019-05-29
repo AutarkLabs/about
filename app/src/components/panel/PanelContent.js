@@ -4,18 +4,18 @@ import styled from 'styled-components'
 
 import { Button, SidePanelSeparator } from '@aragon/ui'
 
-import TypeInput from './TypeInput'
-import EditorTabBar from './EditorTabBar'
-import EditorTabView from './EditorTabView'
-import {SideBarScrollbarContainer} from '../styles'
-import EditorTextInput from './Utils/EditorTextInput'
+import TypeInput from '../TypeInput'
+import PanelTabBar from './PanelTabBar'
+import PanelTabView from './PanelTabView'
+import { SideBarScrollbarContainer } from '../../styles'
+import Input from './Input'
 
 let codemirrorInitialInstance = null
 let editorTypeInitial = 0
-let externalUrlInitial = ""
-let ipfsHashInitial = ""
+let externalUrlInitial = ''
+let ipfsHashInitial = ''
 
-const PanelContent = ({content}) => {
+const PanelContent = ({ content }) => {
   const [unsavedText, setUnsavedText] = useState(content)
   const [screenIndex, setScreenIndex] = useState(0)
   const [editorType, setEditorType] = useState(editorTypeInitial)
@@ -44,7 +44,7 @@ const PanelContent = ({content}) => {
   const handleExternalUrlChange = _externalUrl => {
     setExternalUrl(_externalUrl)
   }
-  
+
   const handleIpfsHashChange = _ipfsHash => {
     setIpfsHash(_ipfsHash)
   }
@@ -60,34 +60,31 @@ const PanelContent = ({content}) => {
   }
 
   const saveBlock = () => {
-    let ipfsAddr = "";
-    switch(editorType){
+    let ipfsAddr = ''
+    switch (editorType) {
       case 0:
-          ipfsAddr = "IPFSADDR";
-        break;
-      case 1:
-          ipfsAddr = externalUrl;
-        break;
-      case 2:
-          ipfsAddr = ipfsHash;
+        ipfsAddr = 'IPFSADDR'
         break
-        default:
-          break
+      case 1:
+        ipfsAddr = externalUrl
+        break
+      case 2:
+        ipfsAddr = ipfsHash
+        break
+      default:
+        break
     }
-    console.log(ipfsAddr);
+    console.log(ipfsAddr)
   }
 
   return (
     <PanelContainer>
       <TopPanel>
-        <TypeInput 
-          value={editorType}
-          onChange={handleEditorTypeChange}
-        />
+        <TypeInput value={editorType} onChange={handleEditorTypeChange} />
         <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
-        {editorType=== 0 && 
+        {editorType === 0 && (
           <div>
-            <EditorTabBar
+            <PanelTabBar
               handleChange={handleChange}
               screenIndex={screenIndex}
               setSelectionBold={setSelectionBold}
@@ -98,36 +95,36 @@ const PanelContent = ({content}) => {
               }}
             />
           </div>
-        }
+        )}
       </TopPanel>
       <CenterPanel>
-        {editorType=== 0 && 
-          <EditorTabView
+        {editorType === 0 && (
+          <PanelTabView
             handleEditorChange={handleEditorChange}
             onCodeMirrorInit={onCodeMirrorInit}
             screenIndex={screenIndex}
             unsavedText={unsavedText}
             instance={codemirrorInstance}
           />
-        }
-        {editorType=== 1 && 
+        )}
+        {editorType === 1 && (
           <SideBarScrollbarContainer>
-            <EditorTextInput
+            <Input
               label="Url"
               value={externalUrl}
               onChange={handleExternalUrlChange}
             />
           </SideBarScrollbarContainer>
-        }
-        {editorType=== 2 && 
+        )}
+        {editorType === 2 && (
           <SideBarScrollbarContainer>
-            <EditorTextInput
+            <Input
               label="Hash"
               value={ipfsHash}
               onChange={handleIpfsHashChange}
             />
           </SideBarScrollbarContainer>
-        }
+        )}
       </CenterPanel>
       <BottomPanel>
         <SidePanelSeparator style={{ margin: '0 -30px 15px' }} />
