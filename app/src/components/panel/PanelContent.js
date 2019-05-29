@@ -43,7 +43,8 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
         }
       )
     }
-  })
+    setUnsavedText(content)
+  }, [content])
 
   const handleChange = _screenIndex => {
     setScreenIndex(_screenIndex)
