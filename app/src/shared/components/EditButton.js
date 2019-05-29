@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { Button, theme } from '@aragon/ui'
 
 const EditButton = styled(Button)`
