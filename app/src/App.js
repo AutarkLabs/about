@@ -180,12 +180,29 @@ function App() {
             <AppBar
               title="Home"
               endContent={
-                <Button
-                  mode={editMode ? 'outline' : 'strong'}
-                  onClick={toggleEditMode}
-                >
-                  {editMode ? 'Cancel and Exit' : 'Edit Page'}
-                </Button>
+                <div>
+                  {editMode && (
+                    <div>
+                      <Button
+                        mode="outline"
+                        onClick={toggleEditMode}
+                        style={{ marginRight: 20 }}
+                      >
+                        Cancel and Exit
+                      </Button>
+
+                      <Button mode="strong" onClick={toggleEditMode}>
+                        Submit changes
+                      </Button>
+                    </div>
+                  )}
+
+                  {!editMode && (
+                    <Button mode="strong" onClick={toggleEditMode}>
+                      Edit Page
+                    </Button>
+                  )}
+                </div>
               }
             />
           }
