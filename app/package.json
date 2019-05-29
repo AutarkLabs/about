@@ -9,6 +9,7 @@
     "@babel/polyfill": "^7.2.5",
     "@githubprimer/octicons-react": "^8.5.0",
     "codemirror": "^5.47.0",
+    "ipfs-http-client": "^30.1.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-codemirror2": "^6.0.0",
