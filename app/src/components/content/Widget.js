@@ -18,7 +18,7 @@ const Widget = ({ id, content, handleClick, active }) => (
 )
 
 Widget.propTypes = {
-  active: PropTypes.number.isRequired,
+  active: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
   handleClick: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,

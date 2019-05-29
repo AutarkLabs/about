@@ -10,7 +10,7 @@ import PanelTabView from './PanelTabView'
 import { SideBarScrollbarContainer } from '../../styles'
 import Input from './Input'
 
-import ipfsAdd from './Utils/Ipfs/ipfsAdd'
+import ipfsAdd from '../Utils/Ipfs/ipfsAdd'
 
 let codemirrorInitialInstance = null
 let editorTypeInitial = 0
