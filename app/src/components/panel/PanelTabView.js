@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Editor from './Editor'
-import Preview from './Preview'
-import {SideBarScrollbarContainer} from '../styles'
+import { MarkdownEditor, MarkdownPreview } from '../../shared'
+import { SideBarScrollbarContainer } from '../../styles'
 
-const EditorTabView = ({
+const PanelTabView = ({
   handleEditorChange,
   onCodeMirrorInit,
   screenIndex,
@@ -30,9 +29,8 @@ const EditorTabView = ({
       }}
     >
       <SideBarScrollbarContainer>
-
         {screenIndex === 0 && (
-          <Editor
+          <MarkdownEditor
             instance={instance}
             content={unsavedText}
             onChange={handleEditorChange}
@@ -40,10 +38,10 @@ const EditorTabView = ({
           />
         )}
 
-        {screenIndex === 1 && <Preview content={unsavedText} />}
+        {screenIndex === 1 && <MarkdownPreview content={unsavedText} />}
       </SideBarScrollbarContainer>
     </div>
   </div>
 )
 
-export default EditorTabView
+export default PanelTabView
