@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import useIpfs from './useIpfs'
 import ipfsConfig from '../../../../ipfs'
 
