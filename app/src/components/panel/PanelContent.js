@@ -77,26 +77,20 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
   }
 
   const saveBlock = async () => {
-    let widgetData = {}
-
     switch (editorType) {
       case 0:
-        widgetData = {
-          body: unsavedText,
-        }
-        await saveIpfs(widgetData)
+        await saveIpfs(unsavedText)
         setSavePending(true)
 
         break
       case 1:
-        widgetData = {
-          url: externalUrl,
-        }
-        await saveIpfs(widgetData)
+        // TODO: Fetch url, sanitize it and then save it to ipfs
+        await saveIpfs(externalUrl)
         setSavePending(true)
-
         break
       case 2:
+        // TODO: Handle ipfsAddr type
+
         break
       default:
         break

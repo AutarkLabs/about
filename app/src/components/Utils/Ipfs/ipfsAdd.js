@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import useIpfs from './useIpfs'
 import ipfsConfig from '../../../../ipfs'
 
-const bufferFile = content => Buffer.from(JSON.stringify(content))
+const bufferFile = content =>
+  Buffer.from(typeof content === 'string' ? content : JSON.stringify(content))
 
 const ipfsAdd = () => {
   const [ipfsClient] = useIpfs(ipfsConfig)
