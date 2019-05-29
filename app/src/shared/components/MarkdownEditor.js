@@ -21,15 +21,11 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
         mode: 'gfm',
         theme: 'idea',
         lineWrapping: true,
-        autofocus: true,
       }}
       editorDidMount={editor => {
         onCodeMirrorInit(editor)
       }}
       onBeforeChange={(_editor, _data, value) => {
-        onChange(value)
-      }}
-      onChange={(_editor, _data, value) => {
         onChange(value)
       }}
     />
