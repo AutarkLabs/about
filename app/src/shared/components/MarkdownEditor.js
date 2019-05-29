@@ -15,24 +15,24 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   }, [instance])
 
   return (
-      <CodeMirror
-        value={content}
-        options={{
-          mode: 'gfm',
-          theme: 'idea',
-          lineWrapping: true,
-          autofocus: true,
-        }}
-        editorDidMount={editor => {
-          onCodeMirrorInit(editor)
-        }}
-        onBeforeChange={(editor, data, value) => {
-          onChange(value)
-        }}
-        onChange={(editor, data, value) => {
-          onChange(value)
-        }}
-      />
+    <CodeMirror
+      value={content}
+      options={{
+        mode: 'gfm',
+        theme: 'idea',
+        lineWrapping: true,
+        autofocus: true,
+      }}
+      editorDidMount={editor => {
+        onCodeMirrorInit(editor)
+      }}
+      onBeforeChange={(_editor, _data, value) => {
+        onChange(value)
+      }}
+      onChange={(_editor, _data, value) => {
+        onChange(value)
+      }}
+    />
   )
 }
 
