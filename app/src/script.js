@@ -1,7 +1,10 @@
 import '@babel/polyfill'
 import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
+import ipfsClient from 'ipfs-http-client'
+import ipfsConfig from '../ipfs'
 
+const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
 let appState
 app.events().subscribe(handleEvents)
@@ -56,13 +59,17 @@ const refreshAllWidgets = async ({ entries = [] }) => {
     for (var i = 0; i <= widgetNumber; i++) {
       try {
         var widgetData = await loadWidgetData(i)
+        // TODO: Fetch data asyncronously
+        const content = await loadWidgetIpfs(widgetData.addr)
+        widgetData.content = content
+        console.log(content)
         entries.push(widgetData) // add to the state object received as param
       } catch (err) {
         console.log(err)
       }
     }
     const state = { entries } // return the entries array
-    console.log(entries)
+    console.log(entries);
     resolve(state)
   })
 }
@@ -82,7 +89,9 @@ const loadWidgetData = async priority => {
         } else {
           resolve({
             addr: widget[0],
+            content: 'Loading',
             disabled: widget[1],
+            loading: true,
           })
         }
       },
@@ -90,6 +99,27 @@ const loadWidgetData = async priority => {
         reject(err)
       }
     )
+  })
+}
+
+const loadWidgetIpfs = async ipfsAddr => {
+  return new Promise((resolve, reject) => {
+    // reject(new Error('getWidget failed'))
+    ipfs
+      .cat(ipfsAddr)
+      .then(_result => {
+        resolve(_result)
+      })
+      .catch(err => {
+        reject(err)
+      })
+
+    /* 
+    if (false) {
+      reject(new Error('getWidget failed'))
+    }
+    */
+    // })
   })
 }
 

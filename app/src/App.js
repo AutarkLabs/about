@@ -151,9 +151,8 @@ function App() {
   const [editMode, setEditMode] = useState(false)
   const [selectedWidget, seSelectedWidget] = useState(0)
 
-  const { api } = useAragonApi()
-  // const { api, appState } = useAragonApi()
-  // const { count, syncing, app } = appState
+  const { api, appState } = useAragonApi()
+  const { count, syncing, entries } = appState
 
   const handleClick = index => e => {
     seSelectedWidget(index)
@@ -171,16 +170,19 @@ function App() {
   const toggleEditMode = () => {
     setEditMode(!editMode)
   }
-  const widgetList = cards.map((widget, index) => (
-    // Only do this if items have no stable IDs
-    <Widget
-      key={index}
-      id={index}
-      content={widget.content}
-      handleClick={handleClick}
-      active={editMode}
-    />
-  ))
+  const widgetList =
+    entries &&
+    entries.map((widget, index) => (
+      // Only do this if items have no stable IDs
+      <Widget
+        key={index}
+        id={index}
+        content={widget.content}
+        ipfsAddr={widget.addr}
+        handleClick={handleClick}
+        active={editMode}
+      />
+    ))
   return (
     <Main>
       <BaseLayout>

@@ -2,26 +2,22 @@ import { useState, useEffect } from 'react'
 import useIpfs from './useIpfs'
 import ipfsConfig from '../../../../ipfs'
 
-const bufferFile = content =>
-  Buffer.from(typeof content === 'string' ? content : JSON.stringify(content))
-
-const ipfsAdd = () => {
+const ipfsCat = () => {
   const [ipfsClient] = useIpfs(ipfsConfig)
   const [data, setData] = useState(null)
   const [ipfsAddr, setIpfsAddr] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const upload = async () => {
+  const catIpfsAddr = async () => {
     setIsError(false)
     setIsLoading(true)
-    setIpfsAddr(null)
-    const file = bufferFile(data)
+    setData(null)
     try {
-      const result = await ipfsClient.add(file)
-      setIpfsAddr(result[0].hash)
+      const result = await ipfsClient.cat(ipfsAddr)
+      setData(result)
     } catch (err) {
-      console.error('Error pinning file to IPFS', err)
+      console.error('Error readinf file to IPFS', err)
       setIsError(true)
     } finally {
       setIsLoading(false)
@@ -29,11 +25,11 @@ const ipfsAdd = () => {
   }
 
   useEffect(() => {
-    if (data !== null) {
-      upload()
+    if (ipfsAddr !== null) {
+      catIpfsAddr()
     }
-  }, [data])
+  }, [ipfsAddr])
 
-  return [{ ipfsAddr, isLoading, isError }, setData]
+  return [{ data, isLoading, isError }, setIpfsAddr]
 }
-export default ipfsAdd
+export default ipfsCat
