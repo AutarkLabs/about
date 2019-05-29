@@ -3,23 +3,18 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { SafeLink, theme } from '@aragon/ui'
 
-import MDReactComponent from 'markdown-react-js'
+import MDReactComponent from 'react-markdown'
 
-const handleIterate = (Tag, props, children) => {
-  if (Tag === 'a') {
-    return (
-      <SafeLink {...props} target="_blank">
-        {children}
-      </SafeLink>
-    )
-  }
-  return <Tag {...props}>{children}</Tag>
-}
+const Link = ({ children, ...props }) => (
+  <SafeLink {...props} target="_blank">
+    {children}
+  </SafeLink>
+)
 
 const Preview = ({ content }) => {
   return (
     <MarkdownWrapper>
-      <MDReactComponent text={content} onIterate={handleIterate} />
+      <MDReactComponent source={content} renderers={{ link: Link }} />
     </MarkdownWrapper>
   )
 }
