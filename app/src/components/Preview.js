@@ -134,6 +134,16 @@ const MarkdownWrapper = styled.div`
   ol {
     padding-left: 2em;
   }
+  ol ol,
+  ul ol {
+    list-style-type: lower-roman;
+  }
+  ol ol ol,
+  ol ul ol,
+  ul ol ol,
+  ul ul ol {
+    list-style-type: lower-alpha;
+  }
   li.task-list-item {
     list-style-type: none;
     position: relative;
