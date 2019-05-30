@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { Card, Text } from '@aragon/ui'
-import ipfsCat from '../Utils/Ipfs/ipfsCat'
 
 import { EditButton, IconPencil, MarkdownPreview } from '../../shared'
 
@@ -14,7 +13,6 @@ const Widget = ({ id, content, isLoading, handleClick, active, ipfsAddr }) => {
         <EditButton mode="text" onClick={handleClick(id)} active={active}>
           <IconPencil />
         </EditButton>
-        {ipfsAddr}
         {isLoading ? (
           <Text>Loading...</Text>
         ) : (

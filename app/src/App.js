@@ -3,7 +3,16 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useAragonApi } from '@aragon/api-react'
-import { Main, AppBar, AppView, Button, SidePanel } from '@aragon/ui'
+import {
+  Main,
+  AppBar,
+  AppView,
+  Button,
+  SidePanel,
+  EmptyStateCard,
+  IconHome,
+  SafeLink,
+} from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
@@ -149,13 +158,18 @@ Would you like us to come to your city? [Get in touch](mailto:autark@autark.xyz)
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   const [editMode, setEditMode] = useState(false)
-  const [selectedWidget, seSelectedWidget] = useState(0)
+  const [selectedWidget, setSelectedWidget] = useState(0)
 
   const { api, appState } = useAragonApi()
-  const { count, syncing, entries } = appState
+  const { entries } = appState
 
-  const handleClick = index => e => {
-    seSelectedWidget(index)
+  const handleClickUpdateWidget = index => e => {
+    setSelectedWidget(index)
+    setPanelVisible(true)
+  }
+
+  const handleClickNewWidget = e => {
+    setSelectedWidget(null)
     setPanelVisible(true)
   }
 
@@ -163,23 +177,27 @@ function App() {
     setPanelVisible(false)
   }
 
-  const saveWidget = (ipfsAddr, index) => {
-    return api.addWidget(ipfsAddr)
+  const updateWidget = (_index, _ipfsAddr) => {
+    return api.updateWidget(_index, _ipfsAddr)
+  }
+
+  const newWidget = _ipfsAddr => {
+    return api.addWidget(_ipfsAddr)
   }
 
   const toggleEditMode = () => {
     setEditMode(!editMode)
   }
+
   const widgetList =
     entries &&
     entries.map((widget, index) => (
-      // Only do this if items have no stable IDs
       <Widget
         key={index}
         id={index}
         content={widget.content}
         ipfsAddr={widget.addr}
-        handleClick={handleClick}
+        handleClick={handleClickUpdateWidget}
         active={editMode}
       />
     ))
@@ -218,7 +236,26 @@ function App() {
             />
           }
         >
-          <WidgetsLayout>{widgetList}</WidgetsLayout>
+          <WidgetsLayout>
+            {entries ? (
+              widgetList
+            ) : (
+              <EmptyStateCard
+                action={
+                  <SafeLink href="#" onClick={handleClickNewWidget}>
+                    Add new widget
+                  </SafeLink>
+                }
+                text="You seem to not have any content on your wall."
+                icon={<IconHome color="blue" />}
+              />
+            )}
+            {entries && (
+              <SafeLink href="#" onClick={handleClickNewWidget}>
+                Add new widget
+              </SafeLink>
+            )}
+          </WidgetsLayout>
         </AppView>
       </BaseLayout>
       <SidePanel
@@ -228,10 +265,20 @@ function App() {
       >
         <SidePanelContainer>
           <PanelContent
-            title={cards[selectedWidget].title}
-            content={cards[selectedWidget].content}
-            saveWidget={saveWidget}
+            ipfsAddr={
+              entries !== undefined &&
+              selectedWidget !== null &&
+              entries[selectedWidget].addr
+            }
+            content={
+              entries !== undefined &&
+              selectedWidget !== null &&
+              entries[selectedWidget].content
+            }
+            newWidget={newWidget}
+            updateWidget={updateWidget}
             closePanel={closePanel}
+            position={selectedWidget}
           />
         </SidePanelContainer>
       </SidePanel>
@@ -245,10 +292,6 @@ const BaseLayout = styled.div`
   flex-direction: column;
 `
 
-// const Count = styled.h1`
-//   font-size: 30px;
-// `
-
 const WidgetsLayout = styled.div`
   display: grid;
   grid-template-columns: 70% 30%;
@@ -261,10 +304,6 @@ const WidgetsLayout = styled.div`
     margin-right: 0;
   }
 `
-
-// const CardContent = styled.div`
-//   padding: 24px;
-// `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
 const SidePanelContainer = styled.div`

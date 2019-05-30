@@ -62,14 +62,13 @@ const refreshAllWidgets = async ({ entries = [] }) => {
         // TODO: Fetch data asyncronously
         const content = await loadWidgetIpfs(widgetData.addr)
         widgetData.content = content
-        console.log(content)
         entries.push(widgetData) // add to the state object received as param
       } catch (err) {
         console.log(err)
       }
     }
     const state = { entries } // return the entries array
-    console.log(entries);
+    console.log(entries)
     resolve(state)
   })
 }
@@ -104,22 +103,14 @@ const loadWidgetData = async priority => {
 
 const loadWidgetIpfs = async ipfsAddr => {
   return new Promise((resolve, reject) => {
-    // reject(new Error('getWidget failed'))
     ipfs
       .cat(ipfsAddr)
       .then(_result => {
-        resolve(_result)
+        resolve(_result.toString('utf8'))
       })
       .catch(err => {
         reject(err)
       })
-
-    /* 
-    if (false) {
-      reject(new Error('getWidget failed'))
-    }
-    */
-    // })
   })
 }
 
