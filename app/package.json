@@ -9,12 +9,11 @@
     "@babel/polyfill": "^7.2.5",
     "@githubprimer/octicons-react": "^8.5.0",
     "codemirror": "^5.47.0",
-    "markdown-it": "^8.4.2",
-    "markdown-react-js": "^1.0.2",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-codemirror2": "^6.0.0",
     "react-dom": "^16.8.4",
+    "react-markdown": "^4.0.8",
     "rxjs": "^6.2.1",
     "styled-components": "^4.1.3"
   },
