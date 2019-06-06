@@ -107,9 +107,45 @@ const PanelContent = ({
     setCodemirrorInstance(_codemirrorInstance)
   }
 
+  const setSelectionSize = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '# ' + codemirrorInstance.doc.getSelection()
+    )
+  }
+
+  const setSelectionUnorderedList = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '\n* ' + codemirrorInstance.doc.getSelection() + '\n'
+    )
+  }
+
   const setSelectionBold = () => {
     codemirrorInstance.doc.replaceSelection(
       '**' + codemirrorInstance.doc.getSelection() + '**'
+    )
+  }
+
+  const setSelectionItalic = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '*' + codemirrorInstance.doc.getSelection() + '*'
+    )
+  }
+
+  const setSelectionLink = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '[' + codemirrorInstance.doc.getSelection() + ']()'
+    )
+  }
+
+  const setSelectionCode = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '`' + codemirrorInstance.doc.getSelection() + '`'
+    )
+  }
+
+  const setSelectionQuote = () => {
+    codemirrorInstance.doc.replaceSelection(
+      '> ' + codemirrorInstance.doc.getSelection()
     )
   }
 
@@ -145,6 +181,12 @@ const PanelContent = ({
               handleChange={handleChange}
               screenIndex={screenIndex}
               setSelectionBold={setSelectionBold}
+              setSelectionCode={setSelectionCode}
+              setSelectionItalic={setSelectionItalic}
+              setSelectionLink={setSelectionLink}
+              setSelectionQuote={setSelectionQuote}
+              setSelectionSize={setSelectionSize}
+              setSelectionUnorderedList={setSelectionUnorderedList}
             />
             <SidePanelSeparator
               style={{

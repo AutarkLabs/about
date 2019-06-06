@@ -12,7 +12,17 @@ import Octicon, {
 
 import { Button, TabBar } from '@aragon/ui'
 
-const PanelTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
+const PanelTabBar = ({
+  screenIndex,
+  handleChange,
+  setSelectionBold,
+  setSelectionCode,
+  setSelectionItalic,
+  setSelectionLink,
+  setSelectionQuote,
+  setSelectionSize,
+  setSelectionUnorderedList,
+}) => (
   <TabBarWrapper>
     <div
       style={{
@@ -30,26 +40,26 @@ const PanelTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
 
       {screenIndex === 0 && (
         <EditToolBar>
-          <EditToolBarButton onClick={setSelectionBold} compact>
+          <EditToolBarButton onClick={setSelectionSize} compact>
             <Octicon icon={TextSize} />
           </EditToolBarButton>
           <EditToolBarButton onClick={setSelectionBold} compact>
             <Octicon icon={Bold} />
           </EditToolBarButton>
-          <EditToolBarButton onClick={setSelectionBold} compact>
+          <EditToolBarButton onClick={setSelectionItalic} compact>
             <Octicon icon={Italic} />
           </EditToolBarButton>
           <EditToolBarSeparator />
-          <EditToolBarButton onClick={setSelectionBold} compact>
+          <EditToolBarButton onClick={setSelectionQuote} compact>
             <Octicon icon={Quote} />
           </EditToolBarButton>
-          <EditToolBarButton onClick={setSelectionBold} compact>
+          <EditToolBarButton onClick={setSelectionCode} compact>
             <Octicon icon={Code} />
           </EditToolBarButton>
-          <EditToolBarButton onClick={setSelectionBold} compact>
+          <EditToolBarButton onClick={setSelectionLink} compact>
             <Octicon icon={Link} />
           </EditToolBarButton>
-          <EditToolBarButton onClick={setSelectionBold} compact>
+          <EditToolBarButton onClick={setSelectionUnorderedList} compact>
             <Octicon icon={ListUnordered} />
           </EditToolBarButton>
           <EditToolBarSeparator />
