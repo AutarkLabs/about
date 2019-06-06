@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { Button, SidePanelSeparator, Text } from '@aragon/ui'
@@ -17,19 +17,56 @@ let editorTypeInitial = 0
 let externalUrlInitial = ''
 let ipfsHashInitial = ''
 
-const PanelContent = ({ content, saveWidget, closePanel }) => {
+const PanelContent = ({
+  content,
+  updateWidget,
+  newWidget,
+  closePanel,
+  ipfsAddr,
+  position,
+  saveWidget,
+}) => {
   const [unsavedText, setUnsavedText] = useState(content)
   const [screenIndex, setScreenIndex] = useState(0)
   const [savePending, setSavePending] = useState(false)
   const [editorType, setEditorType] = useState(editorTypeInitial)
   const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
-  const [ipfsHash, setIpfsHash] = useState(ipfsHashInitial)
-  /* , isError */
-  const [{ ipfsAddr, isLoading }, saveIpfs] = ipfsAdd(null)
+  const [unsavedIpfsHash, setUnsavedIpfsHash] = useState(ipfsHashInitial)
+
+  const [{ savedIpfsAddr, isLoading }, saveIpfs] = ipfsAdd(null)
 
   const [codemirrorInstance, setCodemirrorInstance] = useState(
     codemirrorInitialInstance
   )
+
+  useEffect(() => {
+    if (savedIpfsAddr && savePending) {
+      if (ipfsAddr) {
+        updateWidget(position, savedIpfsAddr).subscribe(
+          _res => {
+            setSavePending(false)
+            closePanel()
+          },
+          err => {
+            console.log(err)
+            setSavePending(false)
+          }
+        )
+      } else {
+        newWidget(savedIpfsAddr).subscribe(
+          _res => {
+            setSavePending(false)
+            closePanel()
+          },
+          err => {
+            console.log(err)
+            setSavePending(false)
+          }
+        )
+      }
+    }
+  }, [savedIpfsAddr, savePending])
+
   useEffect(() => {
     if (ipfsAddr && savePending) {
       saveWidget(ipfsAddr, 0).subscribe(
@@ -44,7 +81,7 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
       )
     }
     setUnsavedText(content)
-  }, [content])
+  }, [content, savedIpfsAddr, savePending])
 
   const handleChange = _screenIndex => {
     setScreenIndex(_screenIndex)
@@ -63,7 +100,7 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
   }
 
   const handleIpfsHashChange = _ipfsHash => {
-    setIpfsHash(_ipfsHash)
+    setUnsavedIpfsHash(_ipfsHash)
   }
 
   const onCodeMirrorInit = _codemirrorInstance => {
@@ -77,26 +114,20 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
   }
 
   const saveBlock = async () => {
-    let widgetData = {}
-
     switch (editorType) {
       case 0:
-        widgetData = {
-          body: unsavedText,
-        }
-        await saveIpfs(widgetData)
+        await saveIpfs(unsavedText)
         setSavePending(true)
 
         break
       case 1:
-        widgetData = {
-          url: externalUrl,
-        }
-        await saveIpfs(widgetData)
+        // TODO: Fetch url, sanitize it and then save it to ipfs
+        await saveIpfs(externalUrl)
         setSavePending(true)
-
         break
       case 2:
+        // TODO: Handle ipfsAddr type
+
         break
       default:
         break
@@ -146,7 +177,7 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
           <SideBarScrollbarContainer>
             <Input
               label="Hash"
-              value={ipfsHash}
+              value={unsavedIpfsHash}
               onChange={handleIpfsHashChange}
             />
           </SideBarScrollbarContainer>
@@ -171,9 +202,11 @@ const PanelContent = ({ content, saveWidget, closePanel }) => {
 }
 
 PanelContent.propTypes = {
-  // onChange: PropTypes.func.isRequired,
-  // onUpdate: PropTypes.func.isRequired,
-  // value: PropTypes.string.isRequired,
+  content: PropTypes.string,
+  updateWidget: PropTypes.func.isRequired,
+  newWidget: PropTypes.func.isRequired,
+  closePanel: PropTypes.func.isRequired,
+  ipfsAddr: PropTypes.string,
 }
 
 // componentWillReceiveProps({ opened }) {
