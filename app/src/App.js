@@ -19,7 +19,8 @@ import Widget from './components/content/Widget'
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
-  const [editMode, setEditMode] = useState(false)
+  // TODO: useState(false) to start editMode disabled
+  const [editMode, setEditMode] = useState(true)
   const [selectedWidget, setSelectedWidget] = useState(0)
 
   const { api, appState } = useAragonApi()
@@ -70,31 +71,32 @@ function App() {
           appBar={
             <AppBar
               title="Home"
-              endContent={
-                <div>
-                  {editMode && (
-                    <div>
-                      <Button
-                        mode="outline"
-                        onClick={toggleEditMode}
-                        style={{ marginRight: 20 }}
-                      >
-                        Cancel and Exit
-                      </Button>
+              // TODO: uncomment this block for edit functionality
+              // endContent={
+              //   <div>
+              //     {editMode && (
+              //       <div>
+              //         <Button
+              //           mode="outline"
+              //           onClick={toggleEditMode}
+              //           style={{ marginRight: 20 }}
+              //         >
+              //           Cancel and Exit
+              //         </Button>
 
-                      <Button mode="strong" onClick={toggleEditMode}>
-                        Submit changes
-                      </Button>
-                    </div>
-                  )}
+              //         <Button mode="strong" onClick={toggleEditMode}>
+              //           Submit changes
+              //         </Button>
+              //       </div>
+              //     )}
 
-                  {!editMode && (
-                    <Button mode="strong" onClick={toggleEditMode}>
-                      Edit Page
-                    </Button>
-                  )}
-                </div>
-              }
+              //     {!editMode && (
+              //       <Button mode="strong" onClick={toggleEditMode}>
+              //         Edit Page
+              //       </Button>
+              //     )}
+              //   </div>
+              // }
             />
           }
         >
