@@ -7,7 +7,8 @@ import {
   Main,
   AppBar,
   AppView,
-  Button,
+  // TODO: temporarily disabled edit-mode
+  // Button,
   SidePanel,
   EmptyStateCard,
   IconHome,
@@ -20,7 +21,8 @@ import Widget from './components/content/Widget'
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   // TODO: useState(false) to start editMode disabled
-  const [editMode, setEditMode] = useState(true)
+  // const [editMode, setEditMode] = useState(true)
+  const [editMode] = useState(true)
   const [selectedWidget, setSelectedWidget] = useState(0)
 
   const { api, appState } = useAragonApi()
@@ -48,9 +50,10 @@ function App() {
     return api.addWidget(_ipfsAddr)
   }
 
-  const toggleEditMode = () => {
-    setEditMode(!editMode)
-  }
+  // TODO: temporarily disabled
+  // const toggleEditMode = () => {
+  //   setEditMode(!editMode)
+  // }
 
   const widgetList =
     entries &&
