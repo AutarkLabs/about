@@ -1,47 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
-// import styled from 'styled-components'
-// import { WidgetCardWrapper, WidgetCard, WidgetCardTitle, WidgetCardBody, BackgroundOverlay, EditableDiv } from '../../style'
-// import { ipfsGet } from '../../utils/ipfs-helper'
-// import { stringToContentEditable, contentEditableToString } from '../../utils/content-editable'
-// import EditButton from './EditButton'
-// import  {ipfsAdd}  from '../../utils/ipfs-helper'
-// Load markdown css
-// import '../../assets/markdown.css'
-var markdown = require('markdown-it')({
-  breaks: true,
-  linkify: true,
-  typographer: true,
-})
-
-// https://github.com/scniro/react-codemirror2
+import { Controlled as CodeMirror } from 'react-codemirror2'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/theme/idea.css'
+import 'codemirror/mode/javascript/javascript'
+// ambiance ambiance-mobile elegant idea neat neo ttcn xq-light 3024-day
 
 // import dompurify from 'dompurify';
 
-const mock = `
-# Hello
+const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
+  useEffect(() => {
+    instance && instance.setSize('100%', '100%')
+  }, [instance])
 
-## This is markdown
-
-- Ok
-- *Bold*
-- **Italics**
-`
-
-const Editor = () => {
   return (
-    <div style={{ maxWidth: '100%', overflow: 'hidden', display: 'flex' }}>
       <CodeMirror
-        value={mock}
+        value={content}
         options={{
-          mode: 'markdown',
-          theme: 'material',
-          lineNumbers: true,
+          mode: 'gfm',
+          theme: 'idea',
+          lineWrapping: true,
+          autofocus: true,
         }}
-        onChange={(editor, data, value) => {}}
+        editorDidMount={editor => {
+          onCodeMirrorInit(editor)
+        }}
+        onBeforeChange={(editor, data, value) => {
+          onChange(value)
+        }}
+        onChange={(editor, data, value) => {
+          onChange(value)
+        }}
       />
-    </div>
   )
 }
 

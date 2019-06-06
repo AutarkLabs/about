@@ -1,60 +1,48 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { theme } from '@aragon/ui'
-// import { WidgetCardWrapper, WidgetCard, WidgetCardTitle, WidgetCardBody, BackgroundOverlay, EditableDiv } from '../../style'
-// import { ipfsGet } from '../../utils/ipfs-helper'
-// import { stringToContentEditable, contentEditableToString } from '../../utils/content-editable'
-// import EditButton from './EditButton'
-// import  {ipfsAdd}  from '../../utils/ipfs-helper'
-// Load markdown css
-// import '../../assets/markdown.css'
+import { Checkbox, SafeLink, theme } from '@aragon/ui'
 
-import MDReactComponent from 'markdown-react-js'
+import MDReactComponent from 'react-markdown'
 
-const markdownContent = `
-# Title
+const Link = ({ children, ...props }) => (
+  <SafeLink {...props} target="_blank">
+    {children}
+  </SafeLink>
+)
 
-## Subtitle
+const ListItem = ({ checked, children, ...props }) => {
+  let checkbox = null
+  if (checked !== null) {
+    checkbox = <Checkbox checked={checked} />
+  }
 
-### H3
-
-- List
-- Item
-- Other
-
-- [ ] Task
-- [x] Completed
-
-[Link](#)
-
-*Emojis!* 🦄 🦅 🚀
-
-**italics**
-
-__something__
-`
-
-// import dompurify from 'dompurify';
-
-const Preview = () => {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        bottom: '0',
-        // backgroundColor: '#222',
-      }}
-    >
-      <MarkdownWrapper>
-        <MDReactComponent text={markdownContent} />
-      </MarkdownWrapper>
-    </div>
+  return React.createElement(
+    'li',
+    { className: checkbox ? 'task-list-item' : '' },
+    checkbox,
+    children
   )
 }
 
-Preview.propTypes = {}
+const Preview = ({ content }) => {
+  return (
+    <MarkdownWrapper>
+      <MDReactComponent
+        source={content}
+        renderers={{ link: Link, listItem: ListItem }}
+      />
+    </MarkdownWrapper>
+  )
+}
+
+Preview.defaultProps = {
+  content: '',
+}
+
+Preview.propTypes = {
+  content: PropTypes.string,
+}
 
 const MarkdownWrapper = styled.div`
   h1,
@@ -64,49 +52,47 @@ const MarkdownWrapper = styled.div`
   h5,
   h6 {
     font-weight: 700;
-    line-height: 1;
-    cursor: text;
-    position: relative;
-    margin: 1em 0 15px;
-    padding: 0;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    margin-top: 24px;
+  }
+  h1,
+  h2 {
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid ${theme.contentBorder};
   }
   h1 {
-    font-size: 2.5em;
-    border-bottom: 1px solid ${theme.contentBorder};
+    font-size: 2em;
   }
   h2 {
-    font-size: 2em;
-    border-bottom: 1px solid ${theme.contentBorder};
+    font-size: 1.5em;
   }
   h3 {
-    font-size: 1.55em;
+    font-size: 1.25em;
   }
   h4 {
-    font-size: 1.2em;
+    font-size: 1em;
   }
   h5 {
-    font-size: 1em;
+    font-size: 0.875em;
   }
   h6 {
     color: ${theme.textSecondary};
-    font-size: 1em;
+    font-size: 0.87em;
   }
   p,
   blockquote,
   table,
   pre {
-    margin: 3px 0;
+    margin: 1em 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   blockquote {
-    padding: 0 15px;
+    padding: 0 1em;
     border-left: 4px solid ${theme.textTertiary};
     color: ${theme.textTertiary};
-  }
-  blockquote > :first-child {
-    margin-top: 0;
-  }
-  blockquote > :last-child {
-    margin-bottom: 10px;
   }
 
   a {
@@ -134,30 +120,40 @@ const MarkdownWrapper = styled.div`
   th,
   td {
     border: 1px solid ${theme.contentBorder};
-    padding: 6px 13px;
+    padding: 0.5em 1em;
   }
   img {
     max-width: 95%;
   }
   pre {
-    margin: 0;
     background-color: ${theme.mainBackground};
     border-radius: 3px;
     overflow: auto;
-    padding: 16px;
+    padding: 1em;
   }
-  ul {
-    padding-left: 30px;
-  }
-  li:last-of-type {
-    padding-bottom: 1rem;
-  }
+  ul,
   ol {
-    padding-left: 30px;
-    padding-bottom: 1rem;
+    padding-left: 2em;
   }
-  ol li ul:first-of-type {
-    margin-top: 0;
+  ol ol,
+  ul ol {
+    list-style-type: lower-roman;
+  }
+  ol ol ol,
+  ol ul ol,
+  ul ol ol,
+  ul ul ol {
+    list-style-type: lower-alpha;
+  }
+  li.task-list-item {
+    list-style-type: none;
+    position: relative;
+    & > button:first-child {
+      position: absolute;
+      margin-left: 0;
+      margin-top: 5px;
+      right: 100%;
+    }
   }
 `
 
