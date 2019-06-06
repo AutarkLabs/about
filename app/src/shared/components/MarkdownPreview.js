@@ -55,6 +55,12 @@ const MarkdownWrapper = styled.div`
     line-height: 1.25;
     margin-bottom: 16px;
     margin-top: 24px;
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   h1,
   h2 {
@@ -85,6 +91,9 @@ const MarkdownWrapper = styled.div`
   table,
   pre {
     margin: 1em 0;
+    &:first-child {
+      margin-top: 0;
+    }
     &:last-child {
       margin-bottom: 0;
     }
@@ -123,7 +132,7 @@ const MarkdownWrapper = styled.div`
     padding: 0.5em 1em;
   }
   img {
-    max-width: 95%;
+    max-width: 100%;
   }
   pre {
     background-color: ${theme.mainBackground};

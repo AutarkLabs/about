@@ -2,23 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Card, Text } from '@aragon/ui'
+import { Card, Text, theme } from '@aragon/ui'
 
-import { EditButton, IconPencil, MarkdownPreview } from '../../shared'
+import { EditButton, MarkdownPreview } from '../../shared'
 
 const Widget = ({ id, content, isLoading, handleClick, active, ipfsAddr }) => {
   return (
-    <StyledCard height="fit-content">
-      <CardContent>
-        <EditButton mode="text" onClick={handleClick(id)} active={active}>
-          <IconPencil />
-        </EditButton>
-        {isLoading ? (
-          <Text>Loading...</Text>
-        ) : (
-          <MarkdownPreview content={content} />
-        )}
-      </CardContent>
+    <StyledCard>
+      <EditButton onClick={handleClick(id)} active={active} />
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <MarkdownPreview content={content} />
+      )}
     </StyledCard>
   )
 }
@@ -31,17 +27,30 @@ Widget.propTypes = {
   ipfsAddr: PropTypes.string.isRequired,
 }
 
-const CardContent = styled.div`
-  padding: 24px;
-  :hover > ${EditButton} {
-    opacity: 1;
-  }
-`
-
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card).attrs({
+  height: 'fit-content',
+})`
   width: 100%;
   margin-bottom: 30px;
   position: relative;
+  padding: 24px;
+  ${EditButton} {
+    background: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    opacity: 0;
+    transition: opacity 0.25s;
+    svg {
+      transition: fill 0.3s ease;
+    }
+    :hover svg {
+      fill: ${theme.accent};
+    }
+  }
+  :hover ${EditButton} {
+    opacity: 1;
+  }
 `
 
 export default Widget
