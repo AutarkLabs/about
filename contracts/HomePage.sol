@@ -40,7 +40,7 @@ contract HomePage is AragonApp {
     }
 
     /**
-     * @notice Add a widget's IPFS hash to the registry
+     * @notice Add a widget to the registry https://ipfs.infura.io/ipfs/`_addr`
      * @param _addr IPFS hash of the widget's data
      */
     function addWidget(string _addr) external auth(ADD_ROLE) {
@@ -49,7 +49,7 @@ contract HomePage is AragonApp {
     }
 
     /**
-     * @notice Update a widget's IPFS hash
+     * @notice Update widget `_priority` to https://ipfs.infura.io/ipfs/`_addr`
      * @param _priority Index of the widget
      * @param _addr IPFS hash of the widget's data
      */

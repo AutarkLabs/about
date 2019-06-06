@@ -24,7 +24,8 @@ const PanelContent = ({
   closePanel,
   ipfsAddr,
   position,
-  saveWidget,
+  //   Widget re-ordering currently disabled
+  // saveWidget,
 }) => {
   const [unsavedText, setUnsavedText] = useState(content)
   const [screenIndex, setScreenIndex] = useState(0)
@@ -66,7 +67,8 @@ const PanelContent = ({
       }
     }
   }, [savedIpfsAddr, savePending])
-
+  /*
+  Widget re-ordering currently disabled
   useEffect(() => {
     if (ipfsAddr && savePending) {
       saveWidget(ipfsAddr, 0).subscribe(
@@ -82,7 +84,7 @@ const PanelContent = ({
     }
     setUnsavedText(content)
   }, [content, savedIpfsAddr, savePending])
-
+  */
   const handleChange = _screenIndex => {
     setScreenIndex(_screenIndex)
   }
