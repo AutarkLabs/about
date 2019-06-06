@@ -1,25 +1,17 @@
 import React, { useState } from 'react'
-// import { useAragonApi } from '@aragon/api-react'
-import {
-  Main,
-  AppBar,
-  AppView,
-  Button,
-  Card,
-  SidePanel,
-  Text,
-} from '@aragon/ui'
-import styled, { css } from 'styled-components'
-import IconPencil from './shared/assets/IconPencil'
-import { theme } from '@aragon/ui'
-import PanelContent from './components/PanelContent'
-import Preview from './components/Preview'
+// import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+import { useAragonApi } from '@aragon/api-react'
+import { Main, AppBar, AppView, Button, SidePanel } from '@aragon/ui'
+
+import PanelContent from './components/panel/PanelContent'
+import Widget from './components/content/Widget'
 
 const cards = [
   {
-    title: 'Welcome to Autark',
-    content: `[![Image of Yaktocat](https://static.wixstatic.com/media/aa0ae4_df121a9c9e8f464a97abfbcf2f77318d~mv2.png/v1/fill/w_180,h_37,al_c,q_80,usm_0.66_1.00_0.01/autarklogo.webp)](https://www.autark.xyz)
-
+    content: `# Welcome to Autark
+[![Autark logo](https://static.wixstatic.com/media/aa0ae4_df121a9c9e8f464a97abfbcf2f77318d~mv2.png/v1/fill/w_180,h_37,al_c,q_80,usm_0.66_1.00_0.01/autarklogo.webp)](https://www.autark.xyz)
 [Visit website 🦄 🦅 🚀](https://www.autark.xyz)
 
 Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker - autonomy, and access to tools that support the global development of complex mega - projects.
@@ -142,37 +134,9 @@ We're going on tour! Catch us at these locations.
 |  2019-06-07 | Oslo   |
 
 Would you like us to come to your city? [Get in touch](mailto:autark@autark.xyz)
-
-# Todo
-
-- [ ] This
-- [ ] That
-- [x] The other
-
-# Yalda's test
-
-0. Item 1
-1. Test
-2. Test
-   - [ ] bullet under list
-      - [ ] bullet
-3. Test
-4. Test
-   1. Test
-
-* Test
-* Test
-  * Test
-1. Test
-2. Test
-   * Test
-     -  bullet
-
 `,
   },
   {
-    title: 'Welcome to Autark',
-    title: 'More text goes here',
     content: `Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.
       To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.
       We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.
@@ -182,33 +146,15 @@ Would you like us to come to your city? [Get in touch](mailto:autark@autark.xyz)
   },
 ]
 
-const Widget = ({ id, title, content, handleClick, active }) => (
-  <StyledCard height="fit-content">
-    <CardContent>
-      <EditButton mode="text" onClick={handleClick(id)} active={active}>
-        <IconPencil />
-      </EditButton>
-      <Text
-        size="xxlarge"
-        style={{
-          display: 'block',
-          paddingBottom: '10px',
-          paddingRight: '50px',
-        }}
-      >
-        {title}
-      </Text>
-      <Preview content={content} />
-    </CardContent>
-  </StyledCard>
-)
-
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [selectedWidget, seSelectedWidget] = useState(0)
-  // const {api, appState } = useAragonApi()
-  // const {count, syncing } = appState
+
+  const { api } = useAragonApi()
+  // const { api, appState } = useAragonApi()
+  // const { count, syncing, app } = appState
+
   const handleClick = index => e => {
     seSelectedWidget(index)
     setPanelVisible(true)
@@ -216,6 +162,10 @@ function App() {
 
   const closePanel = () => {
     setPanelVisible(false)
+  }
+
+  const saveWidget = (ipfsAddr, index) => {
+    return api.addWidget(ipfsAddr)
   }
 
   const toggleEditMode = () => {
@@ -243,14 +193,12 @@ function App() {
           <WidgetsLayout>
             <Widget
               id={0}
-              title={cards[0].title}
               content={cards[0].content}
               handleClick={handleClick}
               active={editMode}
             />
             <Widget
               id={1}
-              title={cards[1].title}
               content={cards[1].content}
               handleClick={handleClick}
               active={editMode}
@@ -267,6 +215,8 @@ function App() {
           <PanelContent
             title={cards[selectedWidget].title}
             content={cards[selectedWidget].content}
+            saveWidget={saveWidget}
+            closePanel={closePanel}
           />
         </SidePanelContainer>
       </SidePanel>
@@ -297,9 +247,9 @@ const WidgetsLayout = styled.div`
   }
 `
 
-const CardContent = styled.div`
-  padding: 24px;
-`
+// const CardContent = styled.div`
+//   padding: 24px;
+// `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
 const SidePanelContainer = styled.div`
@@ -318,37 +268,6 @@ const SidePanelContainer = styled.div`
   }
 `
 
-const StyledCard = styled(Card)`
-  width: 100%;
-  margin-bottom: 30px;
-  position: relative;
-`
-
-const EditButton = styled(Button)`
-  position: absolute;
-  right: 0;
-  top: 0;
-  opacity: 0;
-  transition: opacity 0.25s;
-  color: 30px;
-  z-index: -999;
-  padding: 18px;
-  margin: 10px;
-  > svg {
-    transition: fill 0.3s ease;
-  }
-
-  :hover > svg {
-    fill: ${theme.accent};
-  }
-
-  ${props =>
-    props.active &&
-    css`
-      opacity: 1;
-      z-index: 1;
-    `}
-`
 // const Syncing = styled.div.attrs({children: 'Syncing…' })`
 //   position: absolute;
 //   top: 15px;

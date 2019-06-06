@@ -12,7 +12,7 @@ import Octicon, {
 
 import { Button, TabBar } from '@aragon/ui'
 
-const EditorTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
+const PanelTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
   <TabBarWrapper>
     <div
       style={{
@@ -28,7 +28,7 @@ const EditorTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
         onChange={handleChange}
       />
 
-      {screenIndex===0&&
+      {screenIndex === 0 && (
         <EditToolBar>
           <EditToolBarButton onClick={setSelectionBold} compact>
             <Octicon icon={TextSize} />
@@ -54,7 +54,7 @@ const EditorTabBar = ({ screenIndex, handleChange, setSelectionBold }) => (
           </EditToolBarButton>
           <EditToolBarSeparator />
         </EditToolBar>
-      }
+      )}
     </div>
   </TabBarWrapper>
 )
@@ -81,4 +81,4 @@ const EditToolBarSeparator = styled.div`
   height: 1px;
 `
 
-export default EditorTabBar
+export default PanelTabBar

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/gfm/gfm'
@@ -15,24 +15,20 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
   }, [instance])
 
   return (
-      <CodeMirror
-        value={content}
-        options={{
-          mode: 'gfm',
-          theme: 'idea',
-          lineWrapping: true,
-          autofocus: true,
-        }}
-        editorDidMount={editor => {
-          onCodeMirrorInit(editor)
-        }}
-        onBeforeChange={(editor, data, value) => {
-          onChange(value)
-        }}
-        onChange={(editor, data, value) => {
-          onChange(value)
-        }}
-      />
+    <CodeMirror
+      value={content}
+      options={{
+        mode: 'gfm',
+        theme: 'idea',
+        lineWrapping: true,
+      }}
+      editorDidMount={editor => {
+        onCodeMirrorInit(editor)
+      }}
+      onBeforeChange={(_editor, _data, value) => {
+        onChange(value)
+      }}
+    />
   )
 }
 

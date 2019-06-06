@@ -1,33 +1,50 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Button, SidePanelSeparator } from '@aragon/ui'
+import { Button, SidePanelSeparator, Text } from '@aragon/ui'
 
-import TypeInput from './TypeInput'
-import EditorTabBar from './EditorTabBar'
-import EditorTabView from './EditorTabView'
-import {SideBarScrollbarContainer} from '../styles'
-import EditorTextInput from './Utils/EditorTextInput'
+import TypeInput from '../TypeInput'
+import PanelTabBar from './PanelTabBar'
+import PanelTabView from './PanelTabView'
+import { SideBarScrollbarContainer } from '../../styles'
+import Input from './Input'
+
+import ipfsAdd from '../Utils/Ipfs/ipfsAdd'
 
 let codemirrorInitialInstance = null
 let editorTypeInitial = 0
-let externalUrlInitial = ""
-let ipfsHashInitial = ""
+let externalUrlInitial = ''
+let ipfsHashInitial = ''
 
-const PanelContent = ({content}) => {
+const PanelContent = ({ content, saveWidget, closePanel }) => {
   const [unsavedText, setUnsavedText] = useState(content)
   const [screenIndex, setScreenIndex] = useState(0)
+  const [savePending, setSavePending] = useState(false)
   const [editorType, setEditorType] = useState(editorTypeInitial)
   const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
   const [ipfsHash, setIpfsHash] = useState(ipfsHashInitial)
+  /* , isError */
+  const [{ ipfsAddr, isLoading }, saveIpfs] = ipfsAdd(null)
 
   const [codemirrorInstance, setCodemirrorInstance] = useState(
     codemirrorInitialInstance
   )
   useEffect(() => {
+    if (ipfsAddr && savePending) {
+      saveWidget(ipfsAddr, 0).subscribe(
+        _res => {
+          setSavePending(false)
+          closePanel()
+        },
+        err => {
+          console.log(err)
+          setSavePending(false)
+        }
+      )
+    }
     setUnsavedText(content)
-  })
+  }, [content])
 
   const handleChange = _screenIndex => {
     setScreenIndex(_screenIndex)
@@ -44,7 +61,7 @@ const PanelContent = ({content}) => {
   const handleExternalUrlChange = _externalUrl => {
     setExternalUrl(_externalUrl)
   }
-  
+
   const handleIpfsHashChange = _ipfsHash => {
     setIpfsHash(_ipfsHash)
   }
@@ -59,35 +76,41 @@ const PanelContent = ({content}) => {
     )
   }
 
-  const saveBlock = () => {
-    let ipfsAddr = "";
-    switch(editorType){
+  const saveBlock = async () => {
+    let widgetData = {}
+
+    switch (editorType) {
       case 0:
-          ipfsAddr = "IPFSADDR";
-        break;
-      case 1:
-          ipfsAddr = externalUrl;
-        break;
-      case 2:
-          ipfsAddr = ipfsHash;
+        widgetData = {
+          body: unsavedText,
+        }
+        await saveIpfs(widgetData)
+        setSavePending(true)
+
         break
-        default:
-          break
+      case 1:
+        widgetData = {
+          url: externalUrl,
+        }
+        await saveIpfs(widgetData)
+        setSavePending(true)
+
+        break
+      case 2:
+        break
+      default:
+        break
     }
-    console.log(ipfsAddr);
   }
 
   return (
     <PanelContainer>
       <TopPanel>
-        <TypeInput 
-          value={editorType}
-          onChange={handleEditorTypeChange}
-        />
+        <TypeInput value={editorType} onChange={handleEditorTypeChange} />
         <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
-        {editorType=== 0 && 
+        {editorType === 0 && (
           <div>
-            <EditorTabBar
+            <PanelTabBar
               handleChange={handleChange}
               screenIndex={screenIndex}
               setSelectionBold={setSelectionBold}
@@ -98,36 +121,36 @@ const PanelContent = ({content}) => {
               }}
             />
           </div>
-        }
+        )}
       </TopPanel>
       <CenterPanel>
-        {editorType=== 0 && 
-          <EditorTabView
+        {editorType === 0 && (
+          <PanelTabView
             handleEditorChange={handleEditorChange}
             onCodeMirrorInit={onCodeMirrorInit}
             screenIndex={screenIndex}
             unsavedText={unsavedText}
             instance={codemirrorInstance}
           />
-        }
-        {editorType=== 1 && 
+        )}
+        {editorType === 1 && (
           <SideBarScrollbarContainer>
-            <EditorTextInput
+            <Input
               label="Url"
               value={externalUrl}
               onChange={handleExternalUrlChange}
             />
           </SideBarScrollbarContainer>
-        }
-        {editorType=== 2 && 
+        )}
+        {editorType === 2 && (
           <SideBarScrollbarContainer>
-            <EditorTextInput
+            <Input
               label="Hash"
               value={ipfsHash}
               onChange={handleIpfsHashChange}
             />
           </SideBarScrollbarContainer>
-        }
+        )}
       </CenterPanel>
       <BottomPanel>
         <SidePanelSeparator style={{ margin: '0 -30px 15px' }} />
@@ -135,6 +158,14 @@ const PanelContent = ({content}) => {
           Update
         </Button>
       </BottomPanel>
+
+      {(isLoading || savePending) && (
+        <LoadingOverlay>
+          <LoadingOverlayContainer>
+            <Text>{isLoading ? 'Saving to ipfs' : 'Sign contract'}</Text>
+          </LoadingOverlayContainer>
+        </LoadingOverlay>
+      )}
     </PanelContainer>
   )
 }
@@ -173,6 +204,24 @@ const CenterPanel = styled.div`
   margin-right: -30px;
   margin-left: -30px;
   z-index: 1;
+`
+
+const LoadingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+`
+
+const LoadingOverlayContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
 `
 
 export default PanelContent
