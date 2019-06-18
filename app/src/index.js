@@ -5,7 +5,22 @@ import App from './App'
 
 const reducer = state => {
   if (state === null) {
-    return { count: 0, syncing: true }
+    return {
+      count: 0,
+      syncing: true,
+      entries: [
+        {
+          addr: '',
+          content: '',
+          disabled: false,
+        },
+        {
+          addr: '',
+          content: '',
+          disabled: false,
+        },
+      ],
+    }
   }
   return state
 }
