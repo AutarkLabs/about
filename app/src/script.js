@@ -3,6 +3,7 @@ import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
 import ipfsClient from 'ipfs-http-client'
 import ipfsConfig from '../ipfs'
+const keccak256 = require('js-sha3').keccak_256
 
 const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
@@ -44,31 +45,45 @@ async function handleEvents({ event, returnValues }) {
   }
 
   // purify the resulting state to handle duplication edge cases
-  const filteredState = { entries: filterEntries(nextState.entries) }
-  app.cache('state', filteredState)
+  //const filteredState = { entries: filterEntries(nextState.entries) }
+  app.cache('state', nextState)
 }
 
 const refreshAllWidgets = async ({ entries = [] }) => {
   return new Promise(async resolve => {
     // Clear all entries
     entries = []
-    var widgetNumber = await app
-      .call('getWCount')
+    var mainWidget = await app
+      .call('getWidget', '0x' + keccak256('MAIN_WIDGET'))
       .pipe(first())
       .toPromise()
-    for (var i = 0; i <= widgetNumber; i++) {
-      try {
-        var widgetData = await loadWidgetData(i)
-        // TODO: Fetch data asyncronously
-        const content = await loadWidgetIpfs(widgetData.addr)
-        widgetData.content = content
-        entries.push(widgetData) // add to the state object received as param
-      } catch (err) {
-        console.log(err)
-      }
+    if (mainWidget.addr) {
+      mainWidget.content = await loadWidgetIpfs(mainWidget.addr)
+      entries.push(mainWidget)
+    } else {
+      entries.push({
+        addr: '',
+        content: '',
+        disabled: false,
+      })
     }
+
+    var sideWidget = await app
+      .call('getWidget', '0x' + keccak256('SIDE_WIDGET'))
+      .pipe(first())
+      .toPromise()
+    if (sideWidget.addr) {
+      sideWidget.content = await loadWidgetIpfs(sideWidget.addr)
+      entries.push(sideWidget)
+    } else {
+      entries.push({
+        addr: '',
+        content: '',
+        disabled: false,
+      })
+    }
+
     const state = { entries } // return the entries array
-    console.log(entries)
     resolve(state)
   })
 }
