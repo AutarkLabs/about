@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Card, SafeLink } from '@aragon/ui'
+import { theme, Card, Text, Button } from '@aragon/ui'
 
 import { EditButton, IconPencil, MarkdownPreview } from '../../shared'
 
 const Widget = ({ id, content, isLoading, handleClick, active, ipfsAddr }) => {
   return (
     <StyledCard height="fit-content">
-      {ipfsAddr !== '' ? (
+      {ipfsAddr !== '' && content !== '' ? (
         <CardContent>
           <EditButton mode="text" onClick={handleClick(id)} active={active}>
             <IconPencil />
@@ -17,8 +17,18 @@ const Widget = ({ id, content, isLoading, handleClick, active, ipfsAddr }) => {
           <MarkdownPreview content={content} />
         </CardContent>
       ) : (
-        <CardContent>
-          <SafeLink onClick={handleClick(id)}>Update</SafeLink>
+        <CardContent style={{ padding: '50px', textAlign: 'center' }}>
+          <br />
+          <Text>This widget is empty</Text>
+          <br />
+          <br />
+          <Button
+            compact
+            onClick={handleClick(id)}
+            style={{ color: theme.accent }}
+          >
+            Edit
+          </Button>
         </CardContent>
       )}
     </StyledCard>
