@@ -2,19 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Card, Text, theme } from '@aragon/ui'
+import { Card, SafeLink, theme } from '@aragon/ui'
 
 import { EditButton, MarkdownPreview } from '../../shared'
 
-const Widget = ({ id, content, isLoading, handleClick, active, ipfsAddr }) => {
+const Widget = ({ active, content, handleClick, id, ipfsAddr }) => {
   return (
     <StyledCard>
-      <EditButton onClick={handleClick(id)} active={active} />
-      {isLoading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <MarkdownPreview content={content} />
-      )}
+      {ipfsAddr !== '' ? (
+        <React.Fragment>
+          <EditButton onClick={handleClick(id)} active={active} />
+          <MarkdownPreview content={content} />
+        </React.Fragment>
+      ) : <SafeLink onClick={handleClick(id)}>Update</SafeLink>}
     </StyledCard>
   )
 }

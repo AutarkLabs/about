@@ -42,31 +42,24 @@ const PanelContent = ({
 
   useEffect(() => {
     if (savedIpfsAddr && savePending) {
-      if (ipfsAddr) {
-        updateWidget(position, savedIpfsAddr).subscribe(
-          _res => {
-            setSavePending(false)
-            closePanel()
-          },
-          err => {
-            console.log(err)
-            setSavePending(false)
-          }
-        )
-      } else {
-        newWidget(savedIpfsAddr).subscribe(
-          _res => {
-            setSavePending(false)
-            closePanel()
-          },
-          err => {
-            console.log(err)
-            setSavePending(false)
-          }
-        )
-      }
+      const widgetSlot = position === 0 ? 'MAIN_WIDGET' : 'SIDE_WIDGET'
+      updateWidget(widgetSlot, savedIpfsAddr).subscribe(
+        _res => {
+          setSavePending(false)
+          closePanel()
+        },
+        err => {
+          console.log(err)
+          setSavePending(false)
+        }
+      )
     }
   }, [savedIpfsAddr, savePending])
+
+  useEffect(() => {
+    setUnsavedText(content)
+  }, [content])
+
   /*
   Widget re-ordering currently disabled
   useEffect(() => {
