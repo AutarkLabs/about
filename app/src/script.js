@@ -21,67 +21,92 @@ app.state().subscribe(state => {
  ***********************/
 
 async function handleEvents({ event, returnValues }) {
-  let nextState
-  /*
-    IMPORTANT: I'm refreshing all widgets here on every event (EVEN ON STARTUP EMPTY ONES), this is really underperformant. 
-    Should be improved adding a return value with priority index to the smart contract events so we can update just the widget affected. 
-  */
+  let nextState = { ...appState }
+
+  if (nextState.entries.length < 1) {
+    nextState = initializeWidgets(nextState)
+    app.cache('state', nextState)
+  }
   switch (event) {
-    case 'WidgetAdded':
-      nextState = await refreshAllWidgets(appState)
-      break
-    case 'WidgetRemoved':
-      nextState = await refreshAllWidgets(appState)
-      break
     case 'WidgetUpdated':
-      nextState = await refreshAllWidgets(appState)
-      break
-    case 'WidgetsReordered':
-      nextState = await refreshAllWidgets(appState)
+      if (Object.keys(returnValues).length === 0) {
+        return
+      }
+      nextState = await refreshWidget(nextState, returnValues._priority)
       break
     default:
-      nextState = await refreshAllWidgets(appState)
       console.log('[Widgets script] unknown event', event, returnValues)
   }
-
   app.cache('state', nextState)
 }
 
-const refreshAllWidgets = async ({ entries = [] }) => {
+const initializeWidgets = ({ entries = [] }) => {
+  // Clear all entries
+  entries = []
+
+  for (let i = 0; i < 2; i++) {
+    entries.push({
+      addr: '',
+      content: '',
+      loading: false,
+      disabled: false,
+    })
+  }
+  const state = { entries } // return the entries array
+  return state
+}
+
+const refreshWidget = async ({ entries = [] }, _priority) => {
   return new Promise(async resolve => {
     // Clear all entries
-    entries = []
-    var mainWidget = await app
-      .call('getWidget', '0x' + keccak256('MAIN_WIDGET'))
-      .pipe(first())
-      .toPromise()
-    if (mainWidget.addr) {
-      mainWidget.content = await loadWidgetIpfs(mainWidget.addr)
-      entries.push(mainWidget)
-    } else {
-      entries.push({
-        addr: '',
-        content: '',
-        disabled: false,
-      })
-    }
+    const i = _priority === '0x' + keccak256('MAIN_WIDGET') ? 0 : 1
 
-    var sideWidget = await app
-      .call('getWidget', '0x' + keccak256('SIDE_WIDGET'))
-      .pipe(first())
-      .toPromise()
-    if (sideWidget.addr) {
-      sideWidget.content = await loadWidgetIpfs(sideWidget.addr)
-      entries.push(sideWidget)
-    } else {
-      entries.push({
+    try {
+      var widget = await app
+        .call('getWidget', _priority)
+        .pipe(first())
+        .toPromise()
+      if (widget && widget.addr) {
+        widget.isLoading = true
+        entries[i] = widget
+      } else {
+        entries[i] = {
+          addr: '',
+          content: '',
+          loading: false,
+          disabled: false,
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      entries[i] = {
         addr: '',
         content: '',
+        loading: false,
         disabled: false,
-      })
+      }
     }
 
     const state = { entries } // return the entries array
+
+    if (entries[i].addr !== '') {
+      // Wait so state is propagated into cache
+      setTimeout(() => {
+        loadWidgetIpfs(i, entries[i].addr)
+          .then(_result => {
+            let nextState = { ...appState }
+            nextState.entries[i].isLoading = false
+            nextState.entries[i].content = _result
+            app.cache('state', nextState)
+          })
+          .catch(err => {
+            let nextState = { ...appState }
+            nextState.entries[i].isLoading = false
+            nextState.entries[i].errorMessage = 'Error: ' + err
+            app.cache('state', nextState)
+          })
+      }, 10)
+    }
     resolve(state)
   })
 }
@@ -92,7 +117,7 @@ const refreshAllWidgets = async ({ entries = [] }) => {
  *                     *
  ***********************/
 
-const loadWidgetIpfs = async ipfsAddr => {
+const loadWidgetIpfs = async (i, ipfsAddr) => {
   return new Promise((resolve, reject) => {
     ipfs
       .cat(ipfsAddr)

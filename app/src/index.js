@@ -12,11 +12,13 @@ const reducer = state => {
         {
           addr: '',
           content: '',
+          loading: false,
           disabled: false,
         },
         {
           addr: '',
           content: '',
+          loading: false,
           disabled: false,
         },
       ],
