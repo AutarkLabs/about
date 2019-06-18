@@ -44,8 +44,6 @@ async function handleEvents({ event, returnValues }) {
       console.log('[Widgets script] unknown event', event, returnValues)
   }
 
-  // purify the resulting state to handle duplication edge cases
-  //const filteredState = { entries: filterEntries(nextState.entries) }
   app.cache('state', nextState)
 }
 
@@ -94,28 +92,6 @@ const refreshAllWidgets = async ({ entries = [] }) => {
  *                     *
  ***********************/
 
-const loadWidgetData = async priority => {
-  return new Promise((resolve, reject) => {
-    app.call('getWidget', priority).subscribe(
-      widget => {
-        if (!widget) {
-          reject(new Error('getWidget failed'))
-        } else {
-          resolve({
-            addr: widget[0],
-            content: 'Loading',
-            disabled: widget[1],
-            loading: true,
-          })
-        }
-      },
-      err => {
-        reject(err)
-      }
-    )
-  })
-}
-
 const loadWidgetIpfs = async ipfsAddr => {
   return new Promise((resolve, reject) => {
     ipfs
@@ -127,9 +103,4 @@ const loadWidgetIpfs = async ipfsAddr => {
         reject(err)
       })
   })
-}
-
-const filterEntries = entries => {
-  const filteredEntries = entries.filter(entry => entry && !!entry.addr)
-  return filteredEntries
 }
