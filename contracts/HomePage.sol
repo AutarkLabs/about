@@ -9,7 +9,7 @@ contract HomePage is AragonApp {
     event WidgetAdded();
     event WidgetRemoved();
     event WidgetsReordered();
-    event WidgetUpdated();
+    event WidgetUpdated(bytes32 indexed _priority);
 
     /// Struct
     struct Widget {
@@ -46,7 +46,7 @@ contract HomePage is AragonApp {
      */
     function updateWidget(bytes32 _priority, string _addr) external auth(UPDATE_ROLE) {
         widgets[_priority] = Widget(_addr, false);
-        emit WidgetUpdated();
+        emit WidgetUpdated(_priority);
     }
 
     /**

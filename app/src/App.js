@@ -62,6 +62,8 @@ function App() {
       <Widget
         key={index}
         id={index}
+        isLoading={widget.isLoading}
+        errorMessage={widget.errorMessage}
         content={widget.content}
         ipfsAddr={widget.addr}
         handleClick={handleClickUpdateWidget}
