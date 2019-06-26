@@ -20,6 +20,13 @@ app.state().subscribe(state => {
  *                     *
  ***********************/
 
+const initialWidgetState = {
+  addr: '',
+  content: '',
+  loading: false,
+  disabled: false,
+}
+
 async function handleEvents({ event, returnValues }) {
   let nextState = { ...appState }
 
@@ -45,12 +52,7 @@ const initializeWidgets = ({ entries = [] }) => {
   entries = []
 
   for (let i = 0; i < 2; i++) {
-    entries.push({
-      addr: '',
-      content: '',
-      loading: false,
-      disabled: false,
-    })
+    entries.push(initialWidgetState)
   }
   const state = { entries } // return the entries array
   return state
@@ -70,21 +72,11 @@ const refreshWidget = async ({ entries = [] }, _priority) => {
         widget.isLoading = true
         entries[i] = widget
       } else {
-        entries[i] = {
-          addr: '',
-          content: '',
-          loading: false,
-          disabled: false,
-        }
+        entries[i] = initialWidgetState
       }
     } catch (err) {
       console.log(err)
-      entries[i] = {
-        addr: '',
-        content: '',
-        loading: false,
-        disabled: false,
-      }
+      entries[i] = initialWidgetState
     }
 
     const state = { entries } // return the entries array
