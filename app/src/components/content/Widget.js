@@ -2,9 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { theme, Card, Text, Button, Info, SafeLink } from '@aragon/ui'
+import { theme, Card, Info, SafeLink } from '@aragon/ui'
 
 import { EditButton, IconPencil, MarkdownPreview } from '../../shared'
+
+const mainInitialText = `This is your custom home app. Edit these blocks by hovering over it. Set it to become your default home app by selecting it in "Settings". Find out more [here](link). In the future this app will provide much more flexibility with what you can add to it!
+
+You may want to use this section to provide an overview of your DAO and how people can get involved.`
+
+const sideInitialText = `This section may be good to include social links.`
 
 const Widget = ({
   id,
@@ -18,7 +24,6 @@ const Widget = ({
   return (
     <StyledCard height="fit-content" key={id}>
       <CardContent>
-        {}
         {isLoading ? (
           <div style={{ padding: '50px', textAlign: 'center' }}>
             Loading{' '}
@@ -41,18 +46,26 @@ const Widget = ({
                 <MarkdownPreview content={content} />
               </div>
             ) : (
-              <div style={{ padding: '50px', textAlign: 'center' }}>
-                <br />
-                <Text>This widget is empty</Text>
-                <br />
-                <br />
-                <Button
-                  compact
+              <div style={{ padding: '0' }}>
+                <MarkdownPreview
+                  content={
+                    id === 0
+                      ? '# Welcome to my DAO'
+                      : '# Find out more about my DAO'
+                  }
+                />
+
+                <a
+                  href="#"
                   onClick={handleClick(id)}
                   style={{ color: theme.accent }}
                 >
-                  Edit
-                </Button>
+                  <i>Edit Me</i>
+                </a>
+
+                <MarkdownPreview
+                  content={id === 0 ? mainInitialText : sideInitialText}
+                />
               </div>
             ),
             errorMessage && (
