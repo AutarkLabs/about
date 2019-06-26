@@ -230,7 +230,7 @@ const PanelContent = ({
       {(isLoading || savePending) && (
         <LoadingOverlay>
           <LoadingOverlayContainer>
-            <Text>{isLoading ? 'Saving to ipfs' : 'Sign contract'}</Text>
+            <Text>{isLoading ? 'Saving to ipfs' : ''}</Text>
           </LoadingOverlayContainer>
         </LoadingOverlay>
       )}
