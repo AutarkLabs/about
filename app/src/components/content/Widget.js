@@ -54,7 +54,7 @@ const Widget = ({
                       : '# Find out more about my DAO'
                   }
                 />
-
+                <br />
                 <a
                   href="#"
                   onClick={handleClick(id)}
@@ -62,7 +62,8 @@ const Widget = ({
                 >
                   <i>Edit Me</i>
                 </a>
-
+                <br />
+                <br />
                 <MarkdownPreview
                   content={id === 0 ? mainInitialText : sideInitialText}
                 />
