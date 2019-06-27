@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 import { MarkdownEditor, MarkdownPreview } from '../../shared'
-import { MarkdownContainer } from '../../styles'
+import { MarkdownContainer, SideBarScrollbarContainer } from '../../styles'
 
 const PanelTabView = ({
   handleEditorChange,
@@ -38,7 +38,11 @@ const PanelTabView = ({
           />
         )}
 
-        {screenIndex === 1 && <MarkdownPreview content={unsavedText} />}
+        {screenIndex === 1 && (
+          <SideBarScrollbarContainer>
+            <MarkdownPreview content={unsavedText} />
+          </SideBarScrollbarContainer>
+        )}
       </MarkdownContainer>
     </div>
   </div>
