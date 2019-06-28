@@ -13,6 +13,10 @@ const Editor = ({ content, instance, onCodeMirrorInit, onChange }) => {
     instance && instance.setSize('100%', '100%')
   }, [instance])
 
+  useEffect(() => {
+    instance && instance.focus()
+  }, [onChange])
+
   return (
     <CodeMirror
       value={content}
