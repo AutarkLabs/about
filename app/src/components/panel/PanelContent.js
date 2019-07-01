@@ -12,6 +12,13 @@ import Input from './Input'
 
 import ipfsAdd from '../Utils/Ipfs/ipfsAdd'
 
+import {
+  wrapTextWith,
+  insertLink,
+  insertHeader,
+  insertOnStartOfLines,
+} from '../../shared/codemirror-utils'
+
 let codemirrorInitialInstance = null
 let editorTypeInitial = 0
 let externalUrlInitial = ''
@@ -103,45 +110,31 @@ const PanelContent = ({
   }
 
   const setSelectionSize = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '# ' + codemirrorInstance.doc.getSelection()
-    )
+    insertHeader(codemirrorInstance)
   }
 
   const setSelectionUnorderedList = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '\n* ' + codemirrorInstance.doc.getSelection() + '\n'
-    )
+    insertOnStartOfLines(codemirrorInstance, '* ')
   }
 
-  const setSelectionBold = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '**' + codemirrorInstance.doc.getSelection() + '**'
-    )
+  const setSelectionBold = async () => {
+    wrapTextWith(codemirrorInstance, '**')
   }
 
   const setSelectionItalic = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '*' + codemirrorInstance.doc.getSelection() + '*'
-    )
+    wrapTextWith(codemirrorInstance, '*')
   }
 
   const setSelectionLink = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '[' + codemirrorInstance.doc.getSelection() + ']()'
-    )
+    insertLink(codemirrorInstance, false)
   }
 
   const setSelectionCode = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '`' + codemirrorInstance.doc.getSelection() + '`'
-    )
+    wrapTextWith(codemirrorInstance, '`')
   }
 
   const setSelectionQuote = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '> ' + codemirrorInstance.doc.getSelection()
-    )
+    insertOnStartOfLines(codemirrorInstance, '> ')
   }
 
   const saveBlock = async () => {
