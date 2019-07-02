@@ -80,7 +80,7 @@ const Widget = ({
 
 Widget.propTypes = {
   active: PropTypes.bool.isRequired,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.string,
   handleClick: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   ipfsAddr: PropTypes.string.isRequired,
