@@ -8,6 +8,7 @@ import { soliditySha3 } from 'web3-utils'
 const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
 let appState
+
 app.events().subscribe(handleEvents)
 
 app.state().subscribe(state => {
@@ -28,28 +29,27 @@ const initialWidgetState = {
 }
 
 async function handleEvents({ event, returnValues }) {
-  let nextState = { ...appState }
-
-  if (nextState.entries.length < 1) {
-    nextState = initializeWidgets(nextState)
-    app.cache('state', nextState)
+  if (
+    appState == null ||
+    appState.entries == null ||
+    appState.entries.length < 1
+  ) {
+    const nextState = initializeWidgets()
+    appState = nextState
+    await app.cache('state', { ...nextState })
   }
   switch (event) {
     case 'WidgetUpdated':
-      if (Object.keys(returnValues).length === 0) {
-        return
-      }
-      nextState = await refreshWidget(nextState, returnValues._priority)
+      refreshWidget(returnValues._priority)
       break
     default:
       console.log('[Widgets script] unknown event', event, returnValues)
   }
-  app.cache('state', nextState)
 }
 
-const initializeWidgets = ({ entries = [] }) => {
+const initializeWidgets = () => {
   // Clear all entries
-  entries = []
+  let entries = []
 
   for (let i = 0; i < 2; i++) {
     entries.push(initialWidgetState)
@@ -58,49 +58,51 @@ const initializeWidgets = ({ entries = [] }) => {
   return state
 }
 
-const refreshWidget = async ({ entries = [] }, _priority) => {
-  return new Promise(async resolve => {
-    // Clear all entries
-    const i = _priority === soliditySha3('MAIN_WIDGET') ? 0 : 1
+const refreshWidget = async _priority => {
+  // Clear all entries
+  const i = _priority === soliditySha3('MAIN_WIDGET') ? 0 : 1
 
-    try {
-      var widget = await app
-        .call('getWidget', _priority)
-        .pipe(first())
-        .toPromise()
-      if (widget && widget.addr) {
-        widget.isLoading = true
-        entries[i] = widget
-      } else {
-        entries[i] = initialWidgetState
+  let entry = {
+    addr: '',
+    content: '',
+    isLoading: true,
+    disabled: false,
+  }
+  try {
+    let widget = await app
+      .call('getWidget', _priority)
+      .pipe(first())
+      .toPromise()
+    if (widget && widget.addr) {
+      widget.isLoading = true
+      entry = widget
+      if (entry.addr !== '') {
+        // Set loading state
+        let nextState2 = { ...appState }
+        nextState2.entries[i] = { ...entry }
+        appState = nextState2
+        await app.cache('state', { ...nextState2 })
+        // NOTES: Without this delay, it fails randomly when refreshing whole page
+        setTimeout(async () => {
+          try {
+            const ipfsContent = await loadWidgetIpfs(i, entry.addr)
+            entry.isLoading = false
+            entry.content = ipfsContent
+          } catch (err) {
+            entry.isLoading = false
+            entry.errorMessage = 'Error: ' + err
+          }
+          // Save final entry state
+          let nextState = { ...appState }
+          nextState.entries[i] = { ...entry }
+          appState = nextState
+          await app.cache('state', { ...nextState })
+        }, 1000)
       }
-    } catch (err) {
-      console.log(err)
-      entries[i] = initialWidgetState
     }
-
-    const state = { entries } // return the entries array
-
-    if (entries[i].addr !== '') {
-      // Wait so state is propagated into cache
-      setTimeout(() => {
-        loadWidgetIpfs(i, entries[i].addr)
-          .then(_result => {
-            let nextState = { ...appState }
-            nextState.entries[i].isLoading = false
-            nextState.entries[i].content = _result
-            app.cache('state', nextState)
-          })
-          .catch(err => {
-            let nextState = { ...appState }
-            nextState.entries[i].isLoading = false
-            nextState.entries[i].errorMessage = 'Error: ' + err
-            app.cache('state', nextState)
-          })
-      }, 10)
-    }
-    resolve(state)
-  })
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 /***********************
