@@ -3,7 +3,7 @@ import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
 import ipfsClient from 'ipfs-http-client'
 import ipfsConfig from '../ipfs'
-const keccak256 = require('js-sha3').keccak_256
+import { soliditySha3 } from 'web3-utils'
 
 const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
@@ -61,7 +61,7 @@ const initializeWidgets = ({ entries = [] }) => {
 const refreshWidget = async ({ entries = [] }, _priority) => {
   return new Promise(async resolve => {
     // Clear all entries
-    const i = _priority === '0x' + keccak256('MAIN_WIDGET') ? 0 : 1
+    const i = _priority === soliditySha3('MAIN_WIDGET') ? 0 : 1
 
     try {
       var widget = await app

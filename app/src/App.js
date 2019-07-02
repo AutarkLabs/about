@@ -17,7 +17,7 @@ import {
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
-const keccak256 = require('js-sha3').keccak_256
+import { soliditySha3 } from 'web3-utils'
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
@@ -44,7 +44,7 @@ function App() {
   }
 
   const updateWidget = (_index, _ipfsAddr) => {
-    return api.updateWidget('0x' + keccak256(_index), _ipfsAddr)
+    return api.updateWidget(soliditySha3(_index), _ipfsAddr)
   }
 
   const newWidget = _ipfsAddr => {
