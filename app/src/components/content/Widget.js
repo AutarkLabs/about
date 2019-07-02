@@ -33,46 +33,45 @@ const Widget = ({
             . This could take a while.
           </div>
         ) : (
-            [
-              content !== '' ? (
-                <div>
-                  <EditButton
-                    mode="text"
-                    onClick={handleClick(id)}
-                    active={active}
-                  >
-                  </EditButton>
-                  <MarkdownPreview content={content} />
-                </div>
-              ) : (
-                  <div style={{ padding: '0' }}>
-                    <MarkdownPreview
-                      content={
-                        id === 0
-                          ? '# Welcome to my DAO'
-                          : '# Find out more about my DAO'
-                      }
-                    />
-                    <br />
-                    <a
-                      href="#"
-                      onClick={handleClick(id)}
-                      style={{ color: theme.accent }}
-                    >
-                      <i>Edit Me</i>
-                    </a>
-                    <br />
-                    <br />
-                    <MarkdownPreview
-                      content={id === 0 ? mainInitialText : sideInitialText}
-                    />
-                  </div>
-                ),
-              errorMessage && (
-                <Info.Alert title="Error">{errorMessage}</Info.Alert>
-              ),
-            ]
-          )}
+          [
+            content !== '' ? (
+              <div>
+                <EditButton
+                  mode="text"
+                  onClick={handleClick(id)}
+                  active={active}
+                ></EditButton>
+                <MarkdownPreview content={content} />
+              </div>
+            ) : (
+              <div style={{ padding: '0' }}>
+                <MarkdownPreview
+                  content={
+                    id === 0
+                      ? '# Welcome to my DAO'
+                      : '# Find out more about my DAO'
+                  }
+                />
+                <br />
+                <a
+                  href="#"
+                  onClick={handleClick(id)}
+                  style={{ color: theme.accent }}
+                >
+                  <i>Edit Me</i>
+                </a>
+                <br />
+                <br />
+                <MarkdownPreview
+                  content={id === 0 ? mainInitialText : sideInitialText}
+                />
+              </div>
+            ),
+            errorMessage && (
+              <Info.Alert title="Error">{errorMessage}</Info.Alert>
+            ),
+          ]
+        )}
       </CardContent>
     </StyledCard>
   )
