@@ -41,23 +41,34 @@ export async function wrapTextWith(cm, symbol) {
     }
   }
 }
-
 export async function insertLink(cm, isImage) {
-  let cursor = cm.getCursor()
   let ranges = cm.listSelections()
   const linkEnd = '](https://)'
   const symbol = isImage ? '![' : '['
 
   if (ranges.length > 0) {
     // TODO: Handle all selections and not just the first one
-    let range = ranges[0]
-    if (!range.empty()) {
-      const from = range.from()
-      const to = range.to()
-      let selection = cm.getRange(from, to)
-      selection = symbol + selection + linkEnd
-      await cm.doc.replaceRange(selection, from, to)
-      cm.doc.setSelection(to, from)
+    const from = ranges[0].from()
+    const to = ranges[0].to()
+
+    // Check if string is surrounded by the symbol
+    let preEndPos = {
+      line: to.line,
+      ch: to.ch + linkEnd.length,
+    }
+    let preText = cm.getRange(to, preEndPos)
+    let postEndPos = {
+      line: from.line,
+      ch: from.ch - symbol.length,
+    }
+    let postText = cm.getRange(postEndPos, from)
+
+    if (preText === linkEnd && postText === symbol) {
+      // NOTES: Unexpected behaviour without await
+      await cm.doc.replaceRange('', to, preEndPos)
+      await cm.doc.replaceRange('', postEndPos, from)
+    } else {
+      await cm.doc.replaceSelection(symbol + cm.doc.getSelection() + linkEnd)
 
       // Keep selection like it was before the change
       let postEndPos = {
@@ -70,16 +81,10 @@ export async function insertLink(cm, isImage) {
         ch: to.ch + symbol.length,
       }
       cm.setSelection(postEndPos, preEndPos)
-    } else {
-      // Without a selection, we must rely on cursor position
-      await cm.doc.replaceRange(symbol + linkEnd, cursor, cursor)
-      cm.setCursor({
-        line: cursor.line,
-        ch: cursor.ch + 1,
-      })
     }
   }
 }
+
 
 export function insertHeader(cm) {
   let cursor = cm.getCursor()
