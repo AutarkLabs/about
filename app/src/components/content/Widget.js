@@ -41,7 +41,6 @@ const Widget = ({
                     onClick={handleClick(id)}
                     active={active}
                   >
-                    <IconPencil />
                   </EditButton>
                   <MarkdownPreview content={content} />
                 </div>
