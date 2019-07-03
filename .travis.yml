@@ -1,0 +1,31 @@
+# ensure running in a container for fast boot, travis has these requirements:
+sudo: false
+dist: 'trusty'
+
+# these are executed in order. each must pass for the next to be run
+stages:
+  - precache # warm up cache for default Node.js version
+  - lint-n-test # lint and run tests
+
+# defaults
+language: node_js
+node_js: '11'
+cache:
+  directories:
+    - $HOME/.npm
+    - node_modules
+
+jobs:
+  include:
+    - stage: precache
+      script: true
+
+    - stage: lint-n-test
+      script:
+        - npm run lint
+        - travis_wait 60 npm run coverage
+      name: Home app lint, tests and coverage report
+      after_success: npm run coveralls
+
+notifications:
+  email: false

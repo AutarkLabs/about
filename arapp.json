@@ -1,13 +1,23 @@
 {
   "roles": [
     {
-      "name": "Increment the counter",
-      "id": "INCREMENT_ROLE",
+      "name": "Add a widget",
+      "id": "ADD_ROLE",
       "params": []
     },
     {
-      "name": "Decrement the counter",
-      "id": "DECREMENT_ROLE",
+      "name": "Remove a widget",
+      "id": "REMOVE_ROLE",
+      "params": []
+    },
+    {
+      "name": "Reorder widgets",
+      "id": "REORDER_ROLE",
+      "params": []
+    },
+    {
+      "name": "Update a widget",
+      "id": "UPDATE_ROLE",
       "params": []
     }
   ],
@@ -29,5 +39,5 @@
       "network": "mainnet"
     }
   },
-  "path": "contracts/CounterApp.sol"
+  "path": "contracts/HomePage.sol"
 }
