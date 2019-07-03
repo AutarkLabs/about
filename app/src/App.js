@@ -17,6 +17,7 @@ import {
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
+const keccak256 = require('js-sha3').keccak_256
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
@@ -43,7 +44,7 @@ function App() {
   }
 
   const updateWidget = (_index, _ipfsAddr) => {
-    return api.updateWidget(_index, _ipfsAddr)
+    return api.updateWidget('0x' + keccak256(_index), _ipfsAddr)
   }
 
   const newWidget = _ipfsAddr => {
@@ -61,6 +62,8 @@ function App() {
       <Widget
         key={index}
         id={index}
+        isLoading={widget.isLoading}
+        errorMessage={widget.errorMessage}
         content={widget.content}
         ipfsAddr={widget.addr}
         handleClick={handleClickUpdateWidget}
@@ -116,11 +119,6 @@ function App() {
                 text="You seem to not have any content on your wall."
                 icon={<IconHome color="blue" />}
               />
-            )}
-            {entries && (
-              <SafeLink href="#" onClick={handleClickNewWidget}>
-                Add new widget
-              </SafeLink>
             )}
           </WidgetsLayout>
         </AppView>

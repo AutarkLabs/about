@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import axios from 'axios'
 
 import { Button, SidePanelSeparator, Text } from '@aragon/ui'
 
@@ -11,6 +12,14 @@ import { SideBarScrollbarContainer } from '../../styles'
 import Input from './Input'
 
 import ipfsAdd from '../Utils/Ipfs/ipfsAdd'
+import dompurify from 'dompurify'
+
+import {
+  wrapTextWith,
+  insertLink,
+  insertHeader,
+  insertOnStartOfLines,
+} from '../../shared/codemirror-utils'
 
 let codemirrorInitialInstance = null
 let editorTypeInitial = 0
@@ -42,31 +51,23 @@ const PanelContent = ({
 
   useEffect(() => {
     if (savedIpfsAddr && savePending) {
-      if (ipfsAddr) {
-        updateWidget(position, savedIpfsAddr).subscribe(
-          _res => {
-            setSavePending(false)
-            closePanel()
-          },
-          err => {
-            console.log(err)
-            setSavePending(false)
-          }
-        )
-      } else {
-        newWidget(savedIpfsAddr).subscribe(
-          _res => {
-            setSavePending(false)
-            closePanel()
-          },
-          err => {
-            console.log(err)
-            setSavePending(false)
-          }
-        )
-      }
+      signContract(savedIpfsAddr)
     }
   }, [savedIpfsAddr, savePending])
+
+  useEffect(() => {
+    setUnsavedText(content)
+  }, [content])
+
+  useEffect(() => {
+    // Reset state when changing from widget position, or updated
+    setUnsavedText('')
+    setExternalUrl(externalUrlInitial)
+    setUnsavedIpfsHash(ipfsHashInitial)
+    setEditorType(editorTypeInitial)
+    setScreenIndex(0)
+  }, [position, ipfsAddr])
+
   /*
   Widget re-ordering currently disabled
   useEffect(() => {
@@ -98,11 +99,11 @@ const PanelContent = ({
   }
 
   const handleExternalUrlChange = _externalUrl => {
-    setExternalUrl(_externalUrl)
+    setExternalUrl(_externalUrl.trim())
   }
 
   const handleIpfsHashChange = _ipfsHash => {
-    setUnsavedIpfsHash(_ipfsHash)
+    setUnsavedIpfsHash(_ipfsHash.trim())
   }
 
   const onCodeMirrorInit = _codemirrorInstance => {
@@ -110,44 +111,44 @@ const PanelContent = ({
   }
 
   const setSelectionSize = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '# ' + codemirrorInstance.doc.getSelection()
-    )
+    insertHeader(codemirrorInstance)
   }
 
   const setSelectionUnorderedList = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '\n* ' + codemirrorInstance.doc.getSelection() + '\n'
-    )
+    insertOnStartOfLines(codemirrorInstance, '* ')
   }
 
-  const setSelectionBold = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '**' + codemirrorInstance.doc.getSelection() + '**'
-    )
+  const setSelectionBold = async () => {
+    wrapTextWith(codemirrorInstance, '**')
   }
 
   const setSelectionItalic = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '*' + codemirrorInstance.doc.getSelection() + '*'
-    )
+    wrapTextWith(codemirrorInstance, '*')
   }
 
   const setSelectionLink = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '[' + codemirrorInstance.doc.getSelection() + ']()'
-    )
+    insertLink(codemirrorInstance, false)
   }
 
   const setSelectionCode = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '`' + codemirrorInstance.doc.getSelection() + '`'
-    )
+    wrapTextWith(codemirrorInstance, '`')
   }
 
   const setSelectionQuote = () => {
-    codemirrorInstance.doc.replaceSelection(
-      '> ' + codemirrorInstance.doc.getSelection()
+    insertOnStartOfLines(codemirrorInstance, '> ')
+  }
+
+  const signContract = savedIpfsAddr => {
+    const widgetSlot = position === 0 ? 'MAIN_WIDGET' : 'SIDE_WIDGET'
+    updateWidget(widgetSlot, savedIpfsAddr).subscribe(
+      _res => {
+        setSavePending(false)
+        closePanel()
+      },
+      err => {
+        console.log(err)
+        setSavePending(false)
+      }
     )
   }
 
@@ -159,13 +160,17 @@ const PanelContent = ({
 
         break
       case 1:
-        // TODO: Fetch url, sanitize it and then save it to ipfs
-        await saveIpfs(externalUrl)
-        setSavePending(true)
+        try {
+          var urlResponse = await axios.get(externalUrl)
+          var data = dompurify.sanitize(urlResponse.data)
+          await saveIpfs(data)
+          setSavePending(true)
+        } catch (err) {
+          console.log(err)
+        }
         break
       case 2:
-        // TODO: Handle ipfsAddr type
-
+        signContract(unsavedIpfsHash)
         break
       default:
         break
@@ -237,7 +242,7 @@ const PanelContent = ({
       {(isLoading || savePending) && (
         <LoadingOverlay>
           <LoadingOverlayContainer>
-            <Text>{isLoading ? 'Saving to ipfs' : 'Sign contract'}</Text>
+            <Text>{isLoading ? 'Saving to ipfs' : ''}</Text>
           </LoadingOverlayContainer>
         </LoadingOverlay>
       )}
@@ -287,7 +292,7 @@ const LoadingOverlay = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: -15px;
   right: 0;
   background: rgba(255, 255, 255, 0.8);
   z-index: 10;
