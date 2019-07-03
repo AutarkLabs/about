@@ -7,7 +7,6 @@ import { theme, Card, Info, SafeLink } from '@aragon/ui'
 import { EditButton, MarkdownPreview } from '../../shared'
 
 const mainInitialText = `This is your custom home app. Edit these blocks by hovering over it. Set it to become your default home app by selecting it in "Settings". Find out more [here](link). In the future this app will provide much more flexibility with what you can add to it!
-
 You may want to use this section to provide an overview of your DAO and how people can get involved.`
 
 const sideInitialText = `This section may be good to include social links.`
@@ -40,7 +39,7 @@ const Widget = ({
                   mode="text"
                   onClick={handleClick(id)}
                   active={active}
-                />
+                ></EditButton>
                 <MarkdownPreview content={content} />
               </div>
             ) : (

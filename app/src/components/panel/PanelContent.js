@@ -61,7 +61,6 @@ const PanelContent = ({
 
   useEffect(() => {
     // Reset state when changing from widget position, or updated
-    setUnsavedText('')
     setExternalUrl(externalUrlInitial)
     setUnsavedIpfsHash(ipfsHashInitial)
     setEditorType(editorTypeInitial)

@@ -1,5 +1,5 @@
 let options = {}
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV === 'production') {
   options = {
     host: 'ipfs.infura.io',
     port: '5001',
