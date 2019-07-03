@@ -1,7 +1,7 @@
 {
   "name": "aragon-home",
   "version": "1.0.0",
-  "description": "",
+  "description": "Aragon home app from Planning Suite",
   "dependencies": {
     "@aragon/os": "^4.0.1",
     "@aragon/apps-shared-minime": "^1.0.0",
@@ -66,5 +66,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AutarkLabs/aragon-home.git"
-  }
+  },
+  "license": "GPL-3.0"
 }
