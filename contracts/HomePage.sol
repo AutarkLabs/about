@@ -40,7 +40,7 @@ contract HomePage is AragonApp {
     }
 
     /**
-     * @notice Update widget `@fromHex(_priority, "utf8")` to `_addr`
+     * @notice Update `@fromHex(_priority, "utf8")` content to `_addr`
      * @param _priority Index of the widget
      * @param _addr IPFS hash of the widget's data
      */
