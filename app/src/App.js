@@ -17,7 +17,7 @@ import {
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
-import { soliditySha3 } from 'web3-utils'
+import { toHex } from 'web3-utils'
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
@@ -44,7 +44,7 @@ function App() {
   }
 
   const updateWidget = (_index, _ipfsAddr) => {
-    return api.updateWidget(soliditySha3(_index), _ipfsAddr)
+    return api.updateWidget(toHex(_index), _ipfsAddr)
   }
 
   const newWidget = _ipfsAddr => {

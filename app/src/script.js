@@ -3,7 +3,7 @@ import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
 import ipfsClient from 'ipfs-http-client'
 import ipfsConfig from '../ipfs'
-import { soliditySha3 } from 'web3-utils'
+import { toHex } from 'web3-utils'
 
 const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
@@ -60,7 +60,7 @@ const initializeWidgets = () => {
 
 const refreshWidget = async _priority => {
   // Clear all entries
-  const i = _priority === soliditySha3('MAIN_WIDGET') ? 0 : 1
+  const i = _priority === toHex('MAIN_WIDGET') ? 0 : 1
 
   let entry = {
     addr: '',
