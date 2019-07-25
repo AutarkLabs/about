@@ -41,18 +41,14 @@ const Widget = ({
 }) => {
   return (
     <StyledCard>
-      {content !== '' ? (
-        <div>
-            <EditButton
-              mode="text"
-              onClick={handleClick(id)}
-              active={active}
-            ></EditButton>
-            <MarkdownPreview content={content} />
-        </div>
+      <CardContent>
+        <EditButton mode="text" onClick={handleClick(id)} active={active} />
+        {content !== '' ? (
+          <MarkdownPreview content={content} />
         ) : (
-          <DemoContent id={id} handleClick={handleClick}></DemoContent>
+          <DemoContent id={id} handleClick={handleClick} />
         )}
+      </CardContent>
     </StyledCard>
   )
 }
@@ -73,7 +69,7 @@ const CardContent = styled.div`
 `
 
 const StyledCard = styled(Card).attrs({
-  height: 'fit-content'
+  height: 'fit-content',
 })`
   width: 100%;
   margin-bottom: 30px;
