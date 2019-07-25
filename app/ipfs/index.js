@@ -1,7 +1,7 @@
 let options = {}
 if (process.env.NODE_ENV === 'production') {
   options = {
-    host: 'ipfs.infura.io',
+    host: 'ipfs.autark.io',
     port: '5001',
     protocol: 'https',
   }
