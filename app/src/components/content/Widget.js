@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { theme, Card, Info, SafeLink } from '@aragon/ui'
+import { Card, Info, SafeLink, theme } from '@aragon/ui'
 
 import { EditButton, MarkdownPreview } from '../../shared'
 
@@ -40,21 +40,19 @@ const Widget = ({
   errorMessage,
 }) => {
   return (
-    <StyledCard height="fit-content" key={id}>
-      <CardContent>
-        {content !== '' ? (
-          <div>
+    <StyledCard>
+      {content !== '' ? (
+        <div>
             <EditButton
               mode="text"
               onClick={handleClick(id)}
               active={active}
             ></EditButton>
             <MarkdownPreview content={content} />
-          </div>
+        </div>
         ) : (
           <DemoContent id={id} handleClick={handleClick}></DemoContent>
         )}
-      </CardContent>
     </StyledCard>
   )
 }
@@ -74,7 +72,9 @@ const CardContent = styled.div`
   }
 `
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card).attrs({
+  height: 'fit-content'
+})`
   width: 100%;
   margin-bottom: 30px;
   position: relative;
