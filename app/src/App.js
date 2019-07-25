@@ -170,7 +170,7 @@ const WidgetsLayout = styled.div`
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     `
   )};
-  ${breakpoint('large', 'grid-template-columns: 7fr 3fr')};
+  ${breakpoint('large', 'grid-template-columns: 6.7fr 3.3fr')};
 `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
