@@ -9,6 +9,7 @@ import {
   AppView,
   // TODO: temporarily disabled edit-mode
   // Button,
+  BREAKPOINTS,
   breakpoint,
   SidePanel,
   EmptyStateCard,
@@ -159,21 +160,17 @@ const BaseLayout = styled.div`
 `
 
 const WidgetsLayout = styled.div`
-  display: grid;
-  grid-template-columns: 70% 30%;
-  grid-auto-flow: column;
-  grid-gap: 30px;
-  margin-right: 30px;
+  margin: 0 auto;
+  max-width: ${BREAKPOINTS.large}px;
   ${breakpoint(
     'small',
-    'grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));'
+    `
+      display: grid;
+      grid-gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    `
   )};
-  ${breakpoint('large', 'grid-template-columns: 70% 30%')};
-
-  @media only screen and (max-width: 768px) {
-    display: block;
-    margin-right: 0;
-  }
+  ${breakpoint('large', 'grid-template-columns: 7fr 3fr')};
 `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
