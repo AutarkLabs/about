@@ -83,21 +83,21 @@ const refreshWidget = async _priority => {
         appState = nextState2
         await app.cache('state', { ...nextState2 })
         // NOTES: Without this delay, it fails randomly when refreshing whole page
-        setTimeout(async () => {
-          try {
-            const ipfsContent = await loadWidgetIpfs(i, entry.addr)
-            entry.isLoading = false
-            entry.content = ipfsContent
-          } catch (err) {
-            entry.isLoading = false
-            entry.errorMessage = 'Error: ' + err
-          }
-          // Save final entry state
-          let nextState = { ...appState }
-          nextState.entries[i] = { ...entry }
-          appState = nextState
-          await app.cache('state', { ...nextState })
-        }, 1000)
+        // setTimeout(async () => {
+        try {
+          const ipfsContent = await loadWidgetIpfs(i, entry.addr)
+          entry.isLoading = false
+          entry.content = ipfsContent
+        } catch (err) {
+          entry.isLoading = false
+          entry.errorMessage = 'Error: ' + err
+        }
+        // Save final entry state
+        let nextState = { ...appState }
+        nextState.entries[i] = { ...entry }
+        appState = nextState
+        await app.cache('state', { ...nextState })
+        // }, 1000)
       }
     }
   } catch (err) {
