@@ -41,14 +41,12 @@ const Widget = ({
 }) => {
   return (
     <StyledCard>
-      <CardContent>
-        <EditButton mode="text" onClick={handleClick(id)} active={active} />
-        {content !== '' ? (
-          <MarkdownPreview content={content} />
-        ) : (
-          <DemoContent id={id} handleClick={handleClick} />
-        )}
-      </CardContent>
+      <EditButton mode="text" onClick={handleClick(id)} active={active} />
+      {content !== '' ? (
+        <MarkdownPreview content={content} />
+      ) : (
+        <DemoContent id={id} handleClick={handleClick} />
+      )}
     </StyledCard>
   )
 }
@@ -60,13 +58,6 @@ Widget.propTypes = {
   id: PropTypes.number.isRequired,
   ipfsAddr: PropTypes.string.isRequired,
 }
-
-const CardContent = styled.div`
-  padding: 24px;
-  :hover ${EditButton} {
-    opacity: 1;
-  }
-`
 
 const StyledCard = styled(Card).attrs({
   height: 'fit-content',
