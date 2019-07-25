@@ -17,7 +17,7 @@ const ipfsCat = () => {
       const result = await ipfsClient.cat(ipfsAddr)
       setData(result)
     } catch (err) {
-      console.error('Error readinf file to IPFS', err)
+      console.error('Error reading file from IPFS', err)
       setIsError(true)
     } finally {
       setIsLoading(false)
