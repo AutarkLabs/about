@@ -11,6 +11,25 @@ You may want to use this section to provide an overview of your DAO and how peop
 
 const sideInitialText = `This section may be good to include social links.`
 
+const DemoContent = ({ id, handleClick }) => {
+  return (
+    <div style={{ padding: '0' }}>
+      <MarkdownPreview
+        content={
+          id === 0 ? '# Welcome to my DAO' : '# Find out more about my DAO'
+        }
+      />
+      <br />
+      <a href="#" onClick={handleClick(id)} style={{ color: theme.accent }}>
+        <i>Edit Me</i>
+      </a>
+      <br />
+      <br />
+      <MarkdownPreview content={id === 0 ? mainInitialText : sideInitialText} />
+    </div>
+  )
+}
+
 const Widget = ({
   id,
   content,
@@ -23,53 +42,17 @@ const Widget = ({
   return (
     <StyledCard height="fit-content" key={id}>
       <CardContent>
-        {isLoading ? (
-          <div style={{ padding: '50px', textAlign: 'center' }}>
-            Loading{' '}
-            <SafeLink href={'https://ipfs.io/ipfs/' + ipfsAddr}>
-              ipfs file
-            </SafeLink>
-            . This could take a while.
+        {content !== '' ? (
+          <div>
+            <EditButton
+              mode="text"
+              onClick={handleClick(id)}
+              active={active}
+            ></EditButton>
+            <MarkdownPreview content={content} />
           </div>
         ) : (
-          [
-            content !== '' ? (
-              <div>
-                <EditButton
-                  mode="text"
-                  onClick={handleClick(id)}
-                  active={active}
-                ></EditButton>
-                <MarkdownPreview content={content} />
-              </div>
-            ) : (
-              <div style={{ padding: '0' }}>
-                <MarkdownPreview
-                  content={
-                    id === 0
-                      ? '# Welcome to my DAO'
-                      : '# Find out more about my DAO'
-                  }
-                />
-                <br />
-                <a
-                  href="#"
-                  onClick={handleClick(id)}
-                  style={{ color: theme.accent }}
-                >
-                  <i>Edit Me</i>
-                </a>
-                <br />
-                <br />
-                <MarkdownPreview
-                  content={id === 0 ? mainInitialText : sideInitialText}
-                />
-              </div>
-            ),
-            errorMessage && (
-              <Info.Alert title="Error">{errorMessage}</Info.Alert>
-            ),
-          ]
+          <DemoContent id={id} handleClick={handleClick}></DemoContent>
         )}
       </CardContent>
     </StyledCard>
