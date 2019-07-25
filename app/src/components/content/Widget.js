@@ -16,7 +16,7 @@ const DemoContent = ({ id, handleClick }) => {
     <div style={{ padding: '0' }}>
       <MarkdownPreview
         content={
-          id === 0 ? '# Welcome to my DAO' : '# Find out more about my DAO'
+          id === 0 ? '# Welcome to my DAO' : '# Get involved into my DAO'
         }
       />
       <br />
