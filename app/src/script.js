@@ -1,11 +1,9 @@
 import '@babel/polyfill'
 import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
-import ipfsClient from 'ipfs-http-client'
-import ipfsConfig from '../ipfs'
 import { toHex } from 'web3-utils'
+import { ipfsGet } from './utils/ipfs-helpers'
 
-const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
 let appState
 
@@ -60,7 +58,7 @@ const initializeWidgets = () => {
 
 const refreshWidget = async _priority => {
   // Clear all entries
-  const i = _priority === toHex('MAIN_WIDGET') ? 0 : 1
+  const i = _priority === toHex('PRIMARY_WIDGET') ? 0 : 1
 
   let entry = {
     addr: '',
@@ -113,8 +111,7 @@ const refreshWidget = async _priority => {
 
 const loadWidgetIpfs = async (i, ipfsAddr) => {
   return new Promise((resolve, reject) => {
-    ipfs
-      .cat(ipfsAddr)
+    ipfsGet(ipfsAddr)
       .then(_result => {
         resolve(_result.toString('utf8'))
       })
