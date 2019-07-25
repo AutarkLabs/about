@@ -9,6 +9,7 @@ import {
   AppView,
   // TODO: temporarily disabled edit-mode
   // Button,
+  breakpoint,
   SidePanel,
   EmptyStateCard,
   IconHome,
@@ -163,6 +164,11 @@ const WidgetsLayout = styled.div`
   grid-auto-flow: column;
   grid-gap: 30px;
   margin-right: 30px;
+  ${breakpoint(
+    'small',
+    'grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));'
+  )};
+  ${breakpoint('large', 'grid-template-columns: 70% 30%')};
 
   @media only screen and (max-width: 768px) {
     display: block;
