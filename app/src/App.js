@@ -1,83 +1,127 @@
 import React, { useState } from 'react'
-// import { useAragonApi } from '@aragon/api-react'
+// import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+import { useAragonApi } from '@aragon/api-react'
 import {
   Main,
   AppBar,
   AppView,
-  Button,
-  Card,
-  IconAdd,
+  // TODO: temporarily disabled edit-mode
+  // Button,
+  BREAKPOINTS,
+  breakpoint,
   SidePanel,
+  EmptyStateCard,
+  IconHome,
+  SafeLink,
 } from '@aragon/ui'
-import styled from 'styled-components'
 
-const cardsData = {
-  left: {
-    title: 'Welcome to Autark',
-    content:
-      'Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.<br>To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.<br>We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.<br>In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become (or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80% use case.<br>The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.<br>Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.',
-  },
-  right: {
-    title: 'More text goes here',
-    content:
-      'Autark is a new organization that is to be established for the purpose of advancing life on Earth, with a special focus on DAOs, Aragon, worker-autonomy, and access to tools that support the global development of complex mega-projects.<br>To us, complex mega-projects can mean autonomous cities, next-generation transportation systems, solving sustainable development goals, redesigning the United Nations, or even building spaceships. There are common tools needed that will meet the primary coordination use case across all of these sectors: this can be evidenced by enterprise software companies such as Oracle and SAP building generic systems that are adopted across industries.<br>We will be calling this Aragon suite of project and human-coordination tools Open Enterprise, as DAOs that are solving mega-projects are the definition of an open enterprise.<br>In building Open Enterprise, we plan to also work as consultants for other decentralized organizations that intend to become (or currently are) DAOs to build custom implementations, and also determine common requirements, so we can drive the suite toward meeting the 80% use case.<br>The Open Enterprise roadmap will be a continuation of the Planning Suite, with an additional focus of assessing the existing Aragon App ecosystem as a whole to develop common design patterns and components for the optimal cross-application user experience. This may require special application forks, and moving features from one app to another.<br>Privacy, internationalization, and accessibility are three important pillars of our organization, and will be the pillars in which we plan to uphold the Aragon Manifesto. The Manifesto states "we are committed to a world in which every person can participate in these new organizational structures". We interpret this to mean that we need to ensure these tools can indeed be used by everyone.',
-  },
-}
-
-const StyledCard = styled(Card)``
-
-const EditButton = styled.span`
-  opacity: 0;
-  transition: opacity 0.25s;
-
-  ${StyledCard}:hover & {
-    opacity: 1;
-  }
-`
+import PanelContent from './components/panel/PanelContent'
+import Widget from './components/content/Widget'
+import { toHex } from 'web3-utils'
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
-  // const { api, appState } = useAragonApi()
-  // const { count, syncing } = appState
-  const handleClick = param => e => {
-    // console.log('Event', e)
-    console.log('Param', param)
+  // TODO: useState(false) to start editMode disabled
+  // const [editMode, setEditMode] = useState(true)
+  const [editMode] = useState(true)
+  const [selectedWidget, setSelectedWidget] = useState(0)
+
+  const { api, appState } = useAragonApi()
+  const { entries } = appState
+
+  const handleClickUpdateWidget = index => e => {
+    setSelectedWidget(index)
+    setPanelVisible(true)
+  }
+
+  const handleClickNewWidget = e => {
+    setSelectedWidget(null)
     setPanelVisible(true)
   }
 
   const closePanel = () => {
     setPanelVisible(false)
   }
+
+  const updateWidget = (_index, _ipfsAddr) => {
+    return api.updateWidget(toHex(_index), _ipfsAddr)
+  }
+
+  const newWidget = _ipfsAddr => {
+    return api.addWidget(_ipfsAddr)
+  }
+
+  // TODO: temporarily disabled
+  // const toggleEditMode = () => {
+  //   setEditMode(!editMode)
+  // }
+
+  const widgetList =
+    entries &&
+    entries.map((widget, index) => (
+      <Widget
+        key={index}
+        id={index}
+        isLoading={widget.isLoading}
+        errorMessage={widget.errorMessage}
+        content={widget.content}
+        ipfsAddr={widget.addr}
+        handleClick={handleClickUpdateWidget}
+        active={editMode}
+      />
+    ))
   return (
     <Main>
       <BaseLayout>
         <AppView
           appBar={
             <AppBar
-              title="Welcome!"
-              endContent={<Button mode="strong">Edit Page</Button>}
+              title="Home"
+              // TODO: uncomment this block for edit functionality
+              // endContent={
+              //   <div>
+              //     {editMode && (
+              //       <div>
+              //         <Button
+              //           mode="outline"
+              //           onClick={toggleEditMode}
+              //           style={{ marginRight: 20 }}
+              //         >
+              //           Cancel and Exit
+              //         </Button>
+
+              //         <Button mode="strong" onClick={toggleEditMode}>
+              //           Submit changes
+              //         </Button>
+              //       </div>
+              //     )}
+
+              //     {!editMode && (
+              //       <Button mode="strong" onClick={toggleEditMode}>
+              //         Edit Page
+              //       </Button>
+              //     )}
+              //   </div>
+              // }
             />
           }
         >
           <WidgetsLayout>
-            <StyledCard height="fit-content" width="100%">
-              <CardContent>
-                <EditButton onClick={handleClick('first')}>
-                  <IconAdd />
-                </EditButton>
-                <h1>{cardsData.left.title}</h1>
-                <span>{cardsData.left.content}</span>
-              </CardContent>
-            </StyledCard>
-            <StyledCard height="fit-content" width="calc(100% - 30px)">
-              <CardContent>
-                <EditButton onClick={handleClick('second')}>
-                  <IconAdd />
-                </EditButton>
-                <h1>{cardsData.right.title}</h1>
-                <span>{cardsData.right.content}</span>
-              </CardContent>
-            </StyledCard>
+            {entries ? (
+              widgetList
+            ) : (
+              <EmptyStateCard
+                action={
+                  <SafeLink href="#" onClick={handleClickNewWidget}>
+                    Add new widget
+                  </SafeLink>
+                }
+                text="You seem to not have any content on your wall."
+                icon={<IconHome color="blue" />}
+              />
+            )}
           </WidgetsLayout>
         </AppView>
       </BaseLayout>
@@ -86,13 +130,24 @@ function App() {
         onClose={closePanel}
         title="Content Block Editor"
       >
-        {/* <NewTransferPanelContent
-                opened={newTransferOpened}
-                tokens={tokens}
-                onWithdraw={this.handleWithdraw}
-                onDeposit={this.handleDeposit}
-                proxyAddress={proxyAddress}
-              /> */}
+        <SidePanelContainer>
+          <PanelContent
+            ipfsAddr={
+              entries !== undefined &&
+              selectedWidget !== null &&
+              entries[selectedWidget].addr
+            }
+            content={
+              entries !== undefined &&
+              selectedWidget !== null &&
+              entries[selectedWidget].content
+            }
+            newWidget={newWidget}
+            updateWidget={updateWidget}
+            closePanel={closePanel}
+            position={selectedWidget}
+          />
+        </SidePanelContainer>
       </SidePanel>
     </Main>
   )
@@ -100,28 +155,43 @@ function App() {
 
 const BaseLayout = styled.div`
   display: flex;
-  /* align-items: center;
-  justify-content: center; */
   height: 100vh;
   flex-direction: column;
 `
 
-// const Count = styled.h1`
-//   font-size: 30px;
-// `
-
 const WidgetsLayout = styled.div`
-  display: grid;
-  grid-template-columns: 70% 30%;
-  grid-auto-flow: column;
-  grid-gap: 30px;
+  margin: 0 auto;
+  max-width: ${BREAKPOINTS.large}px;
+  width: 100%;
+  ${breakpoint(
+    'small',
+    `
+      display: grid;
+      grid-gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    `
+  )};
+  ${breakpoint('large', 'grid-template-columns: 6.7fr 3.3fr')};
 `
 
-const CardContent = styled.div`
-  padding: 24px;
+// With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
+const SidePanelContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  left: 30px;
+  top: 60px;
+
+  @media only screen and (max-height: 380px) {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+  }
 `
 
-// const Syncing = styled.div.attrs({ children: 'Syncing…' })`
+// const Syncing = styled.div.attrs({children: 'Syncing…' })`
 //   position: absolute;
 //   top: 15px;
 //   right: 20px;

@@ -6,3 +6,10 @@ ipfs.cmd
 package-lock.json
 coverage.json
 coverage
+.DS_Store
+
+# solidity coverage
+*/**/scTopics
+*/**/coverageEnv
+*/**/coverage.json
+*/**/coverage

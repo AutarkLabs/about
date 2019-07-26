@@ -1,13 +1,23 @@
 {
   "roles": [
     {
-      "name": "Increment the counter",
-      "id": "INCREMENT_ROLE",
+      "name": "Add a widget",
+      "id": "ADD_ROLE",
       "params": []
     },
     {
-      "name": "Decrement the counter",
-      "id": "DECREMENT_ROLE",
+      "name": "Remove a widget",
+      "id": "REMOVE_ROLE",
+      "params": []
+    },
+    {
+      "name": "Reorder widgets",
+      "id": "REORDER_ROLE",
+      "params": []
+    },
+    {
+      "name": "Update a widget",
+      "id": "UPDATE_ROLE",
       "params": []
     }
   ],
@@ -18,7 +28,7 @@
     },
     "staging": {
       "registry": "0x98df287b6c145399aaa709692c8d308357bc085d",
-      "appName": "home.open.aragonpm.eth",
+      "appName": "home-preview.open.aragonpm.eth",
       "wsRPC": "wss://rinkeby.eth.aragon.network/ws",
       "network": "rinkeby"
     },
@@ -29,5 +39,5 @@
       "network": "mainnet"
     }
   },
-  "path": "contracts/CounterApp.sol"
+  "path": "contracts/HomePage.sol"
 }

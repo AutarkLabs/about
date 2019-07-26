@@ -1,10 +1,12 @@
 import '@babel/polyfill'
-import Aragon from '@aragon/client'
-import 'rxjs/add/observable/of'
-import { first, pluck } from 'rxjs/operators'
+import Aragon from '@aragon/api'
+import { first } from 'rxjs/operators'
+import { toUtf8 } from 'web3-utils'
+import { ipfsGet } from './utils/ipfs-helpers'
 
 const app = new Aragon()
 let appState
+
 app.events().subscribe(handleEvents)
 
 app.state().subscribe(state => {
@@ -17,55 +19,88 @@ app.state().subscribe(state => {
  *                     *
  ***********************/
 
-async function handleEvents({ event, returnValues }) {
-  let nextState
-  /*
-    IMPORTANT: I'm refreshing all widgets here on every event (EVEN ON STARTUP EMPTY ONES), this is really underperformant. 
-    Should be improved adding a return value with priority index to the smart contract events so we can update just the widget affected. 
-  */
-  switch (event) {
-    case 'WidgetAdded':
-      nextState = await refreshAllWidgets(appState)
-      break
-    case 'WidgetRemoved':
-      nextState = await refreshAllWidgets(appState)
-      break
-    case 'WidgetUpdated':
-      nextState = await refreshAllWidgets(appState)
-      break
-    case 'WidgetsReordered':
-      nextState = await refreshAllWidgets(appState)
-      break
-    default:
-      nextState = await refreshAllWidgets(appState)
-      console.log('[Widgets script] unknown event', event, returnValues)
-  }
-
-  // purify the resulting state to handle duplication edge cases
-  const filteredState = { entries: filterEntries(nextState.entries) }
-  app.cache('state', filteredState)
+const initialWidgetState = {
+  addr: '',
+  content: '',
+  loading: false,
+  disabled: false,
 }
 
-const refreshAllWidgets = async ({ entries = [] }) => {
-  return new Promise(async resolve => {
-    // Clear all entries
-    entries = []
-    var widgetNumber = await app
-      .call('getWidgetsLength')
+async function handleEvents({ event, returnValues }) {
+  if (
+    appState == null ||
+    appState.entries == null ||
+    appState.entries.length < 1
+  ) {
+    const nextState = initializeWidgets()
+    appState = nextState
+    await app.cache('state', { ...nextState })
+  }
+  switch (event) {
+    case 'WidgetUpdated':
+      refreshWidget(returnValues._priority)
+      break
+    default:
+      console.log('[Widgets script] unknown event', event, returnValues)
+  }
+}
+
+const initializeWidgets = () => {
+  // Clear all entries
+  let entries = []
+
+  for (let i = 0; i < 2; i++) {
+    entries.push(initialWidgetState)
+  }
+  const state = { entries } // return the entries array
+  return state
+}
+
+const refreshWidget = async _priority => {
+  // Clear all entries
+  const i = toUtf8(_priority) === 'PRIMARY_WIDGET' ? 0 : 1
+
+  let entry = {
+    addr: '',
+    content: '',
+    isLoading: true,
+    disabled: false,
+  }
+  try {
+    let widget = await app
+      .call('getWidget', _priority)
       .pipe(first())
       .toPromise()
-    for (var i = 0; i <= widgetNumber; i++) {
-      try {
-        var widgetData = await loadWidgetData(i)
-        entries.push(widgetData) // add to the state object received as param
-      } catch (err) {
-        console.log(err)
+    if (widget && widget.addr) {
+      widget.isLoading = true
+      entry = widget
+      if (entry.addr !== '') {
+        // Set loading state
+        let nextState2 = { ...appState }
+        nextState2.entries[i] = { ...entry }
+        appState = nextState2
+        await app.cache('state', { ...nextState2 })
+        // NOTES: Without this delay, it fails randomly when refreshing whole page
+        // setTimeout(async () => {
+        try {
+          const ipfsContent = await loadWidgetIpfs(i, entry.addr)
+          entry.isLoading = false
+          entry.content = ipfsContent
+        } catch (err) {
+          entry.isLoading = false
+          entry.errorMessage = 'Error: ' + err
+        }
+        // Save final entry state
+        let nextState = { ...appState }
+        nextState.entries[i] = { ...entry }
+        appState = nextState
+        await app.cache('state', { ...nextState })
+        // }, 1000)
       }
     }
-    const state = { entries } // return the entries array
-    console.log(entries)
-    resolve(state)
-  })
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 /***********************
@@ -74,27 +109,14 @@ const refreshAllWidgets = async ({ entries = [] }) => {
  *                     *
  ***********************/
 
-const loadWidgetData = async priority => {
+const loadWidgetIpfs = async (i, ipfsAddr) => {
   return new Promise((resolve, reject) => {
-    app.call('getWidget', priority).subscribe(
-      widget => {
-        if (!widget) {
-          reject()
-        } else {
-          resolve({
-            addr: widget[0],
-            disabled: widget[1],
-          })
-        }
-      },
-      err => {
+    ipfsGet(ipfsAddr)
+      .then(_result => {
+        resolve(_result.toString('utf8'))
+      })
+      .catch(err => {
         reject(err)
-      }
-    )
+      })
   })
-}
-
-const filterEntries = entries => {
-  const filteredEntries = entries.filter(entry => entry && !!entry.addr)
-  return filteredEntries
 }
