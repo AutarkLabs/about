@@ -82,6 +82,12 @@ You can publish your app on [aragonPM](https://hack.aragon.org/docs/apm). See ho
 > **Note**<br>
 > The [Template](https://github.com/aragon/aragon-react-boilerplate/blob/master/contracts/Template.sol) will not be published.
 
+Example publishing command for Autark deployments:
+
+```sh
+npm run publish:patch -- --environment staging --apm.ipfs.rpc https://ipfs.autark.xyz:5001 --ipfs-check false
+```
+
 ### Using a different Ethereum account
 
 You can use a different account to interact with you app. [Check the documentation](https://hack.aragon.org/docs/guides-faq#set-a-private-key).
