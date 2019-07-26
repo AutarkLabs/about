@@ -162,6 +162,7 @@ const BaseLayout = styled.div`
 const WidgetsLayout = styled.div`
   margin: 0 auto;
   max-width: ${BREAKPOINTS.large}px;
+  width: 100%;
   ${breakpoint(
     'small',
     `
