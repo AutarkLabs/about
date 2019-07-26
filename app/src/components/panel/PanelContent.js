@@ -138,7 +138,7 @@ const PanelContent = ({
   }
 
   const signContract = savedIpfsAddr => {
-    const widgetSlot = position === 0 ? 'MAIN_WIDGET' : 'SIDE_WIDGET'
+    const widgetSlot = position === 0 ? 'PRIMARY_WIDGET' : 'SECONDARY_WIDGET'
     updateWidget(widgetSlot, savedIpfsAddr).subscribe(
       _res => {
         setSavePending(false)

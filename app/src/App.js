@@ -9,6 +9,8 @@ import {
   AppView,
   // TODO: temporarily disabled edit-mode
   // Button,
+  BREAKPOINTS,
+  breakpoint,
   SidePanel,
   EmptyStateCard,
   IconHome,
@@ -17,7 +19,7 @@ import {
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
-import { soliditySha3 } from 'web3-utils'
+import { toHex } from 'web3-utils'
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
@@ -44,7 +46,7 @@ function App() {
   }
 
   const updateWidget = (_index, _ipfsAddr) => {
-    return api.updateWidget(soliditySha3(_index), _ipfsAddr)
+    return api.updateWidget(toHex(_index), _ipfsAddr)
   }
 
   const newWidget = _ipfsAddr => {
@@ -158,16 +160,18 @@ const BaseLayout = styled.div`
 `
 
 const WidgetsLayout = styled.div`
-  display: grid;
-  grid-template-columns: 70% 30%;
-  grid-auto-flow: column;
-  grid-gap: 30px;
-  margin-right: 30px;
-
-  @media only screen and (max-width: 768px) {
-    display: block;
-    margin-right: 0;
-  }
+  margin: 0 auto;
+  max-width: ${BREAKPOINTS.large}px;
+  width: 100%;
+  ${breakpoint(
+    'small',
+    `
+      display: grid;
+      grid-gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    `
+  )};
+  ${breakpoint('large', 'grid-template-columns: 6.7fr 3.3fr')};
 `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves

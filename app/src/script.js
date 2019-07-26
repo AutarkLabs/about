@@ -1,11 +1,9 @@
 import '@babel/polyfill'
 import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
-import ipfsClient from 'ipfs-http-client'
-import ipfsConfig from '../ipfs'
-import { soliditySha3 } from 'web3-utils'
+import { toUtf8 } from 'web3-utils'
+import { ipfsGet } from './utils/ipfs-helpers'
 
-const ipfs = ipfsClient(ipfsConfig)
 const app = new Aragon()
 let appState
 
@@ -60,7 +58,7 @@ const initializeWidgets = () => {
 
 const refreshWidget = async _priority => {
   // Clear all entries
-  const i = _priority === soliditySha3('MAIN_WIDGET') ? 0 : 1
+  const i = toUtf8(_priority) === 'PRIMARY_WIDGET' ? 0 : 1
 
   let entry = {
     addr: '',
@@ -83,21 +81,21 @@ const refreshWidget = async _priority => {
         appState = nextState2
         await app.cache('state', { ...nextState2 })
         // NOTES: Without this delay, it fails randomly when refreshing whole page
-        setTimeout(async () => {
-          try {
-            const ipfsContent = await loadWidgetIpfs(i, entry.addr)
-            entry.isLoading = false
-            entry.content = ipfsContent
-          } catch (err) {
-            entry.isLoading = false
-            entry.errorMessage = 'Error: ' + err
-          }
-          // Save final entry state
-          let nextState = { ...appState }
-          nextState.entries[i] = { ...entry }
-          appState = nextState
-          await app.cache('state', { ...nextState })
-        }, 1000)
+        // setTimeout(async () => {
+        try {
+          const ipfsContent = await loadWidgetIpfs(i, entry.addr)
+          entry.isLoading = false
+          entry.content = ipfsContent
+        } catch (err) {
+          entry.isLoading = false
+          entry.errorMessage = 'Error: ' + err
+        }
+        // Save final entry state
+        let nextState = { ...appState }
+        nextState.entries[i] = { ...entry }
+        appState = nextState
+        await app.cache('state', { ...nextState })
+        // }, 1000)
       }
     }
   } catch (err) {
@@ -113,8 +111,7 @@ const refreshWidget = async _priority => {
 
 const loadWidgetIpfs = async (i, ipfsAddr) => {
   return new Promise((resolve, reject) => {
-    ipfs
-      .cat(ipfsAddr)
+    ipfsGet(ipfsAddr)
       .then(_result => {
         resolve(_result.toString('utf8'))
       })

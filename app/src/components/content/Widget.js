@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { theme, Card, Info, SafeLink } from '@aragon/ui'
+import { Card, Info, SafeLink, theme } from '@aragon/ui'
 
 import { EditButton, MarkdownPreview } from '../../shared'
 
@@ -10,6 +10,25 @@ const mainInitialText = `This is your custom home app. Edit these blocks by hove
 You may want to use this section to provide an overview of your DAO and how people can get involved.`
 
 const sideInitialText = `This section may be good to include social links.`
+
+const DemoContent = ({ id, handleClick }) => {
+  return (
+    <div style={{ padding: '0' }}>
+      <MarkdownPreview
+        content={
+          id === 0 ? '# Welcome to my DAO' : '# Get involved into my DAO'
+        }
+      />
+      <br />
+      <a href="#" onClick={handleClick(id)} style={{ color: theme.accent }}>
+        <i>Edit Me</i>
+      </a>
+      <br />
+      <br />
+      <MarkdownPreview content={id === 0 ? mainInitialText : sideInitialText} />
+    </div>
+  )
+}
 
 const Widget = ({
   id,
@@ -21,57 +40,13 @@ const Widget = ({
   errorMessage,
 }) => {
   return (
-    <StyledCard height="fit-content" key={id}>
-      <CardContent>
-        {isLoading ? (
-          <div style={{ padding: '50px', textAlign: 'center' }}>
-            Loading{' '}
-            <SafeLink href={'https://ipfs.io/ipfs/' + ipfsAddr}>
-              ipfs file
-            </SafeLink>
-            . This could take a while.
-          </div>
-        ) : (
-          [
-            content !== '' ? (
-              <div>
-                <EditButton
-                  mode="text"
-                  onClick={handleClick(id)}
-                  active={active}
-                ></EditButton>
-                <MarkdownPreview content={content} />
-              </div>
-            ) : (
-              <div style={{ padding: '0' }}>
-                <MarkdownPreview
-                  content={
-                    id === 0
-                      ? '# Welcome to my DAO'
-                      : '# Find out more about my DAO'
-                  }
-                />
-                <br />
-                <a
-                  href="#"
-                  onClick={handleClick(id)}
-                  style={{ color: theme.accent }}
-                >
-                  <i>Edit Me</i>
-                </a>
-                <br />
-                <br />
-                <MarkdownPreview
-                  content={id === 0 ? mainInitialText : sideInitialText}
-                />
-              </div>
-            ),
-            errorMessage && (
-              <Info.Alert title="Error">{errorMessage}</Info.Alert>
-            ),
-          ]
-        )}
-      </CardContent>
+    <StyledCard>
+      <EditButton mode="text" onClick={handleClick(id)} active={active} />
+      {content !== '' ? (
+        <MarkdownPreview content={content} />
+      ) : (
+        <DemoContent id={id} handleClick={handleClick} />
+      )}
     </StyledCard>
   )
 }
@@ -84,14 +59,9 @@ Widget.propTypes = {
   ipfsAddr: PropTypes.string.isRequired,
 }
 
-const CardContent = styled.div`
-  padding: 24px;
-  :hover ${EditButton} {
-    opacity: 1;
-  }
-`
-
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card).attrs({
+  height: 'fit-content',
+})`
   width: 100%;
   margin-bottom: 30px;
   position: relative;

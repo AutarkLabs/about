@@ -1,15 +1,15 @@
 let options = {}
-if (process.env.NODE_ENV === 'production') {
-  options = {
-    host: 'ipfs.infura.io',
-    port: '5001',
-    protocol: 'https',
-  }
-} else {
+if (process.env.NODE_ENV === 'development') {
   options = {
     host: 'localhost',
     port: '5001',
     protocol: 'http',
+  }
+} else {
+  options = {
+    host: 'ipfs.autark.xyz',
+    port: '5001',
+    protocol: 'https',
   }
 }
 

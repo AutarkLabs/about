@@ -1,18 +1,16 @@
 import axios from 'axios'
-import dompurify from 'dompurify'
 import ipfsClient from 'ipfs-http-client'
 
-const ipfsConfig = {
-  host: 'ipfs.autark.xyz',
-  path: '/api/v0',
-  port: '5001',
-  protocol: 'https',
-}
+export const ipfsConfig =
+  process.env.NODE_ENV === 'development'
+    ? { host: 'localhost', port: '5001', protocol: 'http' }
+    : { host: 'ipfs.autark.xyz', port: '5001', protocol: 'https' }
 
 const ipfsInstance = ipfsClient(ipfsConfig)
+const ipfsEndpoint = `${ipfsConfig.protocol}://${ipfsConfig.host}:${ipfsConfig.port}/api/v0`
 
 const bufferFile = content =>
-  ipfsInstance.types.Buffer.from(dompurify.sanitize(content))
+  ipfsInstance.types.Buffer.from(JSON.stringify(content))
 
 export const ipfsAdd = async content => {
   const file = bufferFile(content)
@@ -25,10 +23,9 @@ export const ipfsAdd = async content => {
 }
 
 export const ipfsGet = async hash => {
-  const { host, port, protocol, path } = ipfsConfig
-  const endpoint = `${protocol}://${host}:${port}${path}/cat?arg=${hash}`
+  const ipfsPath = `${ipfsEndpoint}/cat?arg=${hash}`
   try {
-    const { data } = await axios.get(endpoint)
+    const { data } = await axios.get(ipfsPath)
     return data
   } catch (err) {
     console.error('Error getting data from IPFS', err)
