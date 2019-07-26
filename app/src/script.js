@@ -1,7 +1,7 @@
 import '@babel/polyfill'
 import Aragon from '@aragon/api'
 import { first } from 'rxjs/operators'
-import { toHex } from 'web3-utils'
+import { toUtf8 } from 'web3-utils'
 import { ipfsGet } from './utils/ipfs-helpers'
 
 const app = new Aragon()
@@ -58,7 +58,7 @@ const initializeWidgets = () => {
 
 const refreshWidget = async _priority => {
   // Clear all entries
-  const i = _priority === toHex('PRIMARY_WIDGET') ? 0 : 1
+  const i = toUtf8(_priority) === 'PRIMARY_WIDGET' ? 0 : 1
 
   let entry = {
     addr: '',
