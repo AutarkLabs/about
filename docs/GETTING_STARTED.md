@@ -24,8 +24,8 @@ different step if this worries you (see example [here](https://hack.aragon.org/d
    * Install the storage app: ```dao install <dao-name> storage-preview.open.aragonpm.eth --set-permissions open --environment aragon:rinkeby```
 
 4. Go back to your browser, and visit your organization at `preview.autark.xyz/#/<dao-name>/settings` – note that it won’t work if you visit your organization at `rinkeby.aragon.org` or `rinkeby.autark.xyz`, as you have to use our experimental client located at `preview.autark.xyz`.
-5. In this Settings app, and change the home page to the “Home” option in the dropdown.
-You will be prompted to sign two transactions. After those actions are approved, you should see the changes in your organization. If you installed the apps with open permissions like above, the changes will be reflected right away. Otherwise it may potentially require a vote to approve it.
+5. In the Settings app, change the home page to the “Home” option in the dropdown.
+  * You will be prompted to sign two transactions. After those actions are approved, you should see the changes in your organization. If you installed the apps with open permissions like above, the changes will be reflected right away. Otherwise it may potentially require a vote to approve it.
 6. Visit your Home app and hover over the two content widgets. You will see a pencil icon which you can click to customize the landing page for your organization!
 
 ## Product Notes
