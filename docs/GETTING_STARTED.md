@@ -1,4 +1,5 @@
 # Customize your organization home page
+![home-img](images/home.png)
 ## Demo
 Checkout how an Aragon organization with a customized home page looks here: 
 https://preview.autark.xyz/#/preview/0xbe525e5d313296385814a24b760c3f3fc04a8748
