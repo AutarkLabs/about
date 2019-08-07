@@ -15,8 +15,7 @@ To implement this, it required:
 ## Using the new Home app (alpha)
 Here are instructions on adding the home app to a Rinkeby DAO. We recommend that you don’t install it to a DAO that you are actively using for operations, as these are not the official packages and we plan to make a few more enhancements before the official releases.
 
-1. If you don’t have an organization, create a new one using rinkeby.aragon.org or rinkeby.autark.xyz
-Make note of your organization name (e.g. <dao-name>.aragonid.eth)
+1. If you don’t have an organization, create a new one using [rinkeby.aragon.org](https://rinkeby.aragon.org) or [rinkeby.autark.xyz](https://rinkeby.autark.xyz) and make note of your organization name (e.g. <dao-name>.aragonid.eth)
 2. Install the Home app and the Storage app – this requires using the aragon-cli. The steps below are an insecure, yet fast way to do it as we are setting the permissions to be open. You may want to install and then set the permission in a 
 different step if this worries you (see example [here](https://hack.aragon.org/docs/guides-custom-deploy)), or make updates in your Permissions app after it’s installed. 
 
@@ -24,7 +23,7 @@ different step if this worries you (see example [here](https://hack.aragon.org/d
       ```dao install <dao-name> home-preview.open.aragonpm.eth --set-permissions open --environment aragon:rinkeby```
    * Install the storage app: ```dao install <dao-name> storage-preview.open.aragonpm.eth --set-permissions open --environment aragon:rinkeby```
 
-4. Go back to your browser, and visit your organization at preview.autark.xyz/#/<dao-name>/settings – note that it won’t work if you visit your organization at rinkeby.aragon.org or rinkeby.autark.xyz, as you have to use our experimental client.
+4. Go back to your browser, and visit your organization at `preview.autark.xyz/#/<dao-name>/settings` – note that it won’t work if you visit your organization at `rinkeby.aragon.org` or `rinkeby.autark.xyz`, as you have to use our experimental client located at `preview.autark.xyz`.
 5. In this Settings app, and change the home page to the “Home” option in the dropdown.
 You will be prompted to sign two transactions. After those actions are approved, you should see the changes in your organization. If you installed the apps with open permissions like above, the changes will be reflected right away. Otherwise it may potentially require a vote to approve it.
 6. Visit your Home app and hover over the two content widgets. You will see a pencil icon which you can click to customize the landing page for your organization!
