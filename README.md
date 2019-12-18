@@ -33,7 +33,7 @@ A new about page for Aragon DAOs
    npm run start:ipfs:template -- --client false
    ```
 
-4. Start yet another terminal to run the customized client supporting Home setting
+4. Start yet another terminal to run the customized client supporting About setting
 
    ```sh
    git clone git@github.com:AutarkLabs/aragon.git -b dev
