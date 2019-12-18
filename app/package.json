@@ -1,7 +1,7 @@
 {
-  "name": "home-frontend",
+  "name": "about-frontend",
   "version": "1.0.0",
-  "description": "Aragon home app from Planning Suite",
+  "description": "Aragon About app, from Autark",
   "main": "src/index.js",
   "dependencies": {
     "@aragon/api": "^1.0.0-beta.1",
@@ -41,7 +41,7 @@
   "author": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AutarkLabs/aragon-home.git"
+    "url": "git+https://github.com/AutarkLabs/about.git"
   },
   "keywords": [],
   "license": "GPL-3.0"

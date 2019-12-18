@@ -1,6 +1,6 @@
 /* global artifacts context contract before beforeEach it assert */
 const { assertRevert } = require('@aragon/test-helpers/assertThrow')
-const HomePage = artifacts.require('HomePage')
+const About = artifacts.require('About')
 const DAOFactory = artifacts.require(
   '@aragon/core/contracts/factory/DAOFactory'
 )
@@ -27,7 +27,7 @@ contract('Widgets', accounts => {
       aclBase.address,
       regFact.address
     )
-    appBase = await HomePage.new()
+    appBase = await About.new()
 
     // Setup constants
     // TODO: take roles hashes from constants file
@@ -64,7 +64,7 @@ contract('Widgets', accounts => {
       { from: firstAccount }
     )
 
-    app = HomePage.at(
+    app = About.at(
       receipt.logs.filter(l => l.event === 'NewAppProxy')[0].args.proxy
     )
 
