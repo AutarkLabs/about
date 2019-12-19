@@ -4,9 +4,9 @@
   "description": "Aragon About app, from Autark",
   "main": "src/index.js",
   "dependencies": {
-    "@aragon/api": "^1.0.0-beta.1",
-    "@aragon/api-react": "^1.0.0-beta.1",
-    "@aragon/ui": "^0.32.0",
+    "@aragon/api": "2.0.0-beta.8",
+    "@aragon/api-react": "2.0.0-beta.8",
+    "@aragon/ui": "1.0.0",
     "@babel/polyfill": "^7.2.5",
     "@githubprimer/octicons-react": "^8.5.0",
     "axios": "^0.19.0",

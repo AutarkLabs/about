@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "Aragon About app, from Autark",
   "dependencies": {
-    "@aragon/os": "^4.0.1",
+    "@aragon/os": "4.2.0",
     "@aragon/apps-shared-minime": "^1.0.0",
     "@aragon/apps-token-manager": "2.0.0",
-    "@aragon/apps-voting": "2.0.0",
-    "@aragon/ui": "^0.32.0"
+    "@aragon/apps-voting": "2.0.0"
   },
   "devDependencies": {
     "@aragon/test-helpers": "^1.0.1",
