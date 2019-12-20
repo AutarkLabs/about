@@ -13,13 +13,16 @@ import {
   breakpoint,
   SidePanel,
   EmptyStateCard,
-  IconHome,
-  SafeLink,
+  GU,
+  Button,
 } from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
 import Widget from './components/content/Widget'
 import { toHex } from 'web3-utils'
+import illustration from './assets/empty.svg'
+
+const Illustration = () => <img src={illustration} height={20 * GU} />
 
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
@@ -57,6 +60,53 @@ function App() {
   // const toggleEditMode = () => {
   //   setEditMode(!editMode)
   // }
+
+  const SideContent = () => (
+    <SidePanel
+      opened={panelVisible}
+      onClose={closePanel}
+      title="Content Block Editor"
+    >
+      <SidePanelContainer>
+        <PanelContent
+          ipfsAddr={
+            entries !== undefined &&
+            selectedWidget !== null &&
+            entries[selectedWidget].addr
+          }
+          content={
+            entries !== undefined &&
+            selectedWidget !== null &&
+            entries[selectedWidget].content
+          }
+          newWidget={newWidget}
+          updateWidget={updateWidget}
+          closePanel={closePanel}
+          position={selectedWidget}
+        />
+      </SidePanelContainer>
+    </SidePanel>
+  )
+
+  if (!entries) {
+    return (
+      <Main>
+        <EmptyLayout>
+          <EmptyStateCard
+            action={
+              <Button
+                label="Customize about page"
+                onClick={handleClickNewWidget}
+              />
+            }
+            text="No information here"
+            illustration={<Illustration />}
+          />
+        </EmptyLayout>
+        <SideContent />
+      </Main>
+    )
+  }
 
   const widgetList =
     entries &&
@@ -108,47 +158,10 @@ function App() {
             />
           }
         >
-          <WidgetsLayout>
-            {entries ? (
-              widgetList
-            ) : (
-              <EmptyStateCard
-                action={
-                  <SafeLink href="#" onClick={handleClickNewWidget}>
-                    Add new widget
-                  </SafeLink>
-                }
-                text="You seem to not have any content on your wall."
-                icon={<IconHome color="blue" />}
-              />
-            )}
-          </WidgetsLayout>
+          <WidgetsLayout> {widgetList} </WidgetsLayout>
         </AppView>
       </BaseLayout>
-      <SidePanel
-        opened={panelVisible}
-        onClose={closePanel}
-        title="Content Block Editor"
-      >
-        <SidePanelContainer>
-          <PanelContent
-            ipfsAddr={
-              entries !== undefined &&
-              selectedWidget !== null &&
-              entries[selectedWidget].addr
-            }
-            content={
-              entries !== undefined &&
-              selectedWidget !== null &&
-              entries[selectedWidget].content
-            }
-            newWidget={newWidget}
-            updateWidget={updateWidget}
-            closePanel={closePanel}
-            position={selectedWidget}
-          />
-        </SidePanelContainer>
-      </SidePanel>
+      <SideContent />
     </Main>
   )
 }
@@ -157,6 +170,13 @@ const BaseLayout = styled.div`
   display: flex;
   height: 100vh;
   flex-direction: column;
+`
+
+const EmptyLayout = styled.div`
+  display: flex;
+  height: 95vh;
+  justify-content: center;
+  align-items: center;
 `
 
 const WidgetsLayout = styled.div`
