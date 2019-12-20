@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import axios from 'axios'
 
-import { Button, SidePanelSeparator, Text } from '@aragon/ui'
+import { Button, SidePanelSeparator, Tabs, Text } from '@aragon/ui'
 
 import TypeInput from '../TypeInput'
-import PanelTabBar from './PanelTabBar'
+import PanelToolBar from './PanelToolBar'
 import PanelTabView from './PanelTabView'
 import { SideBarScrollbarContainer } from '../../styles'
 import Input from './Input'
@@ -180,37 +180,36 @@ const PanelContent = ({
     <PanelContainer>
       <TopPanel>
         <TypeInput value={editorType} onChange={handleEditorTypeChange} />
-        <SidePanelSeparator style={{ margin: '15px -30px 6px -30px' }} />
-        {editorType === 0 && (
-          <div>
-            <PanelTabBar
-              handleChange={handleChange}
-              screenIndex={screenIndex}
-              setSelectionBold={setSelectionBold}
-              setSelectionCode={setSelectionCode}
-              setSelectionItalic={setSelectionItalic}
-              setSelectionLink={setSelectionLink}
-              setSelectionQuote={setSelectionQuote}
-              setSelectionSize={setSelectionSize}
-              setSelectionUnorderedList={setSelectionUnorderedList}
-            />
-            <SidePanelSeparator
-              style={{
-                margin: '-31px -30px 0',
-              }}
-            />
-          </div>
-        )}
+        <Tabs
+          items={['Write', 'Preview']}
+          selected={screenIndex}
+          onChange={handleChange}
+        />
       </TopPanel>
       <CenterPanel>
         {editorType === 0 && (
-          <PanelTabView
-            handleEditorChange={handleEditorChange}
-            onCodeMirrorInit={onCodeMirrorInit}
-            screenIndex={screenIndex}
-            unsavedText={unsavedText}
-            instance={codemirrorInstance}
-          />
+          <>
+            {screenIndex === 0 && (
+              <PanelToolBar
+                handleChange={handleChange}
+                screenIndex={screenIndex}
+                setSelectionBold={setSelectionBold}
+                setSelectionCode={setSelectionCode}
+                setSelectionItalic={setSelectionItalic}
+                setSelectionLink={setSelectionLink}
+                setSelectionQuote={setSelectionQuote}
+                setSelectionSize={setSelectionSize}
+                setSelectionUnorderedList={setSelectionUnorderedList}
+              />
+            )}
+            <PanelTabView
+              handleEditorChange={handleEditorChange}
+              onCodeMirrorInit={onCodeMirrorInit}
+              screenIndex={screenIndex}
+              unsavedText={unsavedText}
+              instance={codemirrorInstance}
+            />
+          </>
         )}
         {editorType === 1 && (
           <SideBarScrollbarContainer>
@@ -232,7 +231,7 @@ const PanelContent = ({
         )}
       </CenterPanel>
       <BottomPanel>
-        <SidePanelSeparator style={{ margin: '0 -30px 15px' }} />
+        <SidePanelSeparator style={{ width: '450px',  margin: '0 -30px 24px' }} />
         <Button mode="strong" wide onClick={saveBlock}>
           Update
         </Button>
@@ -268,22 +267,22 @@ const PanelContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-height: 100%;
 `
 
 const BottomPanel = styled.div`
   flex: 0 0 auto;
-  padding-bottom: 15px;
+  padding-bottom: 24px;
 `
 
 const TopPanel = styled.div`
+  margin-top: 24px;
   flex: 0 0 auto;
 `
 
 const CenterPanel = styled.div`
-  flex: 1 1 auto;
-  overflow-y: auto;
-  margin-right: -30px;
-  margin-left: -30px;
+  flex: 0 0 auto;
+  height: calc(100% - 277px);
   z-index: 1;
 `
 

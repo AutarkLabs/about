@@ -13,6 +13,7 @@ const TypeInput = ({ value, onChange }) => (
       onChange={index => {
         onChange(index)
       }}
+      wide
     />
   </Field>
 )
