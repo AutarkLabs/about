@@ -85,7 +85,6 @@ export async function insertLink(cm, isImage) {
   }
 }
 
-
 export function insertHeader(cm) {
   let cursor = cm.getCursor()
   let startOfLine = { line: cursor.line, ch: 0 }

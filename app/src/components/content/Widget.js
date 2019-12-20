@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Card, Info, SafeLink, theme } from '@aragon/ui'
+import { Card, theme } from '@aragon/ui'
 
 import { EditButton, MarkdownPreview } from '../../shared'
 

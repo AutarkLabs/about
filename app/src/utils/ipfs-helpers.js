@@ -7,7 +7,9 @@ export const ipfsConfig =
     : { host: 'ipfs.autark.xyz', port: '5001', protocol: 'https' }
 
 const ipfsInstance = ipfsClient(ipfsConfig)
-const ipfsEndpoint = `${ipfsConfig.protocol}://${ipfsConfig.host}:${ipfsConfig.port}/api/v0`
+const ipfsEndpoint = `${ipfsConfig.protocol}://${ipfsConfig.host}:${
+  ipfsConfig.port
+}/api/v0`
 
 const bufferFile = content =>
   ipfsInstance.types.Buffer.from(JSON.stringify(content))
