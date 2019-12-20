@@ -9,7 +9,7 @@ const TypeInput = ({ value, onChange }) => (
         'External URL (.md file)',
         'IPFS hash (.md file)',
       ]}
-      active={value}
+      selected={value}
       onChange={index => {
         onChange(index)
       }}
