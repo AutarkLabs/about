@@ -7,14 +7,12 @@ import {
   Main,
   AppBar,
   AppView,
-  // TODO: temporarily disabled edit-mode
-  // Button,
+  Button,
   BREAKPOINTS,
   breakpoint,
-  SidePanel,
   EmptyStateCard,
   GU,
-  Button,
+  SidePanel,
 } from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
