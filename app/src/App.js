@@ -14,7 +14,7 @@ import {
   SidePanel,
   EmptyStateCard,
   IconHome,
-  SafeLink,
+  Link,
 } from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
@@ -114,9 +114,9 @@ function App() {
             ) : (
               <EmptyStateCard
                 action={
-                  <SafeLink href="#" onClick={handleClickNewWidget}>
+                  <Link href="#" onClick={handleClickNewWidget}>
                     Add new widget
-                  </SafeLink>
+                  </Link>
                 }
                 text="You seem to not have any content on your wall."
                 icon={<IconHome color="blue" />}
