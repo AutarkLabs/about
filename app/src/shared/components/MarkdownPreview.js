@@ -45,6 +45,7 @@ Preview.propTypes = {
 }
 
 const MarkdownWrapper = styled.div`
+  width: 100%;
   h1,
   h2,
   h3,
