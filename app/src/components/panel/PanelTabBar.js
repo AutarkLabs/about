@@ -10,7 +10,7 @@ import Octicon, {
   ListUnordered,
 } from '@githubprimer/octicons-react'
 
-import { Button, TabBar } from '@aragon/ui'
+import { Button, Tabs } from '@aragon/ui'
 
 const PanelTabBar = ({
   screenIndex,
@@ -32,7 +32,7 @@ const PanelTabBar = ({
         paddingRight: '20px',
       }}
     >
-      <TabBar
+      <Tabs
         items={['Write', 'Preview']}
         selected={screenIndex}
         onChange={handleChange}
