@@ -21,6 +21,8 @@ jobs:
       script: true
 
     - stage: lint-n-test
+      install:
+        - travis_wait npm i -g @aragon/cli@6.3.3
       script:
         - npm run lint
         - travis_wait 60 npm run coverage
