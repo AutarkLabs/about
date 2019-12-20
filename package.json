@@ -1,13 +1,12 @@
 {
-  "name": "aragon-home",
+  "name": "aragon-about",
   "version": "1.0.0",
-  "description": "Aragon home app from Planning Suite",
+  "description": "Aragon About app, from Autark",
   "dependencies": {
-    "@aragon/os": "^4.0.1",
+    "@aragon/os": "4.2.0",
     "@aragon/apps-shared-minime": "^1.0.0",
     "@aragon/apps-token-manager": "2.0.0",
-    "@aragon/apps-voting": "2.0.0",
-    "@aragon/ui": "^0.32.0"
+    "@aragon/apps-voting": "2.0.0"
   },
   "devDependencies": {
     "@aragon/test-helpers": "^1.0.1",
@@ -27,8 +26,8 @@
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-standard": "^4.0.0",
     "ethlint": "^1.2.3",
-    "ganache-cli": "^6.4.4",
-    "parcel-bundler": "^1.12.3",
+    "ganache-cli": "^6.7.0",
+    "parcel-bundler": "^1.12.4",
     "prettier": "^1.16.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -66,7 +65,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AutarkLabs/aragon-home.git"
+    "url": "git+https://github.com/AutarkLabs/about.git"
   },
   "license": "GPL-3.0"
 }

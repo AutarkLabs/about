@@ -1,23 +1,23 @@
-# Aragon Home App 🦅🏠
+# Aragon About App 🦅🗣
 
-A new home page for Aragon DAOs
+A new about page for Aragon DAOs
 
 ## Usage
 
-### Launch the custom client with home support
+### Launch the custom client with about support
 
-1. Clone Aragon home, run a devchain and publish aragon-home to this devchain
+1. Clone Aragon about, run a devchain and publish `about` to this devchain
 
    ```sh
-   git clone https://github.com/AutarkLabs/aragon-home.git -b dev
-   cd aragon-home
+   git clone https://github.com/AutarkLabs/about.git
+   cd about
    npm i # install dependencies
    npx aragon ipfs # run ipfs local node
    npx aragon devchain # run local ganache-cli devchain
                            # add "--reset" to delete previous chain data
    ```
 
-2. Open another terminal an go again into the folder `cd aragon-home`
+2. Open another terminal and go again into the folder `cd about`
 
    ```sh
    npm run publish:major -- --environment default
@@ -45,7 +45,7 @@ A new home page for Aragon DAOs
 
    http://localhost:3000/#/0xe5ac265B0FFE4b47C8386D7d715f3a3f6F8fb5B9
 
-   > It should have Home and Storage along with Voting and Token apps installed by default
+   > It should have About and Storage along with Voting and Token apps installed by default
 
 ### Development
 
