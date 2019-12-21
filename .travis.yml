@@ -18,11 +18,14 @@ cache:
 jobs:
   include:
     - stage: precache
+      install:
+        - travis_wait npm i -g @aragon/cli@6.3.3
       script: true
 
     - stage: lint-n-test
       install:
         - travis_wait npm i -g @aragon/cli@6.3.3
+        - travis_wait npm i
       script:
         - npm run lint
         - travis_wait 60 npm run coverage
