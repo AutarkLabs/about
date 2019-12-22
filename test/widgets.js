@@ -113,14 +113,7 @@ contract('Widgets', accounts => {
     let widgetAddedReceipt = []
 
     beforeEach(async () => {
-      widgetAddedReceipt = await app.addWidget('something')
-    })
-
-    it('should add a widget', async () => {
-      const event = widgetAddedReceipt.logs.filter(
-        l => l.event === 'WidgetAdded'
-      )
-      assert.equal(event.length, 1, 'widget not added correctly')
+      widgetAddedReceipt = await app.updateWidget(0, 'something')
     })
 
     it('should update a widget', async () => {
@@ -129,29 +122,6 @@ contract('Widgets', accounts => {
         l => l.event === 'WidgetUpdated'
       )
       assert.equal(event.length, 1, 'widget not updated correctly')
-    })
-
-    it('should remove a widget', async () => {
-      const widgetRemovedReceipt = await app.removeWidget(0)
-      const event = widgetRemovedReceipt.logs.filter(
-        l => l.event === 'WidgetRemoved'
-      )
-      assert.equal(event.length, 1, 'widget not removed correctly')
-    })
-
-    it('should reorder widgets', async () => {
-      await app.addWidget('second widget')
-      const widgetReorderReceipt = await app.reorderWidgets(0, 1)
-      const event = widgetReorderReceipt.logs.filter(
-        l => l.event === 'WidgetsReordered'
-      )
-      assert.equal(event.length, 1, 'widgets not reordered correctly')
-    })
-
-    it('should get widgets count', async () => {
-      await app.addWidget('second widget')
-      const widgetsCount = await app.getWCount()
-      assert.equal(widgetsCount.toNumber(), 2, 'widgets count invalid')
     })
 
     it('should get a widget', async () => {
