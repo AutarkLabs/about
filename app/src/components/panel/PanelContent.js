@@ -29,12 +29,9 @@ let ipfsHashInitial = ''
 const PanelContent = ({
   content,
   updateWidget,
-  newWidget,
   closePanel,
   ipfsAddr,
   position,
-  //   Widget re-ordering currently disabled
-  // saveWidget,
 }) => {
   const [unsavedText, setUnsavedText] = useState(content)
   const [screenIndex, setScreenIndex] = useState(0)
@@ -42,7 +39,7 @@ const PanelContent = ({
   const [editorType, setEditorType] = useState(editorTypeInitial)
   const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
   const [unsavedIpfsHash, setUnsavedIpfsHash] = useState(ipfsHashInitial)
-
+  
   const [{ savedIpfsAddr, isLoading }, saveIpfs] = ipfsAdd(null)
 
   const [codemirrorInstance, setCodemirrorInstance] = useState(
@@ -251,7 +248,6 @@ const PanelContent = ({
 PanelContent.propTypes = {
   content: PropTypes.string,
   updateWidget: PropTypes.func.isRequired,
-  newWidget: PropTypes.func.isRequired,
   closePanel: PropTypes.func.isRequired,
   ipfsAddr: PropTypes.string,
 }

@@ -1,85 +1,131 @@
-import React, { useState } from 'react'
-// import PropTypes from 'prop-types'
+import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { useAragonApi } from '@aragon/api-react'
 import {
   Main,
-  AppBar,
-  AppView,
-  // TODO: temporarily disabled edit-mode
-  // Button,
+  Button,
   BREAKPOINTS,
   breakpoint,
-  SidePanel,
+  ContextMenuItem,
   EmptyStateCard,
   GU,
-  Button,
+  Header,
+  IconDown,
+  IconGrid,
+  Popover,
+  SidePanel,
+  Text,
+  useLayout,
+  useTheme,
 } from '@aragon/ui'
 
 import PanelContent from './components/panel/PanelContent'
-import Widget from './components/content/Widget'
+import ColumnView from './components/content/ColumnView'
 import { toHex } from 'web3-utils'
 import illustration from './assets/empty.svg'
 
 const Illustration = () => <img src={illustration} height={20 * GU} />
 
+const Actions = ({
+  onClick,
+  openerRef,
+  visible,
+  setVisible,
+  handleClickUpdateWidget,
+  entriesLength,
+}) => {
+  const theme = useTheme()
+  const { layoutName } = useLayout()
+  console.log(theme)
+  return (
+    <React.Fragment>
+      {layoutName === 'small' ? (
+        <Button
+          onClick={onClick}
+          ref={openerRef}
+          icon={<IconGrid />}
+          display="icon"
+          label="Actions Menu"
+        />
+      ) : (
+        <Button onClick={onClick} ref={openerRef}>
+          <IconGrid
+            css={`
+              color: ${theme.surfaceIcon};
+            `}
+          />
+          <Text css="margin: 0 8px;">Actions</Text>
+          <IconDown
+            css={`
+              color: ${theme.surfaceIcon};
+              width: 16px;
+            `}
+          />
+        </Button>
+      )}
+      <Popover
+        visible={visible}
+        opener={openerRef.current}
+        onClose={() => setVisible(false)}
+        placement="bottom-end"
+        css={`
+          display: flex;
+          flex-direction: column;
+          padding: 10px;
+        `}
+      >
+        <ContextMenuItem onClick={() => handleClickUpdateWidget(0)}>
+          Edit main column
+        </ContextMenuItem>
+        <ContextMenuItem onClick={() => handleClickUpdateWidget(1)}>
+          {entriesLength === 2 ? 'Edit side column' : 'Add side column'}
+        </ContextMenuItem>
+      </Popover>
+    </React.Fragment>
+  )
+}
+Actions.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+  setVisible: PropTypes.func.isRequired,
+  openerRef: PropTypes.object.isRequired,
+  entriesLength: PropTypes.number.isRequired,
+}
+
 function App() {
   const [panelVisible, setPanelVisible] = useState(false)
-  // TODO: useState(false) to start editMode disabled
-  // const [editMode, setEditMode] = useState(true)
-  const [editMode] = useState(true)
+  const [actionsMenuVisible, setActionsMenuVisible] = useState(false)
   const [selectedWidget, setSelectedWidget] = useState(0)
+  const actionsOpener = useRef(null)
 
   const { api, appState } = useAragonApi()
-  const { entries } = appState
+  const { entries = [] } = appState
 
-  const handleClickUpdateWidget = index => e => {
+  const handleClickUpdateWidget = index => {
     setSelectedWidget(index)
     setPanelVisible(true)
-  }
-
-  const handleClickNewWidget = e => {
-    setSelectedWidget(null)
-    setPanelVisible(true)
-  }
-
-  const closePanel = () => {
-    setPanelVisible(false)
   }
 
   const updateWidget = (_index, _ipfsAddr) => {
     return api.updateWidget(toHex(_index), _ipfsAddr)
   }
 
-  const newWidget = _ipfsAddr => {
-    return api.addWidget(_ipfsAddr)
+  const closePanel = () => {
+    setPanelVisible(false)
   }
-
-  // TODO: temporarily disabled
-  // const toggleEditMode = () => {
-  //   setEditMode(!editMode)
-  // }
 
   const SideContent = () => (
     <SidePanel
       opened={panelVisible}
       onClose={closePanel}
-      title="Content Block Editor"
+      title={entries[selectedWidget] ? 'Update details' : 'New details'}
     >
       <SidePanelContainer>
         <PanelContent
-          ipfsAddr={
-            entries !== undefined &&
-            selectedWidget !== null &&
-            entries[selectedWidget].addr
-          }
-          content={
-            entries !== undefined &&
-            selectedWidget !== null &&
-            entries[selectedWidget].content
-          }
-          newWidget={newWidget}
+          ipfsAddr={entries[selectedWidget] && entries[selectedWidget].addr}
+          content={entries[selectedWidget] && entries[selectedWidget].content}
           updateWidget={updateWidget}
           closePanel={closePanel}
           position={selectedWidget}
@@ -88,7 +134,7 @@ function App() {
     </SidePanel>
   )
 
-  if (!entries) {
+  if (entries.length === 0) {
     return (
       <Main>
         <EmptyLayout>
@@ -96,7 +142,7 @@ function App() {
             action={
               <Button
                 label="Customize about page"
-                onClick={handleClickNewWidget}
+                onClick={() => handleClickUpdateWidget(0)}
               />
             }
             text="No information here"
@@ -108,90 +154,32 @@ function App() {
     )
   }
 
-  const widgetList =
-    entries &&
-    entries.map((widget, index) => (
-      <Widget
-        key={index}
-        id={index}
-        isLoading={widget.isLoading}
-        errorMessage={widget.errorMessage}
-        content={widget.content}
-        ipfsAddr={widget.addr}
-        handleClick={handleClickUpdateWidget}
-        active={editMode}
-      />
-    ))
   return (
     <Main>
-      <BaseLayout>
-        <AppView
-          appBar={
-            <AppBar
-              title="Home"
-              // TODO: uncomment this block for edit functionality
-              // endContent={
-              //   <div>
-              //     {editMode && (
-              //       <div>
-              //         <Button
-              //           mode="outline"
-              //           onClick={toggleEditMode}
-              //           style={{ marginRight: 20 }}
-              //         >
-              //           Cancel and Exit
-              //         </Button>
-
-              //         <Button mode="strong" onClick={toggleEditMode}>
-              //           Submit changes
-              //         </Button>
-              //       </div>
-              //     )}
-
-              //     {!editMode && (
-              //       <Button mode="strong" onClick={toggleEditMode}>
-              //         Edit Page
-              //       </Button>
-              //     )}
-              //   </div>
-              // }
-            />
-          }
-        >
-          <WidgetsLayout> {widgetList} </WidgetsLayout>
-        </AppView>
-      </BaseLayout>
+      <Header
+        primary="About"
+        secondary={
+          <Actions
+            onClick={() => setActionsMenuVisible(true)}
+            visible={actionsMenuVisible}
+            setVisible={setActionsMenuVisible}
+            openerRef={actionsOpener}
+            handleClickUpdateWidget={handleClickUpdateWidget}
+            entriesLength={entries.length}
+          />
+        }
+      />
+      <ColumnView />
       <SideContent />
     </Main>
   )
 }
-
-const BaseLayout = styled.div`
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-`
 
 const EmptyLayout = styled.div`
   display: flex;
   height: 95vh;
   justify-content: center;
   align-items: center;
-`
-
-const WidgetsLayout = styled.div`
-  margin: 0 auto;
-  max-width: ${BREAKPOINTS.large}px;
-  width: 100%;
-  ${breakpoint(
-    'small',
-    `
-      display: grid;
-      grid-gap: 30px;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    `
-  )};
-  ${breakpoint('large', 'grid-template-columns: 6.7fr 3.3fr')};
 `
 
 // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
