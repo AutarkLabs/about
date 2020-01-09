@@ -42,7 +42,7 @@
     "compile": "truffle compile",
     "coverage": "cross-env SOLIDITY_COVERAGE=true npm run ganache-cli:test",
     "coveralls": "cat coverage/lcov.info | npx coveralls",
-    "dev": "cd app && npm run devserver",
+    "dev": "cd app && npm start",
     "ganache-cli:test": "sh ./node_modules/@aragon/test-helpers/ganache-cli.sh",
     "lint:fix": "eslint . --fix & solium --dir ./contracts --fix",
     "lint": "eslint . & solium --dir ./contracts",
@@ -57,7 +57,7 @@
     "start:http": "aragon run --http localhost:8001 --http-served-from ./dist",
     "start:ipfs:template": "npm run start:ipfs -- --template Template --template-init @ARAGON_ENS --files dist",
     "start:ipfs": "aragon run",
-    "start": "npm run start:ipfs",
+    "start": "npm run dev",
     "test:script": "ava app/src/*.test.js --verbose",
     "test": "cross-env TRUFFLE_TEST=true npm run ganache-cli:test",
     "watch:script": "cd app && npm run watch:script"

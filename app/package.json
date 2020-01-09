@@ -34,8 +34,7 @@
     "build:script": "parcel build src/script.js -d ../dist/",
     "copy-public-assets": "rsync -rtu ./public/ ../dist",
     "watch:script": "parcel watch src/script.js --out-dir ../dist/ --no-hmr",
-    "devserver": "npm run build -- --no-minify && parcel serve index.html -p 8001 -d ../dist/ --no-cache",
-    "start": "npm run sync-assets && npm run build:script -- --no-minify && npm run devserver",
+    "start": "npm run sync-assets && parcel serve index.html -p 8001 -d ../dist --no-cache --no-autoinstall",
     "sync-assets": "copy-aragon-ui-assets ../dist && npm run copy-public-assets"
   },
   "author": "",

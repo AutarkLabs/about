@@ -1,15 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import { Header, Main, SyncIndicator } from '@aragon/ui'
+import { Header, Main, SidePanel, SyncIndicator } from '@aragon/ui'
 
+import ColumnView from './components/content/ColumnView'
+import PanelContent from './components/panel/PanelContent'
 import ActionsButton from './components/ActionsButton'
 import EmptyState from './screens/EmptyState'
 import * as types from './utils/prop-types'
 import { useAragonApi } from './api-react'
 
 const App = ({ api, entries, isSyncing }) => {
-  const [sidePanelOpened, setSidePanelOpened] = useState(false)
+  const [panelVisible, setPanelVisible] = useState(true)
+  const [actionsMenuVisible, setActionsMenuVisible] = useState(false)
+  const [selectedWidget, setSelectedWidget] = useState(-1)
+  const actionsOpener = useRef(null)
+
+  const handleClickUpdateWidget = index => {
+    setSelectedWidget(index)
+    setPanelVisible(true)
+  }
+
+  const handleAddColumn = useCallback(() => {
+    setPanelVisible(true)
+  }, [setPanelVisible])
 
   return (
     <>
@@ -22,15 +37,43 @@ const App = ({ api, entries, isSyncing }) => {
             justify-content: center;
           `}
         >
-          <EmptyState isSyncing={isSyncing} onActionClick={() => {}} />
+          <EmptyState isSyncing={isSyncing} onActionClick={handleAddColumn} />
         </div>
       )}
       {entries.length > 0 && (
         <>
           <SyncIndicator visible={isSyncing} />
-          <Header primary="About" secondary={<ActionsButton />} />
+          <Header
+            primary="About"
+            secondary={
+              <ActionsButton
+                onClick={() => setActionsMenuVisible(true)}
+                visible={actionsMenuVisible}
+                setVisible={setActionsMenuVisible}
+                openerRef={actionsOpener}
+                handleClickUpdateWidget={handleClickUpdateWidget}
+                entriesLength={entries.length}
+              />
+            }
+          />
+          <ColumnView />
         </>
       )}
+      <SidePanel
+        opened={panelVisible}
+        onClose={() => setPanelVisible(false)}
+        title={entries[selectedWidget] ? 'Update details' : 'New details'}
+      >
+        <SidePanelContainer>
+          <PanelContent
+            ipfsAddr={entries[selectedWidget] && entries[selectedWidget].addr}
+            content={entries[selectedWidget] && entries[selectedWidget].content}
+            updateWidget={() => {}}
+            closePanel={() => setPanelVisible(false)}
+            position={selectedWidget}
+          />
+        </SidePanelContainer>
+      </SidePanel>
     </>
   )
 }
@@ -51,20 +94,30 @@ App.defaultProps = {
 export default () => {
   const { api, appState, guiStyle = {} } = useAragonApi()
   const { appearance } = guiStyle
-  console.log('theme', appearance, guiStyle)
 
   return (
-    <Main assetsUrl="./aragon-ui" theme={'dark'}>
+    <Main assetsUrl="./aragon-ui" theme={appearance}>
       <App api={api} {...appState} />
     </Main>
   )
 }
 
-// import React, { useState, useRef } from 'react'
-// import PropTypes from 'prop-types'
-// import styled from 'styled-components'
+// With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
+const SidePanelContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  left: 30px;
+  top: 80px;
 
-// import { useAragonApi } from './api-react'
+  @media only screen and (max-height: 380px) {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+  }
+`
 
 // import {
 //   Main,
@@ -82,7 +135,6 @@ export default () => {
 //   useTheme,
 // } from '@aragon/ui'
 
-// import PanelContent from './components/panel/PanelContent'
 // import ColumnView from './components/content/ColumnView'
 // import { toHex } from 'web3-utils'
 // import illustration from './assets/empty.svg'
@@ -93,16 +145,10 @@ export default () => {
 //   const [panelVisible, setPanelVisible] = useState(false)
 //   const [actionsMenuVisible, setActionsMenuVisible] = useState(false)
 //   const [selectedWidget, setSelectedWidget] = useState(0)
-//   const actionsOpener = useRef(null)
 
 //   const { api, appState } = useAragonApi()
 //   // const { entries = [] } = appState
 //   const entries = []
-
-//   const handleClickUpdateWidget = index => {
-//     setSelectedWidget(index)
-//     setPanelVisible(true)
-//   }
 
 //   const updateWidget = (_index, _ipfsAddr) => {
 //     return api.updateWidget(toHex(_index), _ipfsAddr)
@@ -111,24 +157,6 @@ export default () => {
 //   const closePanel = () => {
 //     setPanelVisible(false)
 //   }
-
-//   const SideContent = () => (
-//     <SidePanel
-//       opened={panelVisible}
-//       onClose={closePanel}
-//       title={entries[selectedWidget] ? 'Update details' : 'New details'}
-//     >
-//       <SidePanelContainer>
-//         <PanelContent
-//           ipfsAddr={entries[selectedWidget] && entries[selectedWidget].addr}
-//           content={entries[selectedWidget] && entries[selectedWidget].content}
-//           updateWidget={updateWidget}
-//           closePanel={closePanel}
-//           position={selectedWidget}
-//         />
-//       </SidePanelContainer>
-//     </SidePanel>
-//   )
 
 //   if (entries.length === 0) {
 //     return (
@@ -154,19 +182,7 @@ export default () => {
 //     <Main>
 //       <Header
 //         primary="About"
-//         secondary={
-//           <Actions
-//             onClick={() => setActionsMenuVisible(true)}
-//             visible={actionsMenuVisible}
-//             setVisible={setActionsMenuVisible}
-//             openerRef={actionsOpener}
-//             handleClickUpdateWidget={handleClickUpdateWidget}
-//             entriesLength={entries.length}
-//           />
-//         }
-//       />
-//       <ColumnView />
-//       <SideContent />
+
 //     </Main>
 //   )
 // }
@@ -176,23 +192,6 @@ export default () => {
 //   height: 95vh;
 //   justify-content: center;
 //   align-items: center;
-// `
-
-// // With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
-// const SidePanelContainer = styled.div`
-//   position: absolute;
-//   bottom: 0;
-//   right: 30px;
-//   left: 30px;
-//   top: 80px;
-
-//   @media only screen and (max-height: 380px) {
-//     position: relative;
-//     bottom: 0;
-//     right: 0;
-//     left: 0;
-//     top: 0;
-//   }
 // `
 
 // // const Syncing = styled.div.attrs({children: 'Syncing…' })`
