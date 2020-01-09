@@ -10,7 +10,7 @@ let appState
 app.events().subscribe(handleEvents)
 
 app.state().subscribe(state => {
-  appState = state || { entries: [] }
+  appState = state || { count: 0, entries: [] }
 })
 
 /***********************
@@ -37,6 +37,12 @@ async function handleEvents({ event, returnValues }) {
     await app.cache('state', { ...nextState })
   }
   switch (event) {
+    case 'WidgetUpdated':
+      refreshWidget(returnValues._priority)
+      break
+    case 'WidgetUpdated':
+      refreshWidget(returnValues._priority)
+      break
     case 'WidgetUpdated':
       refreshWidget(returnValues._priority)
       break
