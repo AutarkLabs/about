@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
 import createDatabase from './database'
 import printWelcomeMessage from './welcomeMessage'
@@ -23,27 +23,24 @@ const stubbedFn = key => ([...args]) => {
 
 const buildHook = ({ initialState, functions }) => {
   const db = createDatabase({ initialState })
-  const guiDb = createDatabase({ appearance: 'dark' })
 
-  printWelcomeMessage(Object.keys(functions({}, () => {})))
+  printWelcomeMessage(['setTheme', ...Object.keys(functions({}, () => {}))])
 
   const useStubbedAragonApi = () => {
     const [appState, setAppState] = useState(db.fetchData())
-    const [guiStyle, setGuiStyle] = useState(guiDb.fetchData())
+    const [guiStyle, setGuiStyle] = useState({ appearance: 'light' })
+
+    const setTheme = useCallback(theme => setGuiStyle({ appearance: theme }), [
+      setGuiStyle,
+    ])
     const onDatabaseUpdate = useCallback(e => {
       setAppState(e.detail)
     }, [])
 
-    const onGuiDbUpdate = useCallback(e => {
-      setGuiStyle(e.detail)
-    }, [])
-
     useEffect(() => {
       db.subscribe(onDatabaseUpdate)
-      guiDb.subscribe(onGuiDbUpdate)
       return () => {
         db.unsubscribe(onDatabaseUpdate)
-        guiDb.unsubscribe(onGuiDbUpdate)
       }
     }, [])
 
@@ -65,7 +62,6 @@ const buildHook = ({ initialState, functions }) => {
           subscriber.complete()
         }),
       ...functions(appState, db.setData),
-      setTheme: theme => db.setData({ appearance: theme }),
     }
 
     const apiProxy = new Proxy(apiOverride, {
@@ -74,12 +70,14 @@ const buildHook = ({ initialState, functions }) => {
     })
 
     window.api = apiProxy
+    window.setTheme = setTheme
 
+    console.log('Current state', apiProxy, appState)
     return {
       api: apiProxy,
       appState,
-      guiStyle,
       connectedAccount: '0xb4124cEB3451635DAcedd11767f004d8a28c6eE7',
+      guiStyle,
     }
   }
 
