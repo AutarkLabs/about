@@ -10,12 +10,9 @@ import {
   List,
 } from '../../shared/icons'
 
-
-import { Button, TabBar, useTheme } from '@aragon/ui'
+import { Button, useTheme } from '@aragon/ui'
 
 const PanelToolBar = ({
-  screenIndex,
-  handleChange,
   setSelectionBold,
   setSelectionCode,
   setSelectionItalic,
@@ -46,14 +43,17 @@ const PanelToolBar = ({
       <EditToolBarButton theme={theme} onClick={setSelectionLink} compact>
         <Link />
       </EditToolBarButton>
-      <EditToolBarButton theme={theme} onClick={setSelectionUnorderedList} compact>
+      <EditToolBarButton
+        theme={theme}
+        onClick={setSelectionUnorderedList}
+        compact
+      >
         <List />
       </EditToolBarButton>
       <EditToolBarSeparator />
     </EditToolBar>
   )
 }
-
 
 const EditToolBar = styled.div`
   margin-bottom: 12px;
