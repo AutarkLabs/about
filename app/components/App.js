@@ -11,7 +11,7 @@ import * as types from '../utils/prop-types'
 import { useAragonApi } from '../api-react'
 
 const App = ({ entries, isSyncing }) => {
-  const [ panelVisible, setPanelVisible ] = useState(true)
+  const [ panelVisible, setPanelVisible ] = useState(false)
   const [ actionsMenuVisible, setActionsMenuVisible ] = useState(false)
   const [ selectedWidget, setSelectedWidget ] = useState(-1)
   const actionsOpener = useRef(null)

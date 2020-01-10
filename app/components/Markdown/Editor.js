@@ -11,7 +11,7 @@ const editorOptions = {
 }
 
 const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
-  const [setValue] = useState(initialValue)
+  const [ ,setValue ] = useState(initialValue)
 
   const ref = useRef()
 

@@ -89,6 +89,7 @@
     "lint:files": "eslint .",
     "lint:fix": "npm run lint:contracts --fix && npm run lint:files --fix",
     "lint": "npm run lint:contracts && npm run lint:files",
+    "precommit": "lint-staged",
     "prepublishOnly": "truffle compile --all && npm run abi:extract -- --no-compile",
     "publish:major": "npm run publish -- major --files dist",
     "publish:minor": "npm run publish -- minor --files dist",
@@ -128,7 +129,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lerna run --concurrency 1 --stream precommit",
+      "pre-commit": "npm run precommit",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
