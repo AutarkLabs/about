@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.4.26;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
 
@@ -21,7 +21,7 @@ contract About is AragonApp {
     mapping(bytes32 => Widget) internal widgets;
 
     /// ACL
-    /* Hardcoded constants to save gas
+    /* Hard-coded constants to save gas
     bytes32 constant public ADD_ROLE = keccak256("ADD_ROLE");
     bytes32 constant public REMOVE_ROLE = keccak256("REMOVE_ROLE");
     bytes32 constant public REORDER_ROLE = keccak256("REORDER_ROLE");
