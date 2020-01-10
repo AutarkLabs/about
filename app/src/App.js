@@ -64,15 +64,13 @@ const App = ({ api, entries, isSyncing }) => {
         onClose={() => setPanelVisible(false)}
         title={entries[selectedWidget] ? 'Update details' : 'New details'}
       >
-        <SidePanelContainer>
-          <PanelContent
-            ipfsAddr={entries[selectedWidget] && entries[selectedWidget].addr}
-            content={entries[selectedWidget] && entries[selectedWidget].content}
-            updateWidget={() => {}}
-            closePanel={() => setPanelVisible(false)}
-            position={selectedWidget}
-          />
-        </SidePanelContainer>
+        <PanelContent
+          ipfsAddr={entries[selectedWidget] && entries[selectedWidget].addr}
+          content={entries[selectedWidget] && entries[selectedWidget].content}
+          updateWidget={() => {}}
+          closePanel={() => setPanelVisible(false)}
+          position={selectedWidget}
+        />
       </SidePanel>
     </>
   )
@@ -101,103 +99,3 @@ export default () => {
     </Main>
   )
 }
-
-// With this style the scrollbar on SidePanel is disabled, so we can handle it ourselves
-const SidePanelContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 30px;
-  left: 30px;
-  top: 80px;
-
-  @media only screen and (max-height: 380px) {
-    position: relative;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-  }
-`
-
-// import {
-//   Main,
-//   Button,
-//   ContextMenuItem,
-//   EmptyStateCard,
-//   GU,
-//   Header,
-//   IconDown,
-//   IconGrid,
-//   Popover,
-//   SidePanel,
-//   Text,
-//   useLayout,
-//   useTheme,
-// } from '@aragon/ui'
-
-// import ColumnView from './components/content/ColumnView'
-// import { toHex } from 'web3-utils'
-// import illustration from './assets/empty.svg'
-
-// const Illustration = () => <img src={illustration} height={20 * GU} />
-
-// function App() {
-//   const [panelVisible, setPanelVisible] = useState(false)
-//   const [actionsMenuVisible, setActionsMenuVisible] = useState(false)
-//   const [selectedWidget, setSelectedWidget] = useState(0)
-
-//   const { api, appState } = useAragonApi()
-//   // const { entries = [] } = appState
-//   const entries = []
-
-//   const updateWidget = (_index, _ipfsAddr) => {
-//     return api.updateWidget(toHex(_index), _ipfsAddr)
-//   }
-
-//   const closePanel = () => {
-//     setPanelVisible(false)
-//   }
-
-//   if (entries.length === 0) {
-//     return (
-//       <Main>
-//         <EmptyLayout>
-//           <EmptyStateCard
-//             action={
-//               <Button
-//                 label="Customize about page"
-//                 onClick={() => handleClickUpdateWidget(0)}
-//               />
-//             }
-//             text="No information here"
-//             illustration={<Illustration />}
-//           />
-//         </EmptyLayout>
-//         <SideContent />
-//       </Main>
-//     )
-//   }
-
-//   return (
-//     <Main>
-//       <Header
-//         primary="About"
-
-//     </Main>
-//   )
-// }
-
-// const EmptyLayout = styled.div`
-//   display: flex;
-//   height: 95vh;
-//   justify-content: center;
-//   align-items: center;
-// `
-
-// // const Syncing = styled.div.attrs({children: 'Syncing…' })`
-// //   position: absolute;
-// //   top: 15px;
-// //   right: 20px;
-// // `
-
-// export default App

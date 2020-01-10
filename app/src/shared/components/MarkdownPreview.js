@@ -45,6 +45,9 @@ Preview.propTypes = {
 }
 
 const MarkdownWrapper = styled.div`
+  flex: 1 1 auto;
+  overflow-y: auto;
+  height: 1px;
   width: 100%;
   h1,
   h2,

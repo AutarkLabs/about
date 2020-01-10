@@ -1,8 +1,13 @@
 import React from 'react'
-import { DropDown, Field } from '@aragon/ui'
+import { DropDown, Field, GU } from '@aragon/ui'
 
 const TypeInput = ({ value, onChange }) => (
-  <Field label="Type">
+  <Field
+    label="Type"
+    css={`
+      margin-top: ${3 * GU}px;
+    `}
+  >
     <DropDown
       items={[
         'Custom markdown',

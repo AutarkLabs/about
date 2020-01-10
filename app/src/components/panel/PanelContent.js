@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import axios from 'axios'
+import React, { useState } from 'react'
 
-import { Button, SidePanelSeparator, Tabs, Text } from '@aragon/ui'
-
-import TypeInput from '../TypeInput'
-import PanelToolBar from './PanelToolBar'
-import PanelTabView from './PanelTabView'
-import { SideBarScrollbarContainer } from '../../styles'
-import Input from './Input'
-
-import ipfsAdd from '../Utils/Ipfs/ipfsAdd'
-import dompurify from 'dompurify'
+import {
+  Button,
+  GU,
+  RADIUS,
+  SidePanelSeparator,
+  Tabs,
+  useTheme,
+} from '@aragon/ui'
 
 import {
   wrapTextWith,
@@ -21,283 +17,119 @@ import {
   insertOnStartOfLines,
 } from '../../shared/codemirror-utils'
 
-let codemirrorInitialInstance = null
-let editorTypeInitial = 0
-let externalUrlInitial = ''
-let ipfsHashInitial = ''
+import { MarkdownEditor, MarkdownPreview } from '../../shared'
+import TypeInput from '../TypeInput'
+import PanelToolBar from './PanelToolBar'
 
-const PanelContent = ({
-  content,
-  updateWidget,
-  closePanel,
-  ipfsAddr,
-  position,
-}) => {
-  const [unsavedText, setUnsavedText] = useState(content)
-  const [screenIndex, setScreenIndex] = useState(0)
-  const [savePending, setSavePending] = useState(false)
-  const [editorType, setEditorType] = useState(editorTypeInitial)
-  const [externalUrl, setExternalUrl] = useState(externalUrlInitial)
-  const [unsavedIpfsHash, setUnsavedIpfsHash] = useState(ipfsHashInitial)
-  
-  const [{ savedIpfsAddr, isLoading }, saveIpfs] = ipfsAdd(null)
+const CONTENT = {
+  EDITOR: 0,
+  PREVIEW: 1,
+  INPUT: 2,
+}
 
-  const [codemirrorInstance, setCodemirrorInstance] = useState(
-    codemirrorInitialInstance
-  )
-
-  useEffect(() => {
-    if (savedIpfsAddr && savePending) {
-      signContract(savedIpfsAddr)
-    }
-  }, [savedIpfsAddr, savePending])
-
-  useEffect(() => {
-    setUnsavedText(content)
-  }, [content])
-
-  useEffect(() => {
-    // Reset state when changing from widget position, or updated
-    setExternalUrl(externalUrlInitial)
-    setUnsavedIpfsHash(ipfsHashInitial)
-    setEditorType(editorTypeInitial)
-    setScreenIndex(0)
-  }, [position, ipfsAddr])
-
-  /*
-  Widget re-ordering currently disabled
-  useEffect(() => {
-    if (ipfsAddr && savePending) {
-      saveWidget(ipfsAddr, 0).subscribe(
-        _res => {
-          setSavePending(false)
-          closePanel()
-        },
-        err => {
-          console.log(err)
-          setSavePending(false)
-        }
-      )
-    }
-    setUnsavedText(content)
-  }, [content, savedIpfsAddr, savePending])
-  */
-  const handleChange = _screenIndex => {
-    setScreenIndex(_screenIndex)
-  }
-
-  const handleEditorChange = _unsavedText => {
-    setUnsavedText(_unsavedText)
-  }
-
-  const handleEditorTypeChange = _editorType => {
-    setEditorType(_editorType)
-  }
-
-  const handleExternalUrlChange = _externalUrl => {
-    setExternalUrl(_externalUrl.trim())
-  }
-
-  const handleIpfsHashChange = _ipfsHash => {
-    setUnsavedIpfsHash(_ipfsHash.trim())
-  }
-
-  const onCodeMirrorInit = _codemirrorInstance => {
-    setCodemirrorInstance(_codemirrorInstance)
-  }
+const PanelContent = () => {
+  const [editor, setEditor] = useState()
+  const [unsavedText, setUnsavedText] = useState()
+  const [type, setType] = useState(0)
+  const [contentArea, setContentArea] = useState(CONTENT.EDITOR)
+  const theme = useTheme()
 
   const setSelectionSize = () => {
-    insertHeader(codemirrorInstance)
+    insertHeader(editor)
   }
 
   const setSelectionUnorderedList = () => {
-    insertOnStartOfLines(codemirrorInstance, '* ')
+    insertOnStartOfLines(editor, '* ')
   }
 
   const setSelectionBold = async () => {
-    wrapTextWith(codemirrorInstance, '**')
+    wrapTextWith(editor, '**')
   }
 
   const setSelectionItalic = () => {
-    wrapTextWith(codemirrorInstance, '*')
+    wrapTextWith(editor, '*')
   }
 
   const setSelectionLink = () => {
-    insertLink(codemirrorInstance, false)
+    insertLink(editor, false)
   }
 
   const setSelectionCode = () => {
-    wrapTextWith(codemirrorInstance, '`')
+    wrapTextWith(editor, '`')
   }
 
   const setSelectionQuote = () => {
-    insertOnStartOfLines(codemirrorInstance, '> ')
-  }
-
-  const signContract = savedIpfsAddr => {
-    const widgetSlot = position === 0 ? 'PRIMARY_WIDGET' : 'SECONDARY_WIDGET'
-    updateWidget(widgetSlot, savedIpfsAddr).subscribe(
-      _res => {
-        setSavePending(false)
-        closePanel()
-      },
-      err => {
-        console.log(err)
-        setSavePending(false)
-      }
-    )
-  }
-
-  const saveBlock = async () => {
-    switch (editorType) {
-      case 0:
-        await saveIpfs(unsavedText)
-        setSavePending(true)
-
-        break
-      case 1:
-        try {
-          var urlResponse = await axios.get(externalUrl)
-          var data = dompurify.sanitize(urlResponse.data)
-          await saveIpfs(data)
-          setSavePending(true)
-        } catch (err) {
-          console.log(err)
-        }
-        break
-      case 2:
-        signContract(unsavedIpfsHash)
-        break
-      default:
-        break
-    }
+    insertOnStartOfLines(editor, '> ')
   }
 
   return (
-    <PanelContainer>
-      <TopPanel>
-        <TypeInput value={editorType} onChange={handleEditorTypeChange} />
+    <div
+      css={`
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        flex: 1;
+        max-height: 100%;
+      `}
+    >
+      {/* <> */}
+      <TypeInput value={type} onChange={setType} />
+      <div
+        css={`
+          > :first-child {
+            border: 1px solid ${theme.border};
+            border-radius: ${RADIUS}px;
+          }
+        `}
+      >
         <Tabs
           items={['Write', 'Preview']}
-          selected={screenIndex}
-          onChange={handleChange}
+          selected={contentArea}
+          onChange={setContentArea}
         />
-      </TopPanel>
-      <CenterPanel>
-        {editorType === 0 && (
-          <>
-            {screenIndex === 0 && (
-              <PanelToolBar
-                handleChange={handleChange}
-                screenIndex={screenIndex}
-                setSelectionBold={setSelectionBold}
-                setSelectionCode={setSelectionCode}
-                setSelectionItalic={setSelectionItalic}
-                setSelectionLink={setSelectionLink}
-                setSelectionQuote={setSelectionQuote}
-                setSelectionSize={setSelectionSize}
-                setSelectionUnorderedList={setSelectionUnorderedList}
-              />
-            )}
-            <PanelTabView
-              handleEditorChange={handleEditorChange}
-              onCodeMirrorInit={onCodeMirrorInit}
-              screenIndex={screenIndex}
-              unsavedText={unsavedText}
-              instance={codemirrorInstance}
-            />
-          </>
-        )}
-        {editorType === 1 && (
-          <SideBarScrollbarContainer>
-            <Input
-              label="Url"
-              value={externalUrl}
-              onChange={handleExternalUrlChange}
-            />
-          </SideBarScrollbarContainer>
-        )}
-        {editorType === 2 && (
-          <SideBarScrollbarContainer>
-            <Input
-              label="Hash"
-              value={unsavedIpfsHash}
-              onChange={handleIpfsHashChange}
-            />
-          </SideBarScrollbarContainer>
-        )}
-      </CenterPanel>
-      <BottomPanel>
-        <SidePanelSeparator style={{ width: '450px',  margin: '0 -30px 24px' }} />
-        <Button mode="strong" wide onClick={saveBlock}>
-          Update
-        </Button>
-      </BottomPanel>
-
-      {(isLoading || savePending) && (
-        <LoadingOverlay>
-          <LoadingOverlayContainer>
-            <Text>{isLoading ? 'Saving to ipfs' : ''}</Text>
-          </LoadingOverlayContainer>
-        </LoadingOverlay>
+      </div>
+      {contentArea === CONTENT.EDITOR && (
+        <>
+          <PanelToolBar
+            setSelectionBold={setSelectionBold}
+            setSelectionCode={setSelectionCode}
+            setSelectionItalic={setSelectionItalic}
+            setSelectionLink={setSelectionLink}
+            setSelectionQuote={setSelectionQuote}
+            setSelectionSize={setSelectionSize}
+            setSelectionUnorderedList={setSelectionUnorderedList}
+          />
+          <MarkdownEditor
+            editor={editor}
+            value={unsavedText}
+            onChange={setUnsavedText}
+            setEditor={setEditor}
+          />
+        </>
       )}
-    </PanelContainer>
+
+      {contentArea === CONTENT.PREVIEW && (
+        <MarkdownPreview content={unsavedText} />
+      )}
+
+      <div
+        css={`
+          flex: 0 0 ${8 * GU}px;
+        `}
+      >
+        <SidePanelSeparator
+          css={`
+            margin-bottom: ${3 * GU}px;
+          `}
+        />
+        <Button mode="strong" wide>
+          Submit
+        </Button>
+      </div>
+    </div>
   )
 }
 
-PanelContent.propTypes = {
-  content: PropTypes.string,
-  updateWidget: PropTypes.func.isRequired,
-  closePanel: PropTypes.func.isRequired,
-  ipfsAddr: PropTypes.string,
-}
-
-// componentWillReceiveProps({ opened }) {
-//   if (opened && !this.props.opened) {
-//     // Reset the state on the panel re-opening, to avoid flickering when it's still closing
-//     this.setState({ ...initialState })
-//   }
-// }
-
-const PanelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: 100%;
-`
-
-const BottomPanel = styled.div`
-  flex: 0 0 auto;
-  padding-bottom: 24px;
-`
-
-const TopPanel = styled.div`
-  margin-top: 24px;
-  flex: 0 0 auto;
-`
-
-const CenterPanel = styled.div`
-  flex: 0 0 auto;
-  height: calc(100% - 277px);
-  z-index: 1;
-`
-
-const LoadingOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -15px;
-  right: 0;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 10;
-`
-
-const LoadingOverlayContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 30px;
-`
+PanelContent.propTypes = {}
 
 export default PanelContent
