@@ -10,7 +10,7 @@ let appState
 app.events().subscribe(handleEvents)
 
 app.state().subscribe(state => {
-  appState = state || { count: 0, entries: [] }
+  appState = state || { entries: [] }
 })
 
 /***********************
@@ -40,12 +40,6 @@ async function handleEvents({ event, returnValues }) {
   case 'WidgetUpdated':
     refreshWidget(returnValues._priority)
     break
-  // case 'WidgetUpdated':
-  //   refreshWidget(returnValues._priority)
-  //   break
-  // case 'WidgetUpdated':
-  //   refreshWidget(returnValues._priority)
-  //   break
   default:
     console.log('[Widgets script] unknown event', event, returnValues) // eslint-disable-line no-console
   }
