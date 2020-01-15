@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity 0.4.24;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
 
@@ -6,8 +6,8 @@ import "@aragon/os/contracts/apps/AragonApp.sol";
 contract About is AragonApp {
 
     /// Events
-    event WidgetAdded();
-    event WidgetRemoved();
+    event WidgetAdded(bytes32 indexed _priority);
+    event WidgetRemoved(bytes32 indexed _priority);
     event WidgetsReordered();
     event WidgetUpdated(bytes32 indexed _priority);
 
@@ -21,7 +21,7 @@ contract About is AragonApp {
     mapping(bytes32 => Widget) internal widgets;
 
     /// ACL
-    /* Hardcoded constants to save gas
+    /* Hard-coded constants to save gas
     bytes32 constant public ADD_ROLE = keccak256("ADD_ROLE");
     bytes32 constant public REMOVE_ROLE = keccak256("REMOVE_ROLE");
     bytes32 constant public REORDER_ROLE = keccak256("REORDER_ROLE");
@@ -47,6 +47,25 @@ contract About is AragonApp {
     function updateWidget(bytes32 _priority, string _addr) external auth(UPDATE_ROLE) {
         widgets[_priority] = Widget(_addr, false);
         emit WidgetUpdated(_priority);
+    }
+
+    /**
+     * @notice Remove `@fromHex(_priority, "utf8")`
+     * @param _priority Index of the widget to remove
+     */
+    function removeWidget(bytes32 _priority) external auth(REMOVE_ROLE) {
+        widgets[_priority] = Widget("", true);
+        emit WidgetRemoved(_priority);
+    }
+
+        /**
+     * @notice Update `@fromHex(_priority, "utf8")` content to `_addr`
+     * @param _priority Index of the widget
+     * @param _addr IPFS hash of the widget's data
+     */
+    function addWidget(bytes32 _priority, string _addr) external auth(ADD_ROLE) {
+        widgets[_priority] = Widget(_addr, false);
+        emit WidgetAdded(_priority);
     }
 
     /**
