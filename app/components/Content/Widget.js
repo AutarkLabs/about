@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Card } from '@aragon/ui'
-import MarkdownPreview from '../Markdown/Preview'
+import MarkdownPreview from '../Widget/Markdown/Preview'
 
 const Widget = ({ content }) => {
   return (

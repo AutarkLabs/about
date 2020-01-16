@@ -1,0 +1,24 @@
+import PropTypes from 'prop-types'
+import React from 'react'
+import { DropDown, Field } from '@aragon/ui'
+
+const WidgetSelect = ({ onChange, value }) => (
+  <Field
+    label="Widget"
+  >
+    <DropDown
+      items={[ 'Markdown', 'Activity feed', 'Latest votes', 'Latest dot votes' ]}
+      selected={value}
+      onChange={onChange}
+      placeholder="Select widget"
+      wide
+    />
+  </Field>
+)
+
+WidgetSelect.propTypes ={
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.number
+}
+
+export default WidgetSelect

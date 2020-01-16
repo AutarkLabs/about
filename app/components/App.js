@@ -5,7 +5,7 @@ import { GU, Header, Main, SidePanel, SyncIndicator } from '@aragon/ui'
 
 import ColumnView from './Content/ColumnView'
 import EmptyState from './Content/EmptyState'
-import PanelContent from './PanelContent/PanelContent'
+import Panel from './Panel/Panel'
 import ActionsButton from './ActionsButton'
 import * as types from '../utils/prop-types'
 import { useAragonApi } from '../api-react'
@@ -61,15 +61,9 @@ const App = ({ entries, isSyncing }) => {
       <SidePanel
         opened={panelVisible}
         onClose={() => setPanelVisible(false)}
-        title={entries[selectedWidget] ? 'Update details' : 'New details'}
+        title={'New widget'}
       >
-        <PanelContent
-          ipfsAddr={entries[selectedWidget] && entries[selectedWidget].addr}
-          content={entries[selectedWidget] && entries[selectedWidget].content}
-          updateWidget={() => {}}
-          closePanel={() => setPanelVisible(false)}
-          position={selectedWidget}
-        />
+        <Panel />
       </SidePanel>
     </>
   )

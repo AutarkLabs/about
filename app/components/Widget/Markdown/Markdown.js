@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 
 import {
-  Button,
-  GU,
   RADIUS,
-  SidePanelSeparator,
   Tabs,
   useTheme,
 } from '@aragon/ui'
@@ -14,11 +11,11 @@ import {
   insertLink,
   insertOnStartOfLines,
   wrapTextWith,
-} from '../../utils/codemirror/codemirror-utils'
-import MarkdownEditor from '../Markdown/Editor'
-import MarkdownPreview from '../Markdown/Preview'
-import TypeInput from '../TypeInput'
-import PanelToolBar from './PanelToolBar'
+} from '../../../utils/codemirror/codemirror-utils'
+import Editor from './Editor'
+import Preview from './Preview'
+import SourceSelect from './SourceSelect'
+import ToolBar from './ToolBar'
 
 const CONTENT = {
   EDITOR: 0,
@@ -26,7 +23,7 @@ const CONTENT = {
   INPUT: 2,
 }
 
-const PanelContent = () => {
+const Markdown = () => {
   const [ editor, setEditor ] = useState()
   const [ unsavedText, setUnsavedText ] = useState()
   const [ type, setType ] = useState(0)
@@ -61,7 +58,8 @@ const PanelContent = () => {
     insertOnStartOfLines(editor, '> ')
   }
 
-  const submitDisabled = !unsavedText || unsavedText.trim().length === 0
+  // TODO: Move this to parent
+  // const submitDisabled = !unsavedText || unsavedText.trim().length === 0
 
   return (
     <div
@@ -69,11 +67,12 @@ const PanelContent = () => {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        flex: 1;
+        /* TODO: enable if we want the submit button stick to bottom */
+        /* flex: 1; */
         max-height: 100%;
       `}
     >
-      <TypeInput value={type} onChange={setType} />
+      <SourceSelect value={type} onChange={setType} />
       <div
         css={`
           > :first-child {
@@ -90,7 +89,7 @@ const PanelContent = () => {
       </div>
       {contentArea === CONTENT.EDITOR && (
         <>
-          <PanelToolBar
+          <ToolBar
             setSelectionBold={setSelectionBold}
             setSelectionCode={setSelectionCode}
             setSelectionItalic={setSelectionItalic}
@@ -99,7 +98,7 @@ const PanelContent = () => {
             setSelectionSize={setSelectionSize}
             setSelectionUnorderedList={setSelectionUnorderedList}
           />
-          <MarkdownEditor
+          <Editor
             editor={editor}
             value={unsavedText}
             onChange={setUnsavedText}
@@ -109,25 +108,10 @@ const PanelContent = () => {
       )}
 
       {contentArea === CONTENT.PREVIEW && (
-        <MarkdownPreview content={unsavedText} />
+        <Preview content={unsavedText} />
       )}
-
-      <div
-        css={`
-          flex: 0 0 ${8 * GU}px;
-        `}
-      >
-        <SidePanelSeparator
-          css={`
-            margin-bottom: ${3 * GU}px;
-          `}
-        />
-        <Button mode="strong" wide disabled={submitDisabled}>
-          Submit
-        </Button>
-      </div>
     </div>
   )
 }
 
-export default PanelContent
+export default Markdown
