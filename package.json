@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Aragon About app from Autark",
   "main": "app/index.js",
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "@aragon/api-react": "2.0.0-beta.8",
     "@aragon/api": "2.0.0-beta.8",

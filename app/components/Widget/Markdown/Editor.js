@@ -2,14 +2,16 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { GU, RADIUS, textStyle,useSidePanel, useTheme, } from '@aragon/ui'
 
-import cmResize from '../../utils/codemirror/cm-resize'
+import cmResize from '../../../utils/codemirror/cm-resize'
 
 const editorOptions = {
   mode: 'gfm',
   lineWrapping: true,
-  scrollbarStyle: 'overlay', // depends on simplescrollbars addon
+  scrollbarStyle: 'overlay', // depends on simplescrollbars codemirror addon
 }
 
+
+// TODO: Dark mode needs fixing here
 const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
   const [ ,setValue ] = useState(initialValue)
 
@@ -89,6 +91,9 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
           overflow: hidden;
           padding: ${1 * GU}px;
           ${textStyle('body3')};
+        }
+        .CodeMirror-wrap {
+          height: ${22 * GU}px
         }
         .cm-resize-handle {
           display: block;

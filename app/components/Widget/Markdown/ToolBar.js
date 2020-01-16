@@ -11,9 +11,9 @@ import {
   List,
   Quote,
   TextSize,
-} from '../../assets/toolbar'
+} from '../../../assets/toolbar'
 
-const PanelToolBar = ({
+const ToolBar = ({
   setSelectionBold,
   setSelectionCode,
   setSelectionItalic,
@@ -24,43 +24,43 @@ const PanelToolBar = ({
 }) => {
   const theme = useTheme()
   return (
-    <EditToolBar>
-      <EditToolBarButton theme={theme} onClick={setSelectionSize} compact>
+    <ToolBarBox>
+      <ToolBarButton theme={theme} onClick={setSelectionSize} compact>
         <TextSize />
-      </EditToolBarButton>
-      <EditToolBarButton theme={theme} onClick={setSelectionBold} compact>
+      </ToolBarButton>
+      <ToolBarButton theme={theme} onClick={setSelectionBold} compact>
         <Bold />
-      </EditToolBarButton>
-      <EditToolBarButton theme={theme} onClick={setSelectionItalic} compact>
+      </ToolBarButton>
+      <ToolBarButton theme={theme} onClick={setSelectionItalic} compact>
         <Italic />
-      </EditToolBarButton>
-      <EditToolBarSeparator />
-      <EditToolBarButton theme={theme} onClick={setSelectionQuote} compact>
+      </ToolBarButton>
+      <ToolBarSeparator />
+      <ToolBarButton theme={theme} onClick={setSelectionQuote} compact>
         <Quote />
-      </EditToolBarButton>
-      <EditToolBarButton theme={theme} vonClick={setSelectionCode} compact>
+      </ToolBarButton>
+      <ToolBarButton theme={theme} vonClick={setSelectionCode} compact>
         <Code />
-      </EditToolBarButton>
-      <EditToolBarButton theme={theme} onClick={setSelectionLink} compact>
+      </ToolBarButton>
+      <ToolBarButton theme={theme} onClick={setSelectionLink} compact>
         <Link />
-      </EditToolBarButton>
-      <EditToolBarButton
+      </ToolBarButton>
+      <ToolBarButton
         theme={theme}
         onClick={setSelectionUnorderedList}
         compact
       >
         <List />
-      </EditToolBarButton>
-      <EditToolBarSeparator />
-    </EditToolBar>
+      </ToolBarButton>
+      <ToolBarSeparator />
+    </ToolBarBox>
   )
 }
 
-const EditToolBar = styled.div`
+const ToolBarBox = styled.div`
   margin-bottom: 12px;
 `
 
-const EditToolBarButton = styled(Button)`
+const ToolBarButton = styled(Button)`
   width: 24px;
   height: 24px;
   text-align: center;
@@ -68,13 +68,13 @@ const EditToolBarButton = styled(Button)`
   margin: 1px;
 `
 
-const EditToolBarSeparator = styled.div`
+const ToolBarSeparator = styled.div`
   display: inline-block;
   width: 12px;
   height: 1px;
 `
 
-PanelToolBar.propTypes = {
+ToolBar.propTypes = {
   setSelectionBold: PropTypes.func.isRequired,
   setSelectionCode: PropTypes.func.isRequired,
   setSelectionItalic: PropTypes.func.isRequired,
@@ -84,4 +84,4 @@ PanelToolBar.propTypes = {
   setSelectionUnorderedList: PropTypes.func.isRequired,
 }
 
-export default PanelToolBar
+export default ToolBar
