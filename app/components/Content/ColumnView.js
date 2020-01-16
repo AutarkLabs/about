@@ -5,7 +5,13 @@ import { BREAKPOINTS, breakpoint } from '@aragon/ui'
 
 import Widget from './Widget'
 
-const SingleColumn = ({ main: { isLoading, errorMessage, content, addr } }) => (
+const SingleColumn = ({ main: {
+  isLoading,
+  errorMessage,
+  type,
+  data,
+  addr,
+} }) => (
   <div
     css={`
       margin: 0 auto;
@@ -19,7 +25,8 @@ const SingleColumn = ({ main: { isLoading, errorMessage, content, addr } }) => (
       id={0}
       isLoading={isLoading}
       errorMessage={errorMessage}
-      content={content}
+      type={type}
+      data={data}
       ipfsAddr={addr}
     />
   </div>
@@ -27,9 +34,10 @@ const SingleColumn = ({ main: { isLoading, errorMessage, content, addr } }) => (
 
 SingleColumn.propTypes = {
   main: PropTypes.shape({
-    addr: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    addr: PropTypes.string,
+    type: PropTypes.symbol.isRequired,
+    data: PropTypes.object.isRequired,
+    errorMessage: PropTypes.string,
     isLoading: PropTypes.bool,
   })
 }
@@ -56,7 +64,8 @@ const DoubleColumn = ({ main, side }) => (
       id={0}
       isLoading={main.isLoading}
       errorMessage={main.errorMessage}
-      content={main.content}
+      type={main.type}
+      data={main.data}
       ipfsAddr={main.addr}
     />
     <Widget
@@ -64,7 +73,8 @@ const DoubleColumn = ({ main, side }) => (
       id={1}
       isLoading={side.isLoading}
       errorMessage={side.errorMessage}
-      content={side.content}
+      type={side.type}
+      data={side.data}
       ipfsAddr={side.addr}
     />
   </div>
@@ -72,25 +82,27 @@ const DoubleColumn = ({ main, side }) => (
 
 DoubleColumn.propTypes = {
   main: PropTypes.shape({
-    addr: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    addr: PropTypes.string,
+    type: PropTypes.symbol.isRequired,
+    data: PropTypes.object.isRequired,
+    errorMessage: PropTypes.string,
     isLoading: PropTypes.bool,
   }).isRequired,
   side: PropTypes.shape({
-    addr: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    addr: PropTypes.string,
+    type: PropTypes.symbol.isRequired,
+    data: PropTypes.object.isRequired,
+    errorMessage: PropTypes.string,
     isLoading: PropTypes.bool,
   }).isRequired
 }
 
 const ColumnView = () => {
   const {
-    appState: { entries },
+    appState: { widgets },
   } = useAragonApi()
-  if (entries.length === 1) return <SingleColumn main={entries[0]} />
-  return <DoubleColumn main={entries[0]} side={entries[1]} />
+  if (widgets.length === 1) return <SingleColumn main={widgets[0]} />
+  return <DoubleColumn main={widgets[0]} side={widgets[1]} />
 }
 
 export default ColumnView

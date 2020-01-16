@@ -10,7 +10,7 @@ import ActionsButton from './ActionsButton'
 import * as types from '../utils/prop-types'
 import { useAragonApi } from '../api-react'
 
-const App = ({ entries, isSyncing }) => {
+const App = ({ widgets, isSyncing }) => {
   const [ panelVisible, setPanelVisible ] = useState(false)
   const [ actionsMenuVisible, setActionsMenuVisible ] = useState(false)
   const [ selectedWidget, setSelectedWidget ] = useState(-1)
@@ -27,7 +27,7 @@ const App = ({ entries, isSyncing }) => {
 
   return (
     <>
-      {entries.length === 0 && (
+      {widgets.length === 0 && (
         <div
           css={`
             height: calc(100vh - ${12 * GU}px);
@@ -39,7 +39,7 @@ const App = ({ entries, isSyncing }) => {
           <EmptyState isSyncing={isSyncing} onActionClick={handleAddColumn} />
         </div>
       )}
-      {entries.length > 0 && (
+      {widgets.length > 0 && (
         <>
           <SyncIndicator visible={isSyncing} />
           <Header
@@ -51,7 +51,7 @@ const App = ({ entries, isSyncing }) => {
                 setVisible={setActionsMenuVisible}
                 openerRef={actionsOpener}
                 handleClickUpdateWidget={handleClickUpdateWidget}
-                entriesLength={entries.length}
+                entriesLength={widgets.length}
               />
             }
           />
@@ -70,14 +70,14 @@ const App = ({ entries, isSyncing }) => {
 }
 
 App.propTypes = {
-  entries: PropTypes.arrayOf(types.entry),
+  widgets: PropTypes.arrayOf(types.widget),
   isSyncing: PropTypes.bool,
 }
 
 App.defaultProps = {
   appStateReady: false,
   isSyncing: true,
-  entries: [],
+  widgets: [],
 }
 
 // Passing api-react by props allows to type-check with propTypes

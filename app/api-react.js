@@ -1,9 +1,30 @@
 import buildStubbedApiReact from './utils/api-react'
+import { TYPE_MARKDOWN, TYPE_VOTES } from './utils/constants'
 
 // TODO: insert favicon to avoid 404
 
 const initialState = process.env.NODE_ENV !== 'production' && {
-  // entries: [{ addr: 'hello', deleted: false }],
+  widgets: [
+    {
+      type: TYPE_MARKDOWN,
+      data: {
+        content: '# hola, `mundo`!',
+      },
+      position: {},
+    },
+    {
+      type: TYPE_VOTES,
+      data: {
+        votes: [
+          {
+            addr: '0xa5a3oestnr342euo3oeuEOsooeurtnsoeu',
+            value: 44,
+          }
+        ]
+      },
+      position: {},
+    }
+  ],
   isSyncing: false,
 }
 
@@ -13,7 +34,7 @@ const functions =
     newEntry: content =>
       setAppState({
         ...appState,
-        entries: [ ...appState.entries, { content }],
+        widgets: [ ...appState.widgets, { content }],
       }),
     setSyncing: syncing =>
       setAppState({
