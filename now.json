@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "public": true,
+  "scope": "autark",
+  "name": "about",
+  "alias": "about-nightly",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "github": {
+    "silent": true
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "staging"
+    }
+  }
+}
