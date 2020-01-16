@@ -22,7 +22,7 @@ pragma solidity 0.4.24;
 
 // import "../About.sol";
 
-
+// solium-disable
 contract TemplateBase { //is APMNamehash {
 //     ENS public ens;
 //     DAOFactory public fac;
