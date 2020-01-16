@@ -33,7 +33,7 @@ const buildHook = ({ initialState, functions }) => {
     ])
     const onDatabaseUpdate = useCallback(e => {
       setAppState(e.detail)
-    }, [])
+    }, [setAppState])
 
     useEffect(() => {
       db.subscribe(onDatabaseUpdate)
@@ -69,8 +69,6 @@ const buildHook = ({ initialState, functions }) => {
 
     window.api = apiProxy
     window.setTheme = setTheme
-
-    console.log('Current state', apiProxy, appState) // eslint-disable-line no-console
     return {
       api: apiProxy,
       appState,

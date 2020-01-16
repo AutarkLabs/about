@@ -34,6 +34,7 @@ ListItem.propTypes = {
   children: PropTypes.node
 }
 
+// TODO: Markdown preview not working
 const Preview = ({ content }) => {
   return (
     <MarkdownWrapper>
@@ -56,7 +57,7 @@ Preview.propTypes = {
 const MarkdownWrapper = styled.div`
   flex: 1 1 auto;
   overflow-y: auto;
-  height: 1px;
+  min-height: 246px;
   width: 100%;
   h1,
   h2 {

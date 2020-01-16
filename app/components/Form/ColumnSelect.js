@@ -2,19 +2,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { DropDown, Field, GU } from '@aragon/ui'
 
-const TypeInput = ({ onChange, value }) => (
+const ColumnSelect = ({ onChange, value }) => (
   <Field
-    label="Type"
-    css={`
-      margin-top: ${3 * GU}px;
-    `}
+    label="Column"
+    css={`margin-top: ${3 * GU}px;`}
   >
     <DropDown
-      items={[
-        'Custom markdown',
-        'External URL (.md file)',
-        'IPFS hash (.md file)',
-      ]}
+      items={[ 'Primary', 'Secondary' ]}
       selected={value}
       onChange={onChange}
       wide
@@ -22,9 +16,9 @@ const TypeInput = ({ onChange, value }) => (
   </Field>
 )
 
-TypeInput.propTypes ={
+ColumnSelect.propTypes ={
   onChange: PropTypes.func.isRequired,
   value: PropTypes.number
 }
 
-export default TypeInput
+export default ColumnSelect

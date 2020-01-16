@@ -1,6 +1,8 @@
 import buildStubbedApiReact from './utils/api-react'
 import { TYPE_MARKDOWN, TYPE_VOTES } from './utils/constants'
 
+// TODO: insert favicon to avoid 404
+
 const initialState = process.env.NODE_ENV !== 'production' && {
   widgets: [
     {
@@ -34,6 +36,11 @@ const functions =
         ...appState,
         widgets: [ ...appState.widgets, { content }],
       }),
+    setSyncing: syncing =>
+      setAppState({
+        ...appState,
+        isSyncing: syncing,
+      })
   }))
 
 const { AragonApi, useAragonApi, usePath } = buildStubbedApiReact({
