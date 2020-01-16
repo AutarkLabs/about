@@ -62,6 +62,7 @@ const App = ({ widgets, isSyncing }) => {
         opened={panelVisible}
         onClose={() => setPanelVisible(false)}
         title={'New widget'}
+      >
         <Panel />
       </SidePanel>
     </>
