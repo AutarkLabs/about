@@ -78,7 +78,6 @@ contract Template is BaseTemplate, TokenCache {
 
         (Kernel dao, ACL acl) = _createDAO();
         (Voting voting) = _setupBaseApps(dao, acl, _holders, _stakes, _votingSettings);
-        // Setup placeholder-app-name app
         _setupCustomApp(dao, acl, voting);
         _transferRootPermissionsFromTemplateAndFinalizeDAO(dao, voting);
     }
@@ -115,8 +114,6 @@ contract Template is BaseTemplate, TokenCache {
         _createTokenManagerPermissions(_acl, _tokenManager, _voting, _voting);
     }
 
-    // Next we install and create permissions for the placeholder-app-name app
-    //--------------------------------------------------------------//
     function _setupCustomApp(
         Kernel _dao,
         ACL _acl,
@@ -149,8 +146,6 @@ contract Template is BaseTemplate, TokenCache {
         _acl.createPermission(_grantee, _app, _app.UPDATE_ROLE(), _manager);
         _acl.createPermission(ANY_ENTITY, _app, _app.REMOVE_ROLE(), _manager);
     }
-
-    //--------------------------------------------------------------//
 
     function _ensureTemplateSettings(
         address[] memory _holders,
