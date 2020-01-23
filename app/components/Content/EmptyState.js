@@ -9,6 +9,7 @@ import {
   useTheme,
 } from '@aragon/ui'
 
+// TODO: Compress illustration
 import emptySvg from '../../assets/empty.svg'
 
 const EmptyState = React.memo(({ isSyncing, onActionClick }) => {
@@ -17,8 +18,8 @@ const EmptyState = React.memo(({ isSyncing, onActionClick }) => {
     <EmptyStateCard
       css={`
         height: ${48 * GU}px;
-        width: ${46 * GU}px;
-        padding: ${3 * GU}px ${2 * GU}px;
+        width: ${41 * GU}px;
+        padding: ${3 * GU}px;
       `}
       text={
         isSyncing ? (
@@ -43,27 +44,28 @@ const EmptyState = React.memo(({ isSyncing, onActionClick }) => {
           <>
             <div
               css={`
-                color: ${theme.content} ${textStyle('title4')};
+                color: ${theme.content};
+                ${textStyle('title4')}
               `}
             >
-              No information here
+              No widgets here
             </div>
             <div
               css={`
-                color: ${theme.contentSecondary};
-                margin-top: ${1 * GU}px 0;
+                /* No aragon color defined for this */
+                color: #637381;
+                margin: ${1 * GU}px 0;
                 ${textStyle('body2')}
               `}
             >
-              Present important information to current and prospective members
-              of your organization.
+              Add information and insights about your organization.
             </div>
           </>
         )
       }
       action={
         <Button wide mode="strong" onClick={onActionClick}>
-          Customize about page
+          New widget
         </Button>
       }
       illustration={

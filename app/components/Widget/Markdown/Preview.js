@@ -39,6 +39,7 @@ const Preview = ({ content }) => {
   return (
     <MarkdownWrapper>
       <MDReactComponent
+        // className="md-preview"
         source={content}
         renderers={{ link: Link, listItem: ListItem }}
       />
@@ -57,7 +58,6 @@ Preview.propTypes = {
 const MarkdownWrapper = styled.div`
   flex: 1 1 auto;
   overflow-y: auto;
-  min-height: 246px;
   width: 100%;
   h1,
   h2 {

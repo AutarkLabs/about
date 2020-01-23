@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
 import {
+  GU,
   RADIUS,
   Tabs,
   useTheme,
@@ -23,9 +25,8 @@ const CONTENT = {
   INPUT: 2,
 }
 
-const Markdown = () => {
+const Markdown = ({ data: unsavedText, setData: setUnsavedText }) => {
   const [ editor, setEditor ] = useState()
-  const [ unsavedText, setUnsavedText ] = useState()
   const [ type, setType ] = useState(0)
   const [ contentArea, setContentArea ] = useState(CONTENT.EDITOR)
   const theme = useTheme()
@@ -87,7 +88,8 @@ const Markdown = () => {
           onChange={setContentArea}
         />
       </div>
-      {contentArea === CONTENT.EDITOR && (
+      <div css={`min-height: ${30 * GU}px;`}>
+        {contentArea === CONTENT.EDITOR && (
         <>
           <ToolBar
             setSelectionBold={setSelectionBold}
@@ -105,13 +107,19 @@ const Markdown = () => {
             setEditor={setEditor}
           />
         </>
-      )}
+        )}
 
-      {contentArea === CONTENT.PREVIEW && (
-        <Preview content={unsavedText} />
-      )}
+        {contentArea === CONTENT.PREVIEW && (
+          <Preview content={unsavedText} />
+        )}
+      </div>
     </div>
   )
+}
+
+Markdown.propTypes = {
+  data: PropTypes.string,
+  setData: PropTypes.func.isRequired
 }
 
 export default Markdown

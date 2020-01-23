@@ -1,29 +1,41 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { GU, Header, Main, SidePanel, SyncIndicator } from '@aragon/ui'
 
-import ColumnView from './Content/ColumnView'
+import { EditProvider, useEditMode } from '../context/Edit'
+import Layout from './Content/Layout'
 import EmptyState from './Content/EmptyState'
 import Panel from './Panel/Panel'
 import ActionsButton from './ActionsButton'
+import EditModeButtons from './EditModeButtons'
 import * as types from '../utils/prop-types'
 import { useAragonApi } from '../api-react'
 
-const App = ({ widgets, isSyncing }) => {
+const App = ({ api, widgets, isSyncing }) => {
+  const { editMode, setEditMode } = useEditMode()
   const [ panelVisible, setPanelVisible ] = useState(false)
-  const [ actionsMenuVisible, setActionsMenuVisible ] = useState(false)
-  const [ selectedWidget, setSelectedWidget ] = useState(-1)
-  const actionsOpener = useRef(null)
 
-  const handleClickUpdateWidget = index => {
-    setSelectedWidget(index)
-    setPanelVisible(true)
+  const handleEditLayout = () => {
+    setEditMode(true)
   }
 
-  const handleAddColumn = useCallback(() => {
+  const handleNewWidget = useCallback(() => {
     setPanelVisible(true)
   }, [setPanelVisible])
+
+  const handlePanelSubmit = useCallback(widget => {
+    setPanelVisible(false)
+    api.newWidget(widget)
+  }, [setPanelVisible])
+
+  const handleEditModeCancel = () => {
+    setEditMode(false)
+  }
+
+  const handleEditModeSubmit = () => {
+    // TODO: Implement save layout changes
+  }
 
   return (
     <>
@@ -36,7 +48,7 @@ const App = ({ widgets, isSyncing }) => {
             justify-content: center;
           `}
         >
-          <EmptyState isSyncing={isSyncing} onActionClick={handleAddColumn} />
+          <EmptyState isSyncing={isSyncing} onActionClick={handleNewWidget} />
         </div>
       )}
       {widgets.length > 0 && (
@@ -44,18 +56,15 @@ const App = ({ widgets, isSyncing }) => {
           <SyncIndicator visible={isSyncing} />
           <Header
             primary="About"
-            secondary={
-              <ActionsButton
-                onClick={() => setActionsMenuVisible(true)}
-                visible={actionsMenuVisible}
-                setVisible={setActionsMenuVisible}
-                openerRef={actionsOpener}
-                handleClickUpdateWidget={handleClickUpdateWidget}
-                entriesLength={widgets.length}
+            secondary={editMode
+              ? <EditModeButtons onCancel={handleEditModeCancel} onSubmit={handleEditModeSubmit}/>
+              : <ActionsButton
+                onClickEditLayout={handleEditLayout}
+                onClickNewWidget={handleNewWidget}
               />
             }
           />
-          <ColumnView />
+          <Layout widgets={widgets}/>
         </>
       )}
       <SidePanel
@@ -63,21 +72,23 @@ const App = ({ widgets, isSyncing }) => {
         onClose={() => setPanelVisible(false)}
         title={'New widget'}
       >
-        <Panel />
+        <Panel onSubmit={handlePanelSubmit}/>
       </SidePanel>
     </>
   )
 }
 
 App.propTypes = {
+  api: PropTypes.object,
   widgets: PropTypes.arrayOf(types.widget),
   isSyncing: PropTypes.bool,
 }
 
 App.defaultProps = {
+  // TODO: implement appStateReady
   appStateReady: false,
   isSyncing: true,
-  widgets: [],
+  widgets: []
 }
 
 // Passing api-react by props allows to type-check with propTypes
@@ -87,7 +98,9 @@ const AboutApp = () => {
 
   return (
     <Main assetsUrl="./aragon-ui" theme={appearance}>
-      <App api={api} {...appState} />
+      <EditProvider>
+        <App api={api} {...appState} />
+      </EditProvider>
     </Main>
   )
 }
