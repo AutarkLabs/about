@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Card } from '@aragon/ui'
+import { Card, GU } from '@aragon/ui'
 import MarkdownPreview from '../Widget/Markdown/Preview'
-import Votes from './Votes'
+import Voting from '../Widget/Voting/Voting'
 import { TYPE_MARKDOWN, TYPE_VOTING } from '../../utils/constants'
 
 const Widget = ({ type, data }) => {
@@ -25,7 +25,7 @@ const StyledCard = styled(Card).attrs({
   width: 100%;
   margin-bottom: 30px;
   position: relative;
-  padding: 24px;
+  padding: ${2 * GU}px;
 `
 
 const WidgetSelector = ({ type, data }) => {
@@ -33,7 +33,7 @@ const WidgetSelector = ({ type, data }) => {
   case TYPE_MARKDOWN:
     return <MarkdownPreview content={data.content} />
   case TYPE_VOTING:
-    return <Votes data={data} />
+    return <Voting data={data} />
   }
 }
 
