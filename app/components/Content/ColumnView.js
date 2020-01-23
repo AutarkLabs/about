@@ -35,7 +35,7 @@ const SingleColumn = ({ main: {
 SingleColumn.propTypes = {
   main: PropTypes.shape({
     addr: PropTypes.string,
-    type: PropTypes.symbol.isRequired,
+    type: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
     errorMessage: PropTypes.string,
     isLoading: PropTypes.bool,
@@ -83,14 +83,14 @@ const DoubleColumn = ({ main, side }) => (
 DoubleColumn.propTypes = {
   main: PropTypes.shape({
     addr: PropTypes.string,
-    type: PropTypes.symbol.isRequired,
+    type: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
     errorMessage: PropTypes.string,
     isLoading: PropTypes.bool,
   }).isRequired,
   side: PropTypes.shape({
     addr: PropTypes.string,
-    type: PropTypes.symbol.isRequired,
+    type: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
     errorMessage: PropTypes.string,
     isLoading: PropTypes.bool,

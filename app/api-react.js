@@ -1,10 +1,30 @@
 import buildStubbedApiReact from './utils/api-react'
-import { TYPE_MARKDOWN, TYPE_VOTES } from './utils/constants'
+import { TYPE_MARKDOWN, TYPE_VOTING } from './utils/constants'
 
 // TODO: insert favicon to avoid 404
 
 const initialState = process.env.NODE_ENV !== 'production' && {
   // widgets: [
+  //   {
+  //     type: TYPE_VOTING,
+  //     data: {
+  //       votes: [
+  //         {
+  //           status: 'Passed',
+  //           id: 1,
+  //           description: 'Mint 1 ETH for 0xbaB65A7D8a8F67D38cD26af113b95279fA3E7616',
+  //           percentageYes: 0.6134,
+  //         },
+  //         {
+  //           status: 'Rejected',
+  //           id: 2,
+  //           description: 'Mint 19 ETH for 0x978f4De6B4833e956a366A441B277deB7A7C0d4c',
+  //           percentageYes: 0.3196,
+  //         },
+  //       ],
+  //     },
+  //     position: {},
+  //   },
   //   {
   //     type: TYPE_MARKDOWN,
   //     data: {
@@ -12,18 +32,6 @@ const initialState = process.env.NODE_ENV !== 'production' && {
   //     },
   //     position: {},
   //   },
-  //   {
-  //     type: TYPE_VOTES,
-  //     data: {
-  //       votes: [
-  //         {
-  //           addr: '0xa5a3oestnr342euo3oeuEOsooeurtnsoeu',
-  //           value: 44,
-  //         }
-  //       ]
-  //     },
-  //     position: {},
-  //   }
   // ],
   // widgets: [{
   //   cId: 'wqefwefwqe',
