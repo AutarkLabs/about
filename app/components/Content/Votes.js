@@ -1,9 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Card } from '@aragon/ui'
 
 const Votes = ({ data }) => {
-  if (data)
-    return <div>hola, mundo!</div>
+  return (
+    <>
+      {data.votes.map(vote => (
+        <Card key={vote.id}>
+          {vote.id}
+        </Card>
+      ))}
+    </>
+  )
 }
 
 Votes.propTypes = {
