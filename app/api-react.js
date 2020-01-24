@@ -1,8 +1,6 @@
 import buildStubbedApiReact from './utils/api-react'
 import { TYPE_MARKDOWN, TYPE_VOTING } from './utils/constants'
-
-// TODO: insert favicon to avoid 404
-
+import { ipfs } from './utils/ipfs'
 const initialState = process.env.NODE_ENV !== 'production' && {
   // widgets: [
   //   {
@@ -51,11 +49,15 @@ const initialState = process.env.NODE_ENV !== 'production' && {
 const functions =
   process.env.NODE_ENV !== 'production' &&
   ((appState, setAppState) => ({
-    newWidget: widget =>
-      setAppState({
-        ...appState,
-        widgets: [ ...appState.widgets, widget ],
-      }),
+    addWidget: (_id ,cId) => ({
+      toPromise: async () =>{
+        const widgetObj = (await ipfs.dag.get(cId)).value
+        setAppState({
+          ...appState,
+          widgets: [ ...appState.widgets, { ...widgetObj }],
+        })}
+    })
+    ,
     setSyncing: syncing =>
       setAppState({
         ...appState,
