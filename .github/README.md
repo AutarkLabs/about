@@ -18,7 +18,7 @@ That should be enough to customize style and frontend changes, as we make use of
 
 #### Run development template with hot reload and http mode
 
-`npm run start:http:template``
+`npm run start:http:template`
 
 This launches a DAO but uses the parcel development server ran in the previous step as the app frontend, so hot reload is still working.
 
