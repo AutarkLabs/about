@@ -1,112 +1,79 @@
-/* global artifacts context contract before beforeEach it assert */
+/* global artifacts, assert, before, beforeEach, context, contract, it */
 const { assertRevert } = require('@aragon/test-helpers/assertThrow')
-const About = artifacts.require('About')
-const DAOFactory = artifacts.require(
-  '@aragon/core/contracts/factory/DAOFactory'
-)
-const EVMScriptRegistryFactory = artifacts.require(
-  '@aragon/core/contracts/factory/EVMScriptRegistryFactory'
-)
-const ACL = artifacts.require('@aragon/core/contracts/acl/ACL')
-const Kernel = artifacts.require('@aragon/core/contracts/kernel/Kernel')
+
+/** Helper function to import truffle contract artifacts */
 const getContract = name => artifacts.require(name)
-const ANY_ADDRESS = '0xffffffffffffffffffffffffffffffffffffffff'
 
-contract('Widgets', accounts => {
-  let APP_MANAGER_ROLE, ADD_ROLE, REMOVE_ROLE, REORDER_ROLE, UPDATE_ROLE
-  let daoFact, appBase, app
+/** Helper function to read events from receipts */
+const getReceipt = (receipt, event, arg) => {
+  const result = receipt.logs.filter(l => l.event === event)[0].args
+  return arg ? result[arg] : result
+}
 
-  const firstAccount = accounts[0]
+/** Useful constants */
+const ANY_ADDR = '0xffffffffffffffffffffffffffffffffffffffff'
+
+contract('About', accounts => {
+  let APP_MANAGER_ROLE, ADD_ROLE, REMOVE_ROLE, UPDATE_ROLE
+  let app, appBase, daoFact
+
+  // setup test actor accounts
+  const [root] = accounts
 
   before(async () => {
+    // Create Base DAO and App contracts
     const kernelBase = await getContract('Kernel').new(true) // petrify immediately
     const aclBase = await getContract('ACL').new()
-    const regFact = await EVMScriptRegistryFactory.new()
-    daoFact = await DAOFactory.new(
+    const regFact = await getContract('EVMScriptRegistryFactory').new()
+    daoFact = await getContract('DAOFactory').new(
       kernelBase.address,
       aclBase.address,
       regFact.address
     )
-    appBase = await About.new()
 
-    // Setup constants
+    appBase = await getContract('About').new()
+
+    // TODO: Add Voting and DotVoting, etc to test widgets
+    // votingBase = await getContract('Voting').new()
+    
+    // Setup ACL roles constants
     // TODO: take roles hashes from constants file
     // TODO: test roles pre-generated with keccak256
     APP_MANAGER_ROLE = await kernelBase.APP_MANAGER_ROLE()
     ADD_ROLE = await appBase.ADD_ROLE()
     REMOVE_ROLE = await appBase.REMOVE_ROLE()
-    REORDER_ROLE = await appBase.REORDER_ROLE()
     UPDATE_ROLE = await appBase.UPDATE_ROLE()
-  })
-
-  beforeEach(async () => {
-    const daoReceipt = await daoFact.newDAO(firstAccount)
-    const dao = Kernel.at(
-      daoReceipt.logs.filter(l => l.event === 'DeployDAO')[0].args.dao
-    )
-    const acl = ACL.at(await dao.acl())
-
-    await acl.createPermission(
-      firstAccount,
-      dao.address,
-      APP_MANAGER_ROLE,
-      firstAccount,
-      {
-        from: firstAccount,
-      }
+        
+    /** Create the dao from the dao factory */
+    const daoReceipt = await daoFact.newDAO(root)
+    const dao = getContract('Kernel').at(
+      getReceipt(daoReceipt, 'DeployDAO', 'dao')
     )
 
-    const receipt = await dao.newAppInstance(
+    /** Setup permission to install app */
+    const acl = getContract('ACL').at(await dao.acl())
+    await acl.createPermission(root, dao.address, APP_MANAGER_ROLE, root)
+
+    /** Install an app instance to the dao */
+    const appReceipt = await dao.newAppInstance(
       '0x1234',
       appBase.address,
       '0x',
-      false,
-      { from: firstAccount }
+      false
+    )
+    app = getContract('About').at(
+      getReceipt(appReceipt, 'NewAppProxy', 'proxy')
     )
 
-    app = About.at(
-      receipt.logs.filter(l => l.event === 'NewAppProxy')[0].args.proxy
-    )
+    /** Setup permissions */
+    await acl.createPermission(ANY_ADDR, app.address, ADD_ROLE, root)
+    await acl.createPermission(ANY_ADDR, app.address, REMOVE_ROLE, root)
+    await acl.createPermission(ANY_ADDR, app.address, UPDATE_ROLE, root)
 
-    await acl.createPermission(
-      ANY_ADDRESS,
-      app.address,
-      ADD_ROLE,
-      firstAccount,
-      {
-        from: firstAccount,
-      }
-    )
-    await acl.createPermission(
-      ANY_ADDRESS,
-      app.address,
-      REMOVE_ROLE,
-      firstAccount,
-      {
-        from: firstAccount,
-      }
-    )
+    // TODO: install other apps here
 
-    await acl.createPermission(
-      ANY_ADDRESS,
-      app.address,
-      REORDER_ROLE,
-      firstAccount,
-      {
-        from: firstAccount,
-      }
-    )
-
-    await acl.createPermission(
-      ANY_ADDRESS,
-      app.address,
-      UPDATE_ROLE,
-      firstAccount,
-      {
-        from: firstAccount,
-      }
-    )
-    app.initialize()
+    /** Initialize app */
+    await app.initialize()
   })
 
   context('widgets usage functions', () => {
