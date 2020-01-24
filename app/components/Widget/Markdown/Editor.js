@@ -2,6 +2,11 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { GU, RADIUS, textStyle,useSidePanel, useTheme, } from '@aragon/ui'
 
+import CodeMirror from 'codemirror/lib/codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/addon/scroll/simplescrollbars'
+import 'codemirror/addon/scroll/simplescrollbars.css'
+
 import cmResize from '../../../utils/codemirror/cm-resize'
 
 const editorOptions = {
@@ -22,11 +27,6 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
   // initialize editor
   useEffect(() => {
     const setupCodeMirror = async () => {
-      const CodeMirror = await import('codemirror/lib/codemirror')
-      await import('codemirror/lib/codemirror.css')
-      await import('codemirror/addon/scroll/simplescrollbars')
-      await import('codemirror/addon/scroll/simplescrollbars.css')
-
       const { current: textarea } = ref
 
       if (!textarea) {
