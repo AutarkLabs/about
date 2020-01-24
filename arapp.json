@@ -11,11 +11,6 @@
       "params": []
     },
     {
-      "name": "Reorder widgets",
-      "id": "REORDER_ROLE",
-      "params": []
-    },
-    {
       "name": "Update a widget",
       "id": "UPDATE_ROLE",
       "params": []

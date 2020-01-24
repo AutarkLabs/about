@@ -122,7 +122,9 @@ contract Template is BaseTemplate, TokenCache {
         internal
     {
         About app = _installAboutApp(_dao);
-        _createAboutAppPermissions(_acl, app, _voting, _voting);
+        // Warning here, set ANY_ENTITY for development,
+        // use another grantee or manager in prod like for example _voting
+        _createAboutAppPermissions(_acl, app, ANY_ENTITY, ANY_ENTITY);
     }
 
     function _installAboutApp(
@@ -143,8 +145,9 @@ contract Template is BaseTemplate, TokenCache {
     )
         internal
     {
+        _acl.createPermission(_grantee, _app, _app.ADD_ROLE(), _manager);
+        _acl.createPermission(_grantee, _app, _app.REMOVE_ROLE(), _manager);
         _acl.createPermission(_grantee, _app, _app.UPDATE_ROLE(), _manager);
-        _acl.createPermission(ANY_ENTITY, _app, _app.REMOVE_ROLE(), _manager);
     }
 
     function _ensureTemplateSettings(
