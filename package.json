@@ -1,7 +1,7 @@
 {
   "name": "@autarklabs/aragon-about",
   "version": "0.0.0",
-  "description": "Aragon About app from Autark",
+  "description": "A customizable interface to add interactive widgets with information and insights about your organization.",
   "main": "app/index.js",
   "engines": {
     "node": "10.x"
