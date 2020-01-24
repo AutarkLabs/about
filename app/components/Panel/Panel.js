@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useState } from 'react'
 import { Button } from '@aragon/ui'
 
+import { ipfs } from '../../utils/ipfs'
 import ColumnSelect from '../Form/ColumnSelect'
 import WidgetSelect from '../Form/WidgetSelect'
 import MarkdownConfig from '../Widget/Markdown/Markdown'
@@ -14,6 +15,10 @@ const widgetType = {
   VOTES: 2,
   DOT_VOTES: 3
 }
+// TODO: Encode as part of constant object with needsConfig key
+
+
+const getWidgetType = widget => Object.keys(widgetType)[widget]
 
 const WidgetConfig = ({ data, type, setData }) => {
   switch (type) {
@@ -40,19 +45,25 @@ const Panel = ({ onSubmit }) => {
   const [ configData, setConfigData  ] = useState()
   const [ widget, setWidget ] = useState()
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback(async () => {
     const widgetObject = {
-      data: configData,
       layout: {
         primary: !column // Will be true when the ColumnSelect value is Primary
       },
-      type: Object.keys(widgetType)[widget]
+      type: getWidgetType(widget)
     }
-    onSubmit(widgetObject)
-  }, [ column, configData, widget ])
+    if (configData) widgetObject.data = configData
 
-  // TODO: also track WidgetConfig content to set submitDisabled
-  const submitDisabled = widget === undefined || configData === undefined
+    // TODO: wrap in try catch and handle errors
+    // TODO: graceful loading indicator
+    const cId = (await ipfs.dag.put(widgetObject, { pin: true })).toBaseEncodedString()
+    onSubmit(cId)
+  }, [ column, configData, ipfs, widget ])
+
+  const needsConfig = getWidgetType(widget) !== 'VOTES' && getWidgetType(widget) !== 'DOT_VOTES'
+  const submitDisabled = widget === undefined || (needsConfig && configData === undefined)
+  
+  //  TODO: handle when selecting another widget once configData is set (we should reset on widget change)
 
   return (
     <>

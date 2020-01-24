@@ -40,9 +40,9 @@ const setupWidgetStyle = ({ primary }) => {
 // TODO: encode this in types constant along with widgetSelect
 const LABELS = {
   ACTIVITY: 'Activity feed',
-  DOT_VOTE: 'Latest dot votes',
+  DOT_VOTES: 'Latest dot votes',
   MARKDOWN: 'Markdown',
-  VOTE: 'Latest votes',
+  VOTES: 'Latest votes',
 }
 
 // TODO: Read from grid CSS or generated layout mapping to dynamically show/hide buttons
@@ -133,11 +133,13 @@ const WidgetContent = ({ data, type }) => {
   switch (type) {
   case 'MARKDOWN':
     return <MarkdownPreview content={data} />
+  case 'VOTES':
+    return <div>Votes Widget</div>
   }
 }
 
 WidgetContent.propTypes = {
-  data: PropTypes.string,
+  data: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ]),
   // TODO: adjust to exact types
   type: PropTypes.string,
 }

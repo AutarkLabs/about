@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
+import { toHex } from 'web3-utils'
 
 import { GU, Header, Main, SidePanel, SyncIndicator } from '@aragon/ui'
 
@@ -24,10 +25,13 @@ const App = ({ api, widgets, isSyncing }) => {
     setPanelVisible(true)
   }, [setPanelVisible])
 
-  const handlePanelSubmit = useCallback(widget => {
+  const handlePanelSubmit = useCallback(cId => {
     setPanelVisible(false)
-    api.newWidget(widget)
-  }, [setPanelVisible])
+
+    // TODO: adapt contract to remove priority
+    const priority = toHex(widgets.length)
+    api.addWidget(priority, cId).toPromise()
+  }, [ setPanelVisible, widgets.length ])
 
   const handleEditModeCancel = () => {
     setEditMode(false)
