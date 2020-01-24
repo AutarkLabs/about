@@ -10,7 +10,7 @@ let appState
 app.events().subscribe(handleEvents)
 
 app.state().subscribe(state => {
-  appState = state || { entries: [] }
+  appState = state || { widgets: [] }
 })
 
 /***********************
@@ -29,8 +29,8 @@ const initialWidgetState = {
 async function handleEvents({ event, returnValues }) {
   if (
     appState == null ||
-    appState.entries == null ||
-    appState.entries.length < 1
+    appState.widgets == null ||
+    appState.widgets.length < 1
   ) {
     const nextState = initializeWidgets()
     appState = nextState
@@ -46,21 +46,21 @@ async function handleEvents({ event, returnValues }) {
 }
 
 const initializeWidgets = () => {
-  // Clear all entries
-  let entries = []
+  // Clear all widgets
+  let widgets = []
 
   for (let i = 0; i < 2; i++) {
-    entries.push(initialWidgetState)
+    widgets.push(initialWidgetState)
   }
-  const state = { entries } // return the entries array
+  const state = { widgets } // return the widgets array
   return state
 }
 
 const refreshWidget = async _priority => {
-  // Clear all entries
+  // Clear all widgets
   const i = toUtf8(_priority) === 'PRIMARY_WIDGET' ? 0 : 1
 
-  let entry = {
+  let widget = {
     addr: '',
     content: '',
     isLoading: true,
@@ -73,26 +73,25 @@ const refreshWidget = async _priority => {
       .toPromise()
     if (widget && widget.addr) {
       widget.isLoading = true
-      entry = widget
-      if (entry.addr !== '') {
+      if (widget.addr !== '') {
         // Set loading state
         let nextState2 = { ...appState }
-        nextState2.entries[i] = { ...entry }
+        nextState2.widgets[i] = { ...widget }
         appState = nextState2
         await app.cache('state', { ...nextState2 })
         // NOTES: Without this delay, it fails randomly when refreshing whole page
         // setTimeout(async () => {
         try {
-          const ipfsContent = await loadWidgetIpfs(i, entry.addr)
-          entry.isLoading = false
-          entry.content = ipfsContent
+          const ipfsContent = await loadWidgetIpfs(i, widget.addr)
+          widget.isLoading = false
+          widget.content = ipfsContent
         } catch (err) {
-          entry.isLoading = false
-          entry.errorMessage = 'Error: ' + err
+          widget.isLoading = false
+          widget.errorMessage = 'Error: ' + err
         }
-        // Save final entry state
+        // Save final widget state
         let nextState = { ...appState }
-        nextState.entries[i] = { ...entry }
+        nextState.widgets[i] = { ...widget }
         appState = nextState
         await app.cache('state', { ...nextState })
         // }, 1000)

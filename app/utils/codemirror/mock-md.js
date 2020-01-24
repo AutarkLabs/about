@@ -49,6 +49,6 @@ export const mocked = {
   
   (Set \`emoji: false\` in mode options to disable):
   
-  - emoji: :smile:  
+  - emoji: :smile:
   `
 }

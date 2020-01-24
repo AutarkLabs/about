@@ -7,6 +7,7 @@ const WidgetSelect = ({ onChange, value }) => (
     label="Widget"
   >
     <DropDown
+      // TODO: encode this in types constant
       items={[ 'Markdown', 'Activity feed', 'Latest votes', 'Latest dot votes' ]}
       selected={value}
       onChange={onChange}

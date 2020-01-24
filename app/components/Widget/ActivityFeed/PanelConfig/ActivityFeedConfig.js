@@ -5,12 +5,10 @@ import { Checkbox, Field } from '@aragon/ui'
 const apps = [ 'Voting', 'Finance', 'Tokens', 'Address Book', 'Allocations', 'Dot Voting', 'Projects',  'Rewards' ]
 
 const CheckboxLabel = ({ checked, label: text, onChange }) =>
-  <div>
-    <label>
-      <Checkbox {...{ checked, onChange }}/>
-      {text}
-    </label>
-  </div>
+  <label>
+    <Checkbox {...{ checked, onChange }}/>
+    {text}
+  </label>
 
 CheckboxLabel.propTypes = {
   checked: PropTypes.bool,
@@ -20,14 +18,16 @@ CheckboxLabel.propTypes = {
 
 const ActivityFeedConfig =  () => {
   const [ options, setOptions ] = useState([])
-
+  
   const handleCheckOption = option => checked => {
     setOptions(checked
       ? Array.from(new Set([ ...options, option ]))
       : options.filter(o => o !== option)
     )
   }
-
+    
+  // TODO: Check weird thing happening to first checkbox when clicking others
+  // TODO: Info-box
   const appsCheckboxes = apps.map((a, i) => <CheckboxLabel label={a} checked={options.includes(a)} key={i} onChange={handleCheckOption(a)}/>)
 
   return (
