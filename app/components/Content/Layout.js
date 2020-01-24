@@ -45,8 +45,51 @@ const LABELS = {
   VOTES: 'Latest votes',
 }
 
+const HeaderArrows = () => {
+  return (
+    <>
+    <Button
+      css={`
+      margin-right: ${GU}px;
+    `}
+      disabled
+      display="icon"
+      icon={<IconArrowLeft />}
+      label="Move to primary column"
+      onClick={() => {}}
+    />
+  <Button
+    css={`
+      margin-right: ${GU}px;
+    `}
+    disabled
+    display="icon"
+    icon={<IconArrowUp />}
+    label="Move up"
+    onClick={() => {}}
+  />
+  <Button
+    css={`
+      margin-right: ${GU}px;
+    `}
+    display="icon"
+    icon={<IconArrowDown />}
+    label="Move down"
+    onClick={() => {}}
+  />
+  <Button
+    display="icon"
+    icon={<IconArrowRight />}
+    label="Move to secondary column"
+    onClick={() => {}}
+  />
+  </>
+  )
+}
+
 // TODO: Read from grid CSS or generated layout mapping to dynamically show/hide buttons
 const WidgetHeader = ({ type }) => {
+  const { editMode } = useEditMode()
   const label = LABELS[type]
   return (
     <>
@@ -59,41 +102,7 @@ const WidgetHeader = ({ type }) => {
         `}
       >
         <span css={'flex: 1 0 auto'}>{label}</span>
-        <Button
-          css={`
-            margin-right: ${GU}px;
-          `}
-          disabled
-          display="icon"
-          icon={<IconArrowLeft />}
-          label="Move to primary column"
-          onClick={() => {}}
-        />
-        <Button
-          css={`
-            margin-right: ${GU}px;
-          `}
-          disabled
-          display="icon"
-          icon={<IconArrowUp />}
-          label="Move up"
-          onClick={() => {}}
-        />
-        <Button
-          css={`
-            margin-right: ${GU}px;
-          `}
-          display="icon"
-          icon={<IconArrowDown />}
-          label="Move down"
-          onClick={() => {}}
-        />
-        <Button
-          display="icon"
-          icon={<IconArrowRight />}
-          label="Move to secondary column"
-          onClick={() => {}}
-        />
+        {editMode && <HeaderArrows />}
       </div>
       <SidePanelSeparator
         css={`
@@ -219,6 +228,7 @@ EmptyMessage.propTypes = {
 const Layout = ({ widgets }) => {
   const [ primaryEmpty, setPrimaryEmpty ] = useState(true)
   const [ secondaryEmpty, setSecondaryEmpty ] = useState(true)
+  const { editMode } = useEditMode()
 
   useEffect(() => {
     if (widgets.filter(w => w.layout.primary === true).length > 0) {
@@ -230,13 +240,14 @@ const Layout = ({ widgets }) => {
   }, [widgets])
 
   const mappedWidgets = widgets.map(WidgetMapper)
+  const twoColumns = secondaryEmpty && editMode
 
   return (
     <div
       css={`
         margin-bottom: ${STYLE_GAP};
         display: grid;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: ${(twoColumns || !secondaryEmpty) ? '2fr ' : ''}1fr;
         grid-gap: 1rem;
         grid-auto-flow: dense;
         /* TODO:  layout small and span 2 + padding */
@@ -244,7 +255,7 @@ const Layout = ({ widgets }) => {
     >
       {primaryEmpty && <EmptyMessage primary span={widgets.length}/>}
       {mappedWidgets}
-      {secondaryEmpty && <EmptyMessage span={widgets.length}/>}
+      {twoColumns && <EmptyMessage span={widgets.length}/>}
     </div>
   )
 }
