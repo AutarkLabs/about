@@ -53,6 +53,7 @@ module.exports = {
     "react/jsx-uses-vars": "warn",
     "react/jsx-filename-extension": "off",
     "react/no-unused-prop-types": "warn",
+    "react/self-closing-comp": ["error", {"component": true, "html": true}],
     "sort-imports": ["warn", { "ignoreDeclarationSort": true }]
   },
   settings: {
