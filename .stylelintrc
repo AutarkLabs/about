@@ -7,6 +7,7 @@
   "rules": {
     "comment-empty-line-before": null,
     "declaration-colon-newline-after": null,
+    "property-no-vendor-prefix": true,
     "rule-empty-line-before": null
   }
 }

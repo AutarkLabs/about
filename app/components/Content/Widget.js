@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Card } from '@aragon/ui'
 import MarkdownPreview from '../Widget/Markdown/Preview'
 import Votes from './Votes'
-import { TYPE_MARKDOWN, TYPE_VOTES } from '../../utils/constants'
+import { TYPE_MARKDOWN, TYPE_VOTING } from '../../utils/constants'
 
 const Widget = ({ type, data }) => {
   return (
@@ -15,7 +15,7 @@ const Widget = ({ type, data }) => {
 }
 
 Widget.propTypes = {
-  type: PropTypes.symbol.isRequired,
+  type: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
 }
 
@@ -32,13 +32,13 @@ const WidgetSelector = ({ type, data }) => {
   switch(type) {
   case TYPE_MARKDOWN:
     return <MarkdownPreview content={data.content} />
-  case TYPE_VOTES:
+  case TYPE_VOTING:
     return <Votes data={data} />
   }
 }
 
 WidgetSelector.propTypes = {
-  type: PropTypes.symbol.isRequired,
+  type: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
 }
 
