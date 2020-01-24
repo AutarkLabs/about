@@ -1,91 +1,50 @@
 # Aragon About App 🦅🗣
 
-A new about page for Aragon DAO´s
+A customizable interface to add interactive widgets with information and insights about your organization.
 
 ## Usage
 
-### Launch the custom client with about support
+### Launch a new DAO with about app installed along with Voting and Tokens apps
 
-1. Clone Aragon about, run a devchain and publish `about` to this devchain
-
-   ```sh
-   git clone https://github.com/AutarkLabs/about.git
-   cd about
-   npm i # install dependencies
-   npx aragon ipfs # run ipfs local node
-   npx aragon devchain # run local ganache-cli devchain
-                           # add "--reset" to delete previous chain data
-   ```
-
-2. Open another terminal and go again into the folder `cd about`
-
-   ```sh
-   npm run publish:major -- --environment default
-   cd ..
-   ```
-
-3. Publish storage app and run the demo template
-
-   ```sh
-   git clone git@github.com:AutarkLabs/aragon-storage.git -b demo-template
-   cd aragon-storage
-   npm i # install dependencies
-   npm run start:ipfs:template -- --client false
-   ```
-
-4. Start yet another terminal to run the customized client supporting About setting
-
-   ```sh
-   git clone git@github.com:AutarkLabs/aragon.git -b dev
-   cd aragon
-   npm i && npm run start:local # download deps and start the client
-   ```
-
-5. Open the browser at the newly created DAO page
-
-   [http://localhost:3000/#/0xe5ac265B0FFE4b47C8386D7d715f3a3f6F8fb5B9](http://localhost:3000/#/0xe5ac265B0FFE4b47C8386D7d715f3a3f6F8fb5B9)
-
-   > It should have About and Storage along with Voting and Token apps installed by default
+`npm run start:ipfs:template`
 
 ### Development
 
-To start development environment:
+#### Run frontend development server
 
-1. Install dependencies
+`npm start`
 
-   ```sh
-   npm i
-   ```
+That should be enough to customize style and frontend changes, as we make use of a stubbed api to simulate some of the aragon client api
 
-2. Run parcel server for frontend development (it also builds the frontend)
+#### Run development template with hot reload and http mode
 
-   ```sh
-   npm run dev
-   ```
+`npm run start:http:template`
 
-3. On a second terminal launch script watcher for background worker development
+This launches a DAO but uses the parcel development server ran in the previous step as the app frontend, so hot reload is still working.
 
-   ```sh
-   npm run watch:script
-   ```
+Note this automatically launches `ipfs` and `devchain` daemons, so no need to launch separately, but still possible to do that.
 
-4. Yet on another terminal launch the aragon client with the app running and hot reload
+#### For script / store development it is convenient to use the watch script
 
-   ```sh
-   npm run start:http:template
-   ```
+`npm run watch:script`
+
+Works similarly to `npm start` but just keeps recompiling the background worker script related files
+
+#### Contract development
+
+It is needed to republish the contract locally between changes, or relaunch the app or template to handle that automatically.
 
 ### Publish
 
 You can publish your app on [aragonPM](https://hack.aragon.org/docs/apm). See how in our [publish guide](https://hack.aragon.org/docs/guides-publish).
 
 > **Note**\
-> The [Template](https://github.com/aragon/aragon-react-boilerplate/blob/master/contracts/Template.sol) will not be published.
+> The [Template](https://github.com/AutarkLabs/about/blob/master/contracts/dev/Template.sol) will not be published.
 
 Example publishing command for Autark deployments:
 
 ```sh
-npm run publish:patch -- --environment staging --apm.ipfs.rpc https://ipfs.autark.xyz:5001 --ipfs-check false
+npm run publish:patch -- --environment rinkeby --apm.ipfs.rpc https://ipfs.autark.xyz:5001 --ipfs-check false
 ```
 
 ### Using a different Ethereum account
@@ -93,6 +52,8 @@ npm run publish:patch -- --environment staging --apm.ipfs.rpc https://ipfs.autar
 You can use a different account to interact with you app. [Check the documentation](https://hack.aragon.org/docs/guides-faq#set-a-private-key).
 
 ### Propagate content
+
+Note this is handled automatically by `@aragon/cli` so it should not be needed
 
 You can propagate the content of your app on IPFS. Learn more in our [troubleshooting guide](https://hack.aragon.org/docs/guides-faq#propagating-your-content-hash-through-ipfs) or use the `aragon ipfs propagate` command:
 
