@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { BigNumber } from 'bignumber.js'
@@ -12,41 +12,42 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { useNetwork } from '@aragon/api-react'
+import { useAragonApi, useNetwork } from '../../../api-react'
 import {
   VOTING_STATUS,
   VOTING_STATUS_ONGOING,
   VOTING_STATUS_REJECTED,
 } from '../../../utils/constants'
 
-const Voting = ({ data }) => {
+const Voting = () => {
+  const { appState: { votes = [] } } = useAragonApi()
+
+  const mappedVotes = useMemo(() => votes.map(vote => (
+    <Vote key={vote.id}>
+      <UpperBar>
+        <App address={vote.app} />
+        <Status status={vote.status} />
+      </UpperBar>
+      <MiddleBar>
+        <Id id={vote.id}/>
+        <Description text={vote.description} />
+      </MiddleBar>
+      <LowerBar>
+        <Result yea={vote.yea} nay={vote.nay} />
+      </LowerBar>
+    </Vote>
+  )), votes)
+  
   return (
     <VoteContainer>
-      {data.votes.map(vote => (
-        <Vote key={vote.id}>
-          <UpperBar>
-            <App address={vote.app} />
-            <Status status={vote.status} />
-          </UpperBar>
-          <MiddleBar>
-            <Id id={vote.id}/>
-            <Description text={vote.description} />
-          </MiddleBar>
-          <LowerBar>
-            <Result yea={vote.yea} nay={vote.nay} />
-          </LowerBar>
-        </Vote>
-      ))}
+      {mappedVotes}
     </VoteContainer>
   )
 }
 
-Voting.propTypes = {
-  data: PropTypes.object.isRequired,
-}
-
 const VoteContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `
 const Vote = styled(Card)`
   margin: ${GU}px;
