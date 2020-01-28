@@ -145,9 +145,7 @@ contract Template is BaseTemplate, TokenCache {
     )
         internal
     {
-        _acl.createPermission(_grantee, _app, _app.ADD_ROLE(), _manager);
-        _acl.createPermission(_grantee, _app, _app.REMOVE_ROLE(), _manager);
-        _acl.createPermission(_grantee, _app, _app.UPDATE_ROLE(), _manager);
+        _acl.createPermission(_grantee, _app, _app.UPDATE_CONTENT(), _manager);
     }
 
     function _ensureTemplateSettings(

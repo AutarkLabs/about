@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useState } from 'react'
 import { Button } from '@aragon/ui'
 
-import { ipfs } from '../../utils/ipfs'
 import ColumnSelect from '../Form/ColumnSelect'
 import WidgetSelect from '../Form/WidgetSelect'
 import MarkdownConfig from '../Widget/Markdown/Markdown'
@@ -56,9 +55,9 @@ const Panel = ({ onSubmit }) => {
 
     // TODO: wrap in try catch and handle errors
     // TODO: graceful loading indicator
-    const cId = (await ipfs.dag.put(widgetObject, { pin: true })).toBaseEncodedString()
-    onSubmit(cId)
-  }, [ column, configData, ipfs, widget ])
+
+    onSubmit(widgetObject)
+  }, [ column, configData, widget ])
 
   const needsConfig = getWidgetType(widget) !== 'VOTES' && getWidgetType(widget) !== 'DOT_VOTES'
   const submitDisabled = widget === undefined || (needsConfig && configData === undefined)

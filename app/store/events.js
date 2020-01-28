@@ -1,6 +1,6 @@
 import { events } from './utils'
 import { handleVoteEvent, handlesVotes } from './vote'
-import { updateWidgets } from './widget'
+import { updateContent } from './widget'
 
 const eventHandler = async eventData => {
   const {
@@ -20,8 +20,8 @@ const eventHandler = async eventData => {
 
   // About events
   switch (event) {
-  case 'WidgetAdded':
-    return { ...state, widgets: await updateWidgets(state.widgets, returnValues) }
+  case 'ContentUpdated':
+    return { ...state, widgets: await updateContent(returnValues.cid) }
   default:
     return { ...state }
   }

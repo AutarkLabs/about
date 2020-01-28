@@ -6,29 +6,16 @@ import "@aragon/os/contracts/apps/AragonApp.sol";
 contract About is AragonApp {
 
     /// Events
-    event WidgetAdded(bytes32 indexed _priority);
-    event WidgetRemoved(bytes32 indexed _priority);
-    event WidgetsReordered();
-    event WidgetUpdated(bytes32 indexed _priority);
-
-    /// Struct
-    struct Widget {
-        string addr;
-        bool deleted;
-    }
+    event ContentUpdated(string cid);
 
     /// State
-    mapping(bytes32 => Widget) internal widgets;
+    string public content;
 
     /// ACL
-    /* Hard-coded constants to save gas
-    bytes32 constant public ADD_ROLE = keccak256("ADD_ROLE");
-    bytes32 constant public REMOVE_ROLE = keccak256("REMOVE_ROLE");
-    bytes32 constant public UPDATE_ROLE = keccak256("UPDATE_ROLE");
+    /* Hard-coded constant to save gas
+    string constant public UPDATE_CONTENT = keccak256("UPDATE_CONTENT");
     */
-    bytes32 constant public ADD_ROLE = 0x9fdb66370b2703c58b55fbb88662023f986df503f838f6ca75ff9f9bdabd694a;
-    bytes32 constant public REMOVE_ROLE = 0x0a55cd9c498e2688378e5cd183217e75c0fa1cdbaa909387f565177cd47670f5;
-    bytes32 constant public UPDATE_ROLE = 0x3ee192ac25847473237ced4bba57f848e1fd794930ff85b42823290580967205;
+    bytes32 constant public UPDATE_CONTENT = 0x8691816984471a5bab51dbc26f2ae34202509c759f4f5a38cfc5eaceda98eeb7;
 
     /**
      * @notice Custom constructor to initialize aragon app
@@ -38,41 +25,11 @@ contract About is AragonApp {
     }
 
     /**
-     * @notice Update `@fromHex(_priority, "utf8")` content to `_addr`
-     * @param _priority Index of the widget
-     * @param _addr IPFS hash of the widget's data
+     * @notice Update content to `cid`
+     * @param cid IPFS hash of the app's data
      */
-    function updateWidget(bytes32 _priority, string _addr) external auth(UPDATE_ROLE) {
-        widgets[_priority] = Widget(_addr, false);
-        emit WidgetUpdated(_priority);
-    }
-
-    /**
-     * @notice Remove `@fromHex(_priority, "utf8")`
-     * @param _priority Index of the widget to remove
-     */
-    function removeWidget(bytes32 _priority) external auth(REMOVE_ROLE) {
-        widgets[_priority] = Widget("", true);
-        emit WidgetRemoved(_priority);
-    }
-
-        /**
-     * @notice Create widget `_priority`  with content `_addr`
-     * @param _priority Index of the widget
-     * @param _addr IPFS hash of the widget's data
-     */
-    function addWidget(bytes32 _priority, string _addr) external auth(ADD_ROLE) {
-        widgets[_priority] = Widget(_addr, false);
-        emit WidgetAdded(_priority);
-    }
-
-    /**
-     * @notice Get a widget's information
-     * @param  _priority index of the widget
-     */
-    function getWidget(bytes32 _priority) external view returns(string addr, bool deleted) {
-        Widget memory widget = widgets[_priority];
-        addr = widget.addr;
-        deleted = widget.deleted;
+    function updateContent(string cid) external auth(UPDATE_CONTENT) {
+        content = cid;
+        emit ContentUpdated(cid);
     }
 }

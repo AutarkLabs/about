@@ -1,18 +1,8 @@
 {
   "roles": [
     {
-      "name": "Add a widget",
-      "id": "ADD_ROLE",
-      "params": []
-    },
-    {
-      "name": "Remove a widget",
-      "id": "REMOVE_ROLE",
-      "params": []
-    },
-    {
-      "name": "Update a widget",
-      "id": "UPDATE_ROLE",
+      "name": "Update the content",
+      "id": "UPDATE_CONTENT",
       "params": []
     }
   ],
