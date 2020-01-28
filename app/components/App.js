@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
-import { toHex } from 'web3-utils'
 
 import { GU, Header, Main, SidePanel, SyncIndicator } from '@aragon/ui'
 
@@ -12,6 +11,7 @@ import ActionsButton from './ActionsButton'
 import EditModeButtons from './EditModeButtons'
 import * as types from '../utils/prop-types'
 import { useAragonApi } from '../api-react'
+import { ipfs } from '../utils/ipfs'
 
 const App = ({ api, widgets, isSyncing }) => {
   const { editMode, setEditMode } = useEditMode()
@@ -25,13 +25,12 @@ const App = ({ api, widgets, isSyncing }) => {
     setPanelVisible(true)
   }, [setPanelVisible])
 
-  const handlePanelSubmit = useCallback(cId => {
+  const handlePanelSubmit = useCallback(async widgetObject => {
     setPanelVisible(false)
-
-    // TODO: adapt contract to remove priority
-    const priority = toHex(widgets.length)
-    api.addWidget(priority, cId).toPromise()
-  }, [ setPanelVisible, widgets.length ])
+    widgets.push(widgetObject)
+    const cId = (await ipfs.dag.put(widgets, { pin: true })).toBaseEncodedString()
+    api.updateContent(cId).toPromise()
+  }, [setPanelVisible])
 
   const handleEditModeCancel = () => {
     setEditMode(false)

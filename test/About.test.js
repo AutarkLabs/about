@@ -1,4 +1,4 @@
-/* global artifacts, assert, before, beforeEach, context, contract, it */
+/* global artifacts, assert, before, context, contract, it */
 const { assertRevert } = require('@aragon/test-helpers/assertThrow')
 
 /** Helper function to import truffle contract artifacts */
@@ -14,7 +14,7 @@ const getReceipt = (receipt, event, arg) => {
 const ANY_ADDR = '0xffffffffffffffffffffffffffffffffffffffff'
 
 contract('About', accounts => {
-  let APP_MANAGER_ROLE, ADD_ROLE, REMOVE_ROLE, UPDATE_ROLE
+  let APP_MANAGER_ROLE, UPDATE_CONTENT
   let app, appBase, daoFact
 
   // setup test actor accounts
@@ -40,9 +40,7 @@ contract('About', accounts => {
     // TODO: take roles hashes from constants file
     // TODO: test roles pre-generated with keccak256
     APP_MANAGER_ROLE = await kernelBase.APP_MANAGER_ROLE()
-    ADD_ROLE = await appBase.ADD_ROLE()
-    REMOVE_ROLE = await appBase.REMOVE_ROLE()
-    UPDATE_ROLE = await appBase.UPDATE_ROLE()
+    UPDATE_CONTENT = await appBase.UPDATE_CONTENT()
         
     /** Create the dao from the dao factory */
     const daoReceipt = await daoFact.newDAO(root)
@@ -66,9 +64,7 @@ contract('About', accounts => {
     )
 
     /** Setup permissions */
-    await acl.createPermission(ANY_ADDR, app.address, ADD_ROLE, root)
-    await acl.createPermission(ANY_ADDR, app.address, REMOVE_ROLE, root)
-    await acl.createPermission(ANY_ADDR, app.address, UPDATE_ROLE, root)
+    await acl.createPermission(ANY_ADDR, app.address, UPDATE_CONTENT, root)
 
     // TODO: install other apps here
 
@@ -77,22 +73,11 @@ contract('About', accounts => {
   })
 
   context('widgets usage functions', () => {
-    beforeEach(async () => {
-      await app.updateWidget(0, 'something')
-    })
-
-    it('should update a widget', async () => {
-      const widgetUpdatedReceipt = await app.updateWidget(0, 'something else')
-      const event = widgetUpdatedReceipt.logs.filter(
-        l => l.event === 'WidgetUpdated'
-      )
-      assert.equal(event.length, 1, 'widget not updated correctly')
-    })
-
-    it('should get a widget', async () => {
-      const widget = await app.getWidget(0)
-      assert.equal(widget[0], 'something', 'widgets string invalid')
-      assert.equal(widget[1], 0, 'widgets priority invalid')
+    it('should get the right content', async () => {
+      const cid = 'bafyreicnzfnootz5mokajmf2mhb3mudvfxbkd57c2yarjejsv77toh7t7m'
+      await app.updateContent(cid)
+      const content = await app.content()
+      assert.equal(content, cid)
     })
   })
 
