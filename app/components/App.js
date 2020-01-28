@@ -21,16 +21,18 @@ const App = ({ api, widgets, isSyncing }) => {
     setEditMode(true)
   }
 
-  const handleNewWidget = useCallback(() => {
+  const handleNewWidget = () => {
     setPanelVisible(true)
-  }, [setPanelVisible])
+  }
 
   const handlePanelSubmit = useCallback(async widgetObject => {
     setPanelVisible(false)
-    widgets.push(widgetObject)
-    const cId = (await ipfs.dag.put(widgets, { pin: true })).toBaseEncodedString()
+    const nextWidgets = [ ...widgets, widgetObject ]
+    const cId = (
+      await ipfs.dag.put(nextWidgets, { pin: true })
+    ).toBaseEncodedString()
     api.updateContent(cId).toPromise()
-  }, [setPanelVisible])
+  }, [widgets])
 
   const handleEditModeCancel = () => {
     setEditMode(false)
