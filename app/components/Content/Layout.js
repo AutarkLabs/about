@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import emptySvg from '../../assets/empty.svg'
 import * as types from '../../utils/prop-types'
 import MarkdownPreview from '../Widget/Markdown/Preview'
-import Voting from '../Widget/Voting/Voting'
+import Votes from '../Widget/Votes/Votes'
 import { useEditMode } from '../../context/Edit'
 
 
@@ -144,7 +144,7 @@ const WidgetContent = ({ data, type }) => {
   case 'MARKDOWN':
     return <MarkdownPreview content={data} />
   case 'VOTES':
-    return <Voting />
+    return <Votes />
   }
 }
 

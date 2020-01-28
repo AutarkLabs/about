@@ -19,65 +19,64 @@ import {
   VOTING_STATUS_REJECTED,
 } from '../../../utils/constants'
 
-const Voting = () => {
+const Votes = () => {
   const { appState: { votes = [] } } = useAragonApi()
 
   const mappedVotes = useMemo(() => votes.map(vote => (
     <Vote key={vote.id}>
-      <UpperBar>
-        <App address={vote.app} />
+      <div css={`
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: ${2 * GU}px;
+        `}>
+        <AppBadge address={vote.app} />
         <Status status={vote.status} />
-      </UpperBar>
-      <MiddleBar>
+      </div>
+      <div css={`
+        display: flex;
+        margin-bottom: ${GU}px;
+      `}>
         <Id id={vote.id}/>
         <Description text={vote.description} />
-      </MiddleBar>
-      <LowerBar>
+      </div>
+      <div css={`
+        display: flex;
+      `}>
         <Result yea={vote.yea} nay={vote.nay} />
-      </LowerBar>
+      </div>
     </Vote>
   )), votes)
   
   return (
-    <VoteContainer>
+    <div css={`
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    `}>
       {mappedVotes}
-    </VoteContainer>
+    </div>
   )
 }
 
-const VoteContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
 const Vote = styled(Card)`
-  margin: ${GU}px;
-  padding: ${GU}px;
+  :not(:last-child) {
+    margin-bottom: ${2 * GU}px;
+  }
+
+  padding: ${2 * GU}px;
   display: flex;
   height: 100%;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
 `
-const UpperBar = styled.div`
-  margin: ${GU}px;
-  margin-left: 0;
-  display: flex;
-  justify-content: space-between;
-`
-const MiddleBar = styled.div`
-  margin: ${GU}px;
-  display: flex;
-`
-const LowerBar = styled.div`
-  margin: ${GU}px;
-  margin-top: 0;
-  display: flex;
-`
 
-const App = ({ address }) => {
+const AppBadge = ({ address }) => {
   const network = useNetwork()
   return (
     <IdentityBadge
+      css={'padding: 0;'}
       badgeOnly={true}
       compact={true}
       entity={address}
@@ -87,7 +86,7 @@ const App = ({ address }) => {
   )
 }
 
-App.propTypes = {
+AppBadge.propTypes = {
   address: PropTypes.string.isRequired,
 }
 
@@ -138,7 +137,6 @@ Id.propTypes = {
 const IdContainer = styled.span`
   ${textStyle('body2')};
   font-weight: bold;
-  margin-right: 3px;
 `
 
 const Description = ({ text }) => {
@@ -147,9 +145,9 @@ const Description = ({ text }) => {
   const startIndex = text.search(addressRegex)
   if (startIndex === -1) {
     return (
-      <DescriptionContainer>
+      <span>
         {text}
-      </DescriptionContainer>
+      </span>
     )
   }
   const endIndex = startIndex + 42
@@ -157,27 +155,28 @@ const Description = ({ text }) => {
   const address = text.substring(startIndex, endIndex)
   const afterAddress = text.substring(endIndex)
   return (
-    <DescriptionContainer>
-      {beforeAddress}
+    <div css={`
+      ${textStyle('body2')};
+    `}>
+      <span css={`margin: 0 ${.5 * GU}px;`}>
+        {beforeAddress}
+      </span>
       <IdentityBadge
         badgeOnly={true}
+        css="padding: 0;"
         compact={true}
         entity={address}
         networkType={network && network.type}
         shorten={true}
       />
       {afterAddress}
-    </DescriptionContainer>
+    </div>
   )
 }
 
 Description.propTypes = {
   text: PropTypes.string.isRequired,
 }
-
-const DescriptionContainer = styled.span`
-  ${textStyle('body2')};
-`
 
 const Result = ({ yea, nay }) => {
   const theme = useTheme()
@@ -215,7 +214,6 @@ const ResultContainer = styled.div`
 const LabelContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${GU}px;
 `
 const LabelText = styled.div`
   ${textStyle('label1')};
@@ -236,4 +234,4 @@ Bar.propTypes = {
   value: PropTypes.instanceOf(BigNumber)
 }
 
-export default Voting
+export default Votes
