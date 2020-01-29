@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-export const widget = PropTypes.exact({
+export const widget = PropTypes.shape({
   cId: PropTypes.string,
   // Markdown data will be string for now
   // TODO: Embed md data into object
