@@ -104,6 +104,7 @@ const Widget = ({ children, type, ...props }) => {
         background-color: #f9fafc;
         opacity: .8;
       }
+      cursor: ${ editMode ? 'grab' : 'normal' };
   `}>
       {(type !== 'MARKDOWN' || editMode) && <WidgetHeader type={type} />}
       {children && React.cloneElement(children, props)}

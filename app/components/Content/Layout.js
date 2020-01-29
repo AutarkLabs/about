@@ -59,9 +59,18 @@ EmptyMessage.propTypes = {
 
 const Layout = ({ widgets }) => {
   //  TODO: A layout preview should come from store (when parsed in vote radspec)
-  const [ primaryWidgets, setPrimaryWidgets ] = useState(widgets.filter(w => w.layout.primary))
-  const [ secondaryWidgets, setSecondaryWidgets ] = useState(widgets.filter(w => !w.layout.primary))
   const { editMode, setEditedWidgets } = useEditMode()
+  const originalPrimaryWidgets = widgets.filter(w => w.layout.primary)
+  const originalSecondaryWidgets = widgets.filter(w => !w.layout.primary)
+  const [ primaryWidgets, setPrimaryWidgets ] = useState(originalPrimaryWidgets)
+  const [ secondaryWidgets, setSecondaryWidgets ] = useState(originalSecondaryWidgets)
+
+  useEffect(() => {
+    if (!editMode) {
+      setPrimaryWidgets(originalPrimaryWidgets)
+      setSecondaryWidgets(originalSecondaryWidgets)
+    }
+  }, [editMode])
 
   const setPrimary = p => {
     const nextWidgets = p.map((e, i) => ({ ...e, index: i, layout: { primary: true } }))
@@ -88,13 +97,13 @@ const Layout = ({ widgets }) => {
           flex: 2 1 20ch;
           margin-right: ${2 * GU}px;
         `}>
-          {primaryWidgets.map(WidgetMapper)}
+          {originalPrimaryWidgets.map(WidgetMapper)}
         </div>
-        {secondaryWidgets.length > 0 && 
+        {originalSecondaryWidgets.length > 0 &&
           <div css={`
             flex: 1 1 10ch;
           `}>
-            {secondaryWidgets.map(WidgetMapper)}
+            {originalSecondaryWidgets.map(WidgetMapper)}
           </div>
         }
       </div>
