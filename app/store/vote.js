@@ -1,6 +1,14 @@
 import { app } from './utils'
 import { map } from 'rxjs/operators'
 import { addressesEqual } from './lib/web3-utils'
+import { BigNumber } from 'bignumber.js'
+import {
+  VOTING_STATUS_ACCEPTED,
+  VOTING_STATUS_ENACTED,
+  VOTING_STATUS_ONGOING,
+  VOTING_STATUS_PENDING_ENACTMENT,
+  VOTING_STATUS_REJECTED,
+} from '../utils/constants'
 
 /// ////////////////////////////////////
 /*    Votes event handlers            */
@@ -29,16 +37,57 @@ export const handleVoteEvent = async eventData => {
 
 export const updateVotes = async (votes, { metadata, voteId: id }, voting) => {
   const newVotes = Array.from(votes || [])
-  const voteIndex = newVotes.findIndex(v => v.id === id)  
+  const voteIndex = newVotes.findIndex(v => v.id === id)
   const vote = await getVote(id, { metadata, voting })
   
-  voteIndex === -1 ? newVotes.push(vote) : newVotes[voteIndex] = vote
+  if (voteIndex === -1) {
+    newVotes.push(vote)
+  } else {
+    const oldVote = newVotes[voteIndex]
+    let newVote = {}
+    Object.keys(vote).forEach(key => {
+      const newValue = vote[key] ? vote[key] : oldVote[key]
+      newVote[key] = newValue
+    })
+    newVotes[voteIndex] = newVote
+  }
   return newVotes
 }
 
 /// ////////////////////////////////////
 /*    Votes helper functions          */
 /// ////////////////////////////////////
+
+const hasAction = async vote => {
+  const script = await app.describeScript(vote.script).toPromise()
+  return script.length > 0
+}
+
+const isSuccessful = vote => {
+  const yea = new BigNumber(vote.yea)
+  const nay = new BigNumber(vote.nay)
+  const votingPower = new BigNumber(vote.votingPower)
+  const supportRequired = new BigNumber(vote.supportRequired)
+  const minAcceptQuorum = new BigNumber(vote.minAcceptQuorum)
+  const totalVotes = yea.plus(nay)
+  return (
+    yea.div(votingPower).gt(supportRequired.div(votingPower)) ||
+      (yea.div(totalVotes).gt(supportRequired.div(totalVotes)) &&
+       yea.div(votingPower).gt(minAcceptQuorum.div(votingPower)))
+  )
+}
+
+const getStatus = async vote => (
+  vote.open ?
+    VOTING_STATUS_ONGOING :
+    isSuccessful(vote) ?
+      await hasAction(vote) ?
+        vote.executed ?
+          VOTING_STATUS_ENACTED :
+          VOTING_STATUS_PENDING_ENACTMENT :
+        VOTING_STATUS_ACCEPTED:
+      VOTING_STATUS_REJECTED
+)
 
 const getVote = (id, { metadata, voting }) => {
   return voting.contract.getVote(id)
@@ -50,10 +99,10 @@ const getVote = (id, { metadata, voting }) => {
         script,
         snapshotBlock,
         startDate,
-        status,
         supportRequired,
-        totalVotes,
         yea,
+        votingPower,
+        minAcceptQuorum,
       }) => {
         const {
           description = metadata,
@@ -64,15 +113,23 @@ const getVote = (id, { metadata, voting }) => {
           description, 
           executed,
           id, // note the id is added along with the other data,
-          nay: parseInt(nay),
+          nay: nay,
           open,
           snapshotBlock,
           startDate,
-          status,
           supportRequired,
-          to,
-          totalVotes,
-          yea: parseInt(yea),
+          appAddress: to,
+          yea: yea,
+          status: await getStatus({
+            open,
+            executed,
+            yea,
+            nay,
+            votingPower,
+            supportRequired,
+            minAcceptQuorum,
+            script,
+          }),
         }})
     )
     .toPromise()

@@ -12,6 +12,7 @@ import EditModeButtons from './EditModeButtons'
 import * as types from '../utils/prop-types'
 import { useAragonApi } from '../api-react'
 import { ipfs } from '../utils/ipfs'
+import { IdentityProvider } from '../utils/identity-manager'
 
 const App = ({ api, widgets, isSyncing }) => {
   const { editMode, setEditMode } = useEditMode()
@@ -104,7 +105,9 @@ const AboutApp = () => {
   return (
     <Main assetsUrl="./aragon-ui" theme={appearance}>
       <EditProvider>
-        <App api={api} {...appState} />
+        <IdentityProvider>
+          <App api={api} {...appState} />
+        </IdentityProvider>
       </EditProvider>
     </Main>
   )

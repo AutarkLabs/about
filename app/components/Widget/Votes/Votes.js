@@ -18,6 +18,8 @@ import {
   VOTING_STATUS_ONGOING,
   VOTING_STATUS_REJECTED,
 } from '../../../utils/constants'
+import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
+import { useIdentity } from '../../../utils/identity-manager'
 
 const Votes = () => {
   const { appState: { votes = [] } } = useAragonApi()
@@ -29,7 +31,7 @@ const Votes = () => {
         justify-content: space-between;
         margin-bottom: ${2 * GU}px;
         `}>
-        <AppBadge address={vote.app} />
+        <AppBadge address={vote.appAddress} />
         <Status status={vote.status} />
       </div>
       <div css={`
@@ -73,15 +75,10 @@ const Vote = styled(Card)`
 `
 
 const AppBadge = ({ address }) => {
-  const network = useNetwork()
   return (
-    <IdentityBadge
-      css={'padding: 0;'}
-      badgeOnly={true}
-      compact={true}
-      entity={address}
-      networkType={network && network.type}
-      shorten={true}
+    <LocalLabelAppBadge
+      badgeOnly
+      appAddress={address}
     />
   )
 }
@@ -140,12 +137,13 @@ const IdContainer = styled.span`
 `
 
 const Description = ({ text }) => {
+  if (!text) return <span/>
   const network = useNetwork()
   const addressRegex = /0x[a-fA-F0-9]{40}/g
   const startIndex = text.search(addressRegex)
   if (startIndex === -1) {
     return (
-      <span>
+      <span css={`margin: 0 ${.5 * GU}px;`}>
         {text}
       </span>
     )
@@ -154,6 +152,7 @@ const Description = ({ text }) => {
   const beforeAddress = text.substring(0, startIndex)
   const address = text.substring(startIndex, endIndex)
   const afterAddress = text.substring(endIndex)
+  const [localLabel] = useIdentity(address)
   return (
     <div css={`
       ${textStyle('body2')};
@@ -162,12 +161,12 @@ const Description = ({ text }) => {
         {beforeAddress}
       </span>
       <IdentityBadge
-        badgeOnly={true}
         css="padding: 0;"
-        compact={true}
+        compact
+        label={localLabel}
         entity={address}
         networkType={network && network.type}
-        shorten={true}
+        shorten
       />
       {afterAddress}
     </div>
@@ -183,9 +182,16 @@ const Result = ({ yea, nay }) => {
   const bigYea = BigNumber(yea)
   const bigNay = BigNumber(nay)
   const totalVotes = bigYea.plus(bigNay)
-  const fractionYea = bigYea.div(totalVotes)
-  const percentageYea = fractionYea.times(100).toNumber()
-  const percentageNay = bigNay.times(100).div(totalVotes).toNumber()
+  let fractionYea, percentageYea, percentageNay
+  if (totalVotes.isZero()) {
+    fractionYea = BigNumber(0)
+    percentageYea = '0'
+    percentageNay = '0'
+  } else {
+    fractionYea = bigYea.div(totalVotes)
+    percentageYea = fractionYea.times(100).toString()
+    percentageNay = bigNay.times(100).div(totalVotes).toString()
+  }
   return (
     <ResultContainer>
       <LabelContainer>
