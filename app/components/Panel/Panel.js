@@ -6,6 +6,7 @@ import ColumnSelect from '../Form/ColumnSelect'
 import WidgetSelect from '../Form/WidgetSelect'
 import MarkdownConfig from '../Widget/Markdown/Markdown'
 import ActivityFeedConfig from '../Widget/ActivityFeed/PanelConfig/ActivityFeedConfig'
+import { uuid } from '../../utils/helpers'
 
 // TODO: encode this in types constant along with widgetSelect
 const widgetType = {
@@ -46,6 +47,7 @@ const Panel = ({ onSubmit }) => {
 
   const handleClick = useCallback(async () => {
     const widgetObject = {
+      id: uuid(),
       layout: {
         primary: !column // Will be true when the ColumnSelect value is Primary
       },

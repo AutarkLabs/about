@@ -29,28 +29,38 @@ const initialState = process.env.NODE_ENV !== 'production' && {
   ],
   widgets: [
     {
+      id: 0,
       type: TYPE_MARKDOWN,
-      data: '# hola, `mundo`!',
+      data: '# Title for Markdown test 🐈',
       layout: { primary: true },
     },
     {
+      id: 1,
       type: TYPE_VOTING,
       data: {
       },
       layout: { primary: false },
-    }
-  ],
-  // widgets: [{
-  //   cId: 'wqefwefwqe',
-  //   data: { content: 'PropTypes.object' },
-  //   layout: { primary: true, wide: false },
-  //   type: 'PropTypes.string'
-  // }, {
-  //   cId: 'sdasdfsdf',
-  //   data: { content: 'PropTypes.object' },
-  //   layout: { primary: false, wide: false },
-  //   type: 'PropTypes.string'
-  // }],
+    },
+    {
+      id: 2,
+      type: TYPE_MARKDOWN,
+      data: '# hello, `WORLD`! 🌐👽',
+      layout: { primary: true },
+    },
+    {
+      id: 3,
+      type: TYPE_VOTING,
+      data: {
+      },
+      layout: { primary: true },
+    },
+    {
+      id: 4,
+      type: TYPE_MARKDOWN,
+      data: 'Unicorns exist 🦄',
+      layout: { primary: true },
+    },
+  ]
 }
 
 const functions =

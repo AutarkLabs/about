@@ -15,7 +15,7 @@ import { ipfs } from '../utils/ipfs'
 import { IdentityProvider } from '../utils/identity-manager'
 
 const App = ({ api, widgets, isSyncing }) => {
-  const { editMode, setEditMode } = useEditMode()
+  const { editMode, setEditMode, editedWidgets, } = useEditMode()
   const [ panelVisible, setPanelVisible ] = useState(false)
 
   const handleEditLayout = () => {
@@ -39,9 +39,13 @@ const App = ({ api, widgets, isSyncing }) => {
     setEditMode(false)
   }
 
-  const handleEditModeSubmit = () => {
-    // TODO: Implement save layout changes
-  }
+  const handleEditModeSubmit = useCallback(async () => {
+    const cId = (
+      await ipfs.dag.put(editedWidgets, { pin: true })
+    ).toBaseEncodedString()
+    api.updateContent(cId).toPromise()
+    setEditMode(false)
+  }, [editedWidgets])
 
   return (
     <>

@@ -54,6 +54,7 @@ const Actions = ({
             Actions
           </div>
           <IconDown
+            // TODO: rotate arrow on open
             css={`
               color: ${theme.surfaceIcon};
               width: 16px;

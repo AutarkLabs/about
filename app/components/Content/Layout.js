@@ -1,185 +1,18 @@
-import { Button, Card, GU, IconArrowDown, IconArrowLeft, IconArrowRight, IconArrowUp, SidePanelSeparator, textStyle, theme } from '@aragon/ui'
+import { Card, GU, textStyle, theme } from '@aragon/ui'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
 // TODO: Compress illustration
 import emptySvg from '../../assets/empty.svg'
 import * as types from '../../utils/prop-types'
-import MarkdownPreview from '../Widget/Markdown/Preview'
-import Votes from '../Widget/Votes/Votes'
 import { useEditMode } from '../../context/Edit'
+import WidgetMapper from './WidgetMapper'
+import { ReactSortable } from 'react-sortablejs'
 
-
-const STYLE_GAP = `${2 * GU}px;`
-
-const setupWidgetStyle = ({ primary }) => {
-  const primaryStyle = `
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    grid-column: 1 / span 1;
-    height: auto;
-    justify-content: center;
-    overflow: hidden;
-    padding: ${2.25 * GU}px ${3 * GU}px ${3 * GU}px;
-    width: auto;
-  `
-  const secondaryStyle = `
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    grid-column: 2 / span 1;
-    height: auto;
-    justify-content: center;
-    overflow: hidden;
-    padding: ${2.25 * GU}px ${3 * GU}px ${3 * GU}px;
-    width: auto;
-  `
-  return primary ? primaryStyle : secondaryStyle
-}
-
-// TODO: encode this in types constant along with widgetSelect
-const LABELS = {
-  ACTIVITY: 'Activity feed',
-  DOT_VOTES: 'Latest dot votes',
-  MARKDOWN: 'Markdown',
-  VOTES: 'Latest votes',
-}
-
-const HeaderArrows = () => {
-  return (
-    <>
-    <Button
-      css={`
-      margin-right: ${GU}px;
-    `}
-      disabled
-      display="icon"
-      icon={<IconArrowLeft />}
-      label="Move to primary column"
-      onClick={() => {}}
-    />
-  <Button
-    css={`
-      margin-right: ${GU}px;
-    `}
-    disabled
-    display="icon"
-    icon={<IconArrowUp />}
-    label="Move up"
-    onClick={() => {}}
-  />
-  <Button
-    css={`
-      margin-right: ${GU}px;
-    `}
-    display="icon"
-    icon={<IconArrowDown />}
-    label="Move down"
-    onClick={() => {}}
-  />
-  <Button
-    display="icon"
-    icon={<IconArrowRight />}
-    label="Move to secondary column"
-    onClick={() => {}}
-  />
-  </>
-  )
-}
-
-// TODO: Read from grid CSS or generated layout mapping to dynamically show/hide buttons
-const WidgetHeader = ({ type }) => {
-  const { editMode } = useEditMode()
-  const label = LABELS[type]
-  return (
-    <>
-      <div
-        css={`
-          display: flex;
-          flex: 0 0 ${5 * GU}px;
-          align-items: center;
-          ${textStyle('body1')}
-        `}
-      >
-        <span css={'flex: 1 0 auto'}>{label}</span>
-        {editMode && <HeaderArrows />}
-      </div>
-      <SidePanelSeparator
-        css={`
-          margin: ${3 * GU}px -${3 * GU}px;
-        `}
-      />
-    </>
-  )
-}
-
-WidgetHeader.propTypes = {
-  // TODO: adjust to exact types
-  type: PropTypes.oneOf(Object.keys(LABELS)).isRequired,
-}
-
-const Widget = ({ children, layout, type, ...props }) => {
-  const { editMode } = useEditMode()
-  return (
-    <Card css={setupWidgetStyle(layout)}>
-      {(type !== 'MARKDOWN' || editMode) && <WidgetHeader type={type} />}
-      {children && React.cloneElement(children, props)}
-    </Card>
-  )
-}
-
-Widget.propTypes = {
-  children: PropTypes.node,
-  layout: PropTypes.exact({
-    primary: PropTypes.bool,
-    wide: PropTypes.bool,
-  }),
-  // TODO: adjust to exact types
-  type: PropTypes.string,
-}
-
-const WidgetContent = ({ data, type }) => {
-  switch (type) {
-  case 'MARKDOWN':
-    return <MarkdownPreview content={data} />
-  case 'VOTES':
-    return <Votes />
-  }
-}
-
-WidgetContent.propTypes = {
-  data: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ]),
-  // TODO: adjust to exact types
-  type: PropTypes.string,
-}
-
-const WidgetMapper = ({ cId, data, layout, type }, i) => {
-  // TODO: better uuid for key
-  return (
-    <Widget key={i /*cId.slice(2,10)*/} layout={layout} type={type}>
-      <div css={'flex: 1 0 auto;'}>
-        <WidgetContent data={data} type={type} />
-      </div>
-    </Widget>
-  )
-}
-
-WidgetMapper.propTypes = {
-  cId: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,
-  layout: PropTypes.exact({
-    primary: PropTypes.bool,
-    wide: PropTypes.bool,
-  }).isRequired,
-  type: PropTypes.oneOf(Object.keys(LABELS)).isRequired
-}
-
-const EmptyMessage = ({ primary, span }) => (
+const EmptyMessage = ({ primary }) => (
   <Card
     css={`
-      ${setupWidgetStyle({ primary })}
-      grid-row: span ${span};
+      flex: ${primary ? '2 1 20': '1 1 10'}ch;
       height: 84vh;
       justify-content: center;
       align-items: center;
@@ -192,7 +25,6 @@ const EmptyMessage = ({ primary, span }) => (
       `}>
       <img
         css={`
-            /* height: 160px; */
             margin-bottom: ${3 * GU}px;
           `}
         src={emptySvg}
@@ -223,40 +55,118 @@ const EmptyMessage = ({ primary, span }) => (
 
 EmptyMessage.propTypes = {
   primary: PropTypes.bool,
-  span: PropTypes.number.isRequired,
 }
 
 const Layout = ({ widgets }) => {
-  const [ primaryEmpty, setPrimaryEmpty ] = useState(true)
-  const [ secondaryEmpty, setSecondaryEmpty ] = useState(true)
-  const { editMode } = useEditMode()
+  //  TODO: A layout preview should come from store (when parsed in vote radspec)
+  const { editMode, setEditedWidgets } = useEditMode()
+  const originalPrimaryWidgets = widgets.filter(w => w.layout.primary)
+  const originalSecondaryWidgets = widgets.filter(w => !w.layout.primary)
+  const [ primaryWidgets, setPrimaryWidgets ] = useState(originalPrimaryWidgets)
+  const [ secondaryWidgets, setSecondaryWidgets ] = useState(originalSecondaryWidgets)
 
   useEffect(() => {
-    if (widgets.filter(w => w.layout.primary === true).length > 0) {
-      setPrimaryEmpty(false)
+    if (!editMode) {
+      setPrimaryWidgets(originalPrimaryWidgets)
+      setSecondaryWidgets(originalSecondaryWidgets)
     }
-    if (widgets.filter(w => w.layout.primary === false).length > 0) {
-      setSecondaryEmpty(false)
-    }
-  }, [widgets])
+  }, [editMode])
 
-  const mappedWidgets = widgets.map(WidgetMapper)
-  const twoColumns = secondaryEmpty && editMode
+  const setPrimary = p => {
+    const nextWidgets = p.map((e, i) => ({ ...e, index: i, layout: { primary: true } }))
+    setPrimaryWidgets(nextWidgets)
+  }
+
+  const setSecondary = p => {
+    const nextWidgets = p.map((e, i) => ({ ...e, index: i, layout: { primary: false } }))
+    setSecondaryWidgets(nextWidgets)
+  }
+
+  useEffect(()=> {
+    setEditedWidgets([...new Set([ ...primaryWidgets, ...secondaryWidgets ])])
+  }, [ primaryWidgets, secondaryWidgets ])
+  
+
+  if (!editMode) {
+    return (
+      <div css={`
+      display: flex;
+      flew-wrap: wrap;
+    `}>
+        <div css={`
+          flex: 2 1 20ch;
+          margin-right: ${2 * GU}px;
+        `}>
+          {originalPrimaryWidgets.map(WidgetMapper)}
+        </div>
+        {originalSecondaryWidgets.length > 0 &&
+          <div css={`
+            flex: 1 1 10ch;
+          `}>
+            {originalSecondaryWidgets.map(WidgetMapper)}
+          </div>
+        }
+      </div>
+    )
+  }
 
   return (
-    <div
-      css={`
-        margin-bottom: ${STYLE_GAP};
-        display: grid;
-        grid-template-columns: ${(twoColumns || !secondaryEmpty) ? '2fr ' : ''}1fr;
-        grid-gap: 1rem;
-        grid-auto-flow: dense;
-        /* TODO:  layout small and span 2 + padding */
-      `}
-    >
-      {primaryEmpty && <EmptyMessage primary span={widgets.length}/>}
-      {mappedWidgets}
-      {twoColumns && <EmptyMessage span={widgets.length}/>}
+    <div css={`
+      display: flex;
+      flew-wrap: wrap;
+    `}>
+      <div css={`
+          flex: 2 1 20ch;
+          margin-right: ${2 * GU}px;
+          display: grid;
+          grid-template-rows: 1fr;
+        `}>
+        {primaryWidgets.length === 0 && 
+          <div css={`
+            display: flex;
+            grid-column: 1/1;
+            grid-row: 1/1;
+          `}>
+            <EmptyMessage primary/>
+          </div>}
+        <ReactSortable
+          css={`
+            grid-row: 1/1;
+            grid-column: 1/1;
+          `}
+          group="widgets"
+          list={primaryWidgets}
+          primary={true}
+          setList={setPrimary}
+        >
+          {primaryWidgets.map(WidgetMapper)}
+        </ReactSortable>
+      </div>
+      <div css={`
+          flex: 1 1 10ch;
+          display: grid;
+          grid-template-rows: 1fr;
+        `}>
+        {secondaryWidgets.length === 0 &&
+          <div css={`
+            display: flex;
+            grid-column: 1/1;
+            grid-row: 1/1;
+          `}>
+            <EmptyMessage />
+          </div>}
+        <ReactSortable
+          css={`
+            grid-row: 1/1;
+            grid-column: 1/1;
+        `}
+          group="widgets"
+          list={secondaryWidgets}
+          setList={setSecondary}
+        >
+          {secondaryWidgets.map(WidgetMapper)}
+        </ReactSortable>
+      </div>
     </div>
   )
 }
