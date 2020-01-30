@@ -1,65 +1,71 @@
+const ignoreExports = [
+  '.eslintrc.js',
+  'app/script.js',
+  'app/script.test.js',
+  'commitlint.config.js',
+  'test/About.test.js',
+  'truffle-config.js',
+  // TODO: Fix index exports
+  '**/index.js',
+]
+
 module.exports = {
   env: {
     browser: true,
+    commonjs: true,
     es6: true,
     node: true,
-    commonjs: true,
   },
   extends: [
+    'standard', 'standard-react',
     'eslint:recommended',
     'plugin:import/errors',
-    'plugin:react/recommended',
+    'plugin:react/recommended', // will import plugin and enable jsx in parser options
     'plugin:jsx-a11y/recommended',
   ],
   parser: 'babel-eslint',
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true
-    },
     ecmaVersion: 2018,
-    sourceType: 'module'
   },
-  plugins: ['react'],
+  plugins: [ 'react-hooks', 'sort-keys-fix' ],
   rules: {
-    'arrow-parens': ["error", "as-needed"],
-    indent: ['error', 2],
-    'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
-    'react/no-typos': 1,
-    semi: ['error', 'never'],
-    'array-bracket-spacing': [
-      'error',
-      'always',
-      {
-        objectsInArrays: false,
-        arraysInArrays: false,
-        singleValue: false
-      }
-    ],
-    'func-style': ["warn", "declaration", { "allowArrowFunctions": true }],
-    'object-curly-spacing': ['error', 'always'],
-    // "import/no-unused-modules": [
-    //  "warn",
-    //  {
-    //    unusedExports: true,
-    //    missingExports: true,
-    //    ignoreExports: [],
-    //  }
-    // ],
-    "no-undef": "error",
-    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
-    "react/jsx-uses-react": "warn",
-    "react/jsx-uses-vars": "warn",
-    "react/jsx-filename-extension": "off",
-    "react/no-unused-prop-types": "warn",
-    "react/self-closing-comp": ["error", {"component": true, "html": true}],
-    "sort-imports": ["warn", { "ignoreDeclarationSort": true }]
+    'array-bracket-spacing': [ 'error', 'always', { singleValue: false } ],
+    'arrow-parens': [ 'error', 'as-needed' ],
+    'comma-dangle': [ 'error', 'always-multiline' ],
+    'comma-spacing': ['error'],
+    'func-style': [ 'warn', 'declaration', { 'allowArrowFunctions': true } ],
+    'import/no-unresolved': ['error'],
+    'import/no-unused-modules': [ 'error', { ignoreExports, missingExports: true, unusedExports: true } ],
+    'indent': [ 'error', 2 ],
+    'linebreak-style': [ 'error', 'unix' ],
+    'no-console': [ 'warn', { allow: [ 'warn', 'error' ] } ],
+    'no-multi-spaces': 'error',
+    'no-trailing-spaces': ['error'],
+    'no-undef': 'error',
+    'no-unused-vars': [ 'warn', { 'args': 'after-used', 'ignoreRestSiblings': false, 'vars': 'all' } ],
+    'object-curly-spacing': [ 'error', 'always' ],
+    'quotes': [ 'error', 'single' ],
+    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/rules-of-hooks': 'error',
+    'react/default-props-match-prop-types': ['error'],
+    'react/destructuring-assignment': [ 'error', 'always' ],
+    'react/forbid-prop-types': ['warn'],
+    'react/function-component-definition': [ 'error', { 'namedComponents': 'arrow-function', 'unnamedComponents': 'function-expression' } ],
+    'react/no-array-index-key': 'warn',
+    'react/no-danger': 'error',
+    'react/no-typos': 'error',
+    'react/no-unused-prop-types': 'warn',
+    'react/require-default-props': ['error'],
+    'react/self-closing-comp': [ 'error', { 'component': true, 'html': true } ],
+    'react/sort-comp': ['error'],
+    'react/sort-prop-types': [ 'error', { 'ignoreCase': true, 'sortShapeProp': 'true' } ],
+    'react/void-dom-elements-no-children': 'error',
+    'semi': [ 'error', 'never' ],
+    'sort-imports': [ 'error', { 'ignoreDeclarationSort': true } ],
+    'sort-keys-fix/sort-keys-fix': 'error',
   },
   settings: {
-    react: {
-      version: 'detect',
-    }
-  }
+    react: { version: 'detect' },
+  },
 }
 
