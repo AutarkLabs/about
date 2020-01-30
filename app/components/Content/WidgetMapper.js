@@ -97,9 +97,9 @@ const Widget = ({ children, type, ...props }) => {
       height: auto;
       justify-content: center;
       overflow: hidden;
-      padding: ${2.25 * GU}px ${3 * GU}px ${3 * GU}px;
+      padding: ${2.25 * GU}px ${3 * GU}px;
       width: auto;
-      margin-bottom: ${3 * GU}px;
+      margin-bottom: ${2 * GU}px;
       &.sortable-ghost {
         background-color: #f9fafc;
         opacity: .8;

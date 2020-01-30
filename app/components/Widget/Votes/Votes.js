@@ -73,6 +73,7 @@ const Vote = styled(Card)`
   display: flex;
   height: 100%;
   width: 100%;
+  max-width: 334px;
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
