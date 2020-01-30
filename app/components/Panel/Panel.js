@@ -5,15 +5,16 @@ import { Button } from '@aragon/ui'
 import ColumnSelect from '../Form/ColumnSelect'
 import WidgetSelect from '../Form/WidgetSelect'
 import MarkdownConfig from '../Widget/Markdown/Markdown'
-import ActivityFeedConfig from '../Widget/ActivityFeed/PanelConfig/ActivityFeedConfig'
+// import ActivityFeedConfig from '../Widget/ActivityFeed/PanelConfig/ActivityFeedConfig'
 import { uuid } from '../../utils/helpers'
 
 // TODO: encode this in types constant along with widgetSelect
 const widgetType = {
   MARKDOWN: 0,
-  ACTIVITY: 1,
-  VOTES: 2,
-  DOT_VOTES: 3
+  VOTES: 1,
+  // ACTIVITY: 1,
+  // VOTES: 2,
+  // DOT_VOTES: 3
 }
 // TODO: Encode as part of constant object with needsConfig key
 
@@ -24,8 +25,8 @@ const WidgetConfig = ({ data, type, setData }) => {
   switch (type) {
   case widgetType.MARKDOWN:
     return <MarkdownConfig data={data} setData={setData}/>
-  case widgetType.ACTIVITY:
-    return <ActivityFeedConfig />
+    // case widgetType.ACTIVITY:
+    // return <ActivityFeedConfig />
 
   case widgetType.VOTES:
   case widgetType.DOT_VOTES:

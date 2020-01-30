@@ -1,7 +1,7 @@
 import buildStubbedApiReact from './utils/api-react'
 import {
   TYPE_MARKDOWN,
-  TYPE_VOTING,
+  TYPE_VOTES,
   VOTING_STATUS_ONGOING,
   VOTING_STATUS_PENDING_ENACTMENT,
 } from './utils/constants'
@@ -36,7 +36,7 @@ const initialState = process.env.NODE_ENV !== 'production' && {
     },
     {
       id: 1,
-      type: TYPE_VOTING,
+      type: TYPE_VOTES,
       data: {
       },
       layout: { primary: false },
@@ -49,7 +49,7 @@ const initialState = process.env.NODE_ENV !== 'production' && {
     },
     {
       id: 3,
-      type: TYPE_VOTING,
+      type: TYPE_VOTES,
       data: {
       },
       layout: { primary: true },

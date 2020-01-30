@@ -16,7 +16,7 @@ import {
 } from '../../../utils/codemirror/codemirror-utils'
 import Editor from './Editor'
 import Preview from './Preview'
-import SourceSelect from './SourceSelect'
+// import SourceSelect from './SourceSelect'
 import ToolBar from './ToolBar'
 
 const CONTENT = {
@@ -27,7 +27,7 @@ const CONTENT = {
 
 const Markdown = ({ data: unsavedText, setData: setUnsavedText }) => {
   const [ editor, setEditor ] = useState()
-  const [ type, setType ] = useState(0)
+  // const [ type, setType ] = useState(0)
   const [ contentArea, setContentArea ] = useState(CONTENT.EDITOR)
   const theme = useTheme()
 
@@ -73,7 +73,7 @@ const Markdown = ({ data: unsavedText, setData: setUnsavedText }) => {
         max-height: 100%;
       `}
     >
-      <SourceSelect value={type} onChange={setType} />
+      {/* <SourceSelect value={type} onChange={setType} /> */}
       <div
         css={`
           > :first-child {

@@ -1,26 +1,17 @@
 import { app } from './utils'
 import { map } from 'rxjs/operators'
 import { addressesEqual } from './lib/web3-utils'
-import { BigNumber } from 'bignumber.js'
-import {
-  VOTING_STATUS_ACCEPTED,
-  VOTING_STATUS_ENACTED,
-  VOTING_STATUS_ONGOING,
-  VOTING_STATUS_PENDING_ENACTMENT,
-  VOTING_STATUS_REJECTED,
-} from '../utils/constants'
 
 /// ////////////////////////////////////
 /*    Votes event handlers            */
 /// ////////////////////////////////////
 
 export const handlesVotes = eventData => {
-  const { event: { address }, settings: { voting }, state: { widgets } } = eventData
+  const { event: { address }, settings: { voting } } = eventData
 
   const hasVotingApp = Boolean(voting.address)
-  const usesVotingWidget = Boolean(widgets.find(w => w.type === 'VOTES'))
   const isVotingEvent = addressesEqual(address, voting.address )  
-  return hasVotingApp && usesVotingWidget && isVotingEvent
+  return hasVotingApp && isVotingEvent
 }
 
 export const handleVoteEvent = async eventData => {
@@ -58,36 +49,10 @@ export const updateVotes = async (votes, { metadata, voteId: id }, voting) => {
 /*    Votes helper functions          */
 /// ////////////////////////////////////
 
-const hasAction = async vote => {
-  const script = await app.describeScript(vote.script).toPromise()
-  return script.length > 0
+const hasAction = async script => {
+  const result = await app.describeScript(script).toPromise()
+  return result.length > 0
 }
-
-const isSuccessful = vote => {
-  const yea = new BigNumber(vote.yea)
-  const nay = new BigNumber(vote.nay)
-  const votingPower = new BigNumber(vote.votingPower)
-  const supportRequired = new BigNumber(vote.supportRequired)
-  const minAcceptQuorum = new BigNumber(vote.minAcceptQuorum)
-  const totalVotes = yea.plus(nay)
-  return (
-    yea.div(votingPower).gt(supportRequired.div(votingPower)) ||
-      (yea.div(totalVotes).gt(supportRequired.div(totalVotes)) &&
-       yea.div(votingPower).gt(minAcceptQuorum.div(votingPower)))
-  )
-}
-
-const getStatus = async vote => (
-  vote.open ?
-    VOTING_STATUS_ONGOING :
-    isSuccessful(vote) ?
-      await hasAction(vote) ?
-        vote.executed ?
-          VOTING_STATUS_ENACTED :
-          VOTING_STATUS_PENDING_ENACTMENT :
-        VOTING_STATUS_ACCEPTED:
-      VOTING_STATUS_REJECTED
-)
 
 const getVote = (id, { metadata, voting }) => {
   return voting.contract.getVote(id)
@@ -108,28 +73,24 @@ const getVote = (id, { metadata, voting }) => {
           description = metadata,
           to = voting.address
         } = (await app.describeScript(script).toPromise())[0] || {}
+        const voteTime = await voting.contract.voteTime().toPromise()
+        const endDate = parseInt(startDate) + parseInt(voteTime)
         return {
           // transform response data for the frontend
           description, 
           executed,
           id, // note the id is added along with the other data,
-          nay: nay,
+          nay,
           open,
           snapshotBlock,
           startDate,
           supportRequired,
+          minAcceptQuorum,
+          votingPower,
           appAddress: to,
-          yea: yea,
-          status: await getStatus({
-            open,
-            executed,
-            yea,
-            nay,
-            votingPower,
-            supportRequired,
-            minAcceptQuorum,
-            script,
-          }),
+          yea,
+          endDate,
+          hasAction: await hasAction(script)
         }})
     )
     .toPromise()
