@@ -66,10 +66,8 @@ const Layout = ({ widgets }) => {
   const [ secondaryWidgets, setSecondaryWidgets ] = useState(originalSecondaryWidgets)
 
   useEffect(() => {
-    if (!editMode) {
-      setPrimaryWidgets(originalPrimaryWidgets)
-      setSecondaryWidgets(originalSecondaryWidgets)
-    }
+    setPrimaryWidgets(originalPrimaryWidgets)
+    setSecondaryWidgets(originalSecondaryWidgets)
   }, [editMode])
 
   const setPrimary = p => {

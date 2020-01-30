@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { BigNumber } from 'bignumber.js'
@@ -18,13 +18,17 @@ import {
   VOTING_STATUS_ONGOING,
   VOTING_STATUS_REJECTED,
 } from '../../../utils/constants'
+import { getStatus } from '../../../utils/helpers'
 import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
 import { useIdentity } from '../../../utils/identity-manager'
 
 const Votes = () => {
   const { appState: { votes = [] } } = useAragonApi()
 
-  const mappedVotes = useMemo(() => votes.map(vote => (
+  const reversedVotes = [...votes]
+  reversedVotes.reverse()
+
+  const mappedVotes = useMemo(() => reversedVotes.slice(0, 4).map(vote => (
     <Vote key={vote.id}>
       <div css={`
         display: flex;
@@ -32,7 +36,7 @@ const Votes = () => {
         margin-bottom: ${2 * GU}px;
         `}>
         <AppBadge address={vote.appAddress} />
-        <Status status={vote.status} />
+        <Status vote={vote} />
       </div>
       <div css={`
         display: flex;
@@ -47,7 +51,7 @@ const Votes = () => {
         <Result yea={vote.yea} nay={vote.nay} />
       </div>
     </Vote>
-  )), votes)
+  )), [reversedVotes])
   
   return (
     <div css={`
@@ -87,7 +91,17 @@ AppBadge.propTypes = {
   address: PropTypes.string.isRequired,
 }
 
-const Status = ({ status }) => {
+const Status = ({ vote }) => {
+  const [ status, setStatus ] = useState(getStatus(vote))
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const status = getStatus(vote)
+      setStatus(status)
+    }, 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  })
   const theme = useTheme()
   let Icon
   let color
@@ -118,7 +132,7 @@ const StatusText = styled.div`
 `
 
 Status.propTypes = {
-  status: PropTypes.string.isRequired,
+  vote: PropTypes.object.isRequired,
 }
 
 const Id = ({ id }) => (

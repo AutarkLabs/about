@@ -8,7 +8,8 @@ const WidgetSelect = ({ onChange, value }) => (
   >
     <DropDown
       // TODO: encode this in types constant
-      items={[ 'Markdown', 'Activity feed', 'Latest votes', 'Latest dot votes' ]}
+      // items={[ 'Markdown', 'Activity feed', 'Latest votes', 'Latest dot votes' ]}
+      items={[ 'Markdown', 'Latest votes' ]}
       selected={value}
       onChange={onChange}
       placeholder="Select widget"
