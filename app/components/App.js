@@ -89,7 +89,9 @@ const App = ({ api, widgets, isSyncing }) => {
 }
 
 App.propTypes = {
-  api: PropTypes.func.isRequired,
+  api: PropTypes.shape({
+    updateContent: PropTypes.func,
+  }),
   // appStateReady: PropTypes.bool,
   isSyncing: PropTypes.bool,
   widgets: PropTypes.arrayOf(types.widget),
@@ -98,13 +100,14 @@ App.propTypes = {
 App.defaultProps = {
   // TODO: implement appStateReady
   // appStateReady: false,
+  api: {},
   isSyncing: true,
   widgets: [],
 }
 
 // Passing api-react by props allows to type-check with propTypes
 const AboutApp = () => {
-  const { api = {}, appState, guiStyle = {} } = useAragonApi()
+  const { api, appState, guiStyle = {} } = useAragonApi()
   const { appearance } = guiStyle
 
   return (

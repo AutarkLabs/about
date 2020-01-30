@@ -22,7 +22,6 @@ export default ({ initialState = {}, functions = (() => {}) }) => {
     if (!inIframe()) {
       useAragonApi = require('./useStubbedApi')({ functions, initialState })
       useNetwork = require('./useStubbedNetwork')
-
     }
   }
 
