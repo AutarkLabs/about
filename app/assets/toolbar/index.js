@@ -10,18 +10,19 @@ import quote from './quote.svg'
 import size from './size.svg'
 
 // TODO: Convert to one simple component that accepts different icons
-const iconPropTypes = { height: PropTypes.string, width: PropTypes.string, }
+const iconPropTypes = { height: PropTypes.string, width: PropTypes.string }
+const iconDefaultProps = { height: 'auto', width: 'auto' }
 
-export const Bold = ({ height = 'auto', width = 'auto' }) => (
+export const Bold = ({ height, width }) => (
   <img src={bold} alt="Bold" title="Bold" height={height} width={width} />
 )
-export const Code = ({ height = 'auto', width = 'auto' }) => (
+export const Code = ({ height, width }) => (
   <img src={code} alt="Code" title="Code" height={height} width={width} />
 )
-export const Italic = ({ height = 'auto', width = 'auto' }) => (
+export const Italic = ({ height, width }) => (
   <img src={italic} alt="Italic" title="Italic" height={height} width={width} />
 )
-export const Link = ({ height = 'auto', width = 'auto' }) => (
+export const Link = ({ height, width }) => (
   <img
     src={link}
     alt="Insert link"
@@ -30,7 +31,7 @@ export const Link = ({ height = 'auto', width = 'auto' }) => (
     width={width}
   />
 )
-export const List = ({ height = 'auto', width = 'auto' }) => (
+export const List = ({ height, width }) => (
   <img
     src={list}
     alt="Unordered list"
@@ -39,10 +40,10 @@ export const List = ({ height = 'auto', width = 'auto' }) => (
     width={width}
   />
 )
-export const Quote = ({ height = 'auto', width = 'auto' }) => (
+export const Quote = ({ height, width }) => (
   <img src={quote} alt="Quote" title="Quote" height={height} width={width} />
 )
-export const TextSize = ({ height = 'auto', width = 'auto' }) => (
+export const TextSize = ({ height, width }) => (
   <img
     src={size}
     alt="Cycle headers"
@@ -59,3 +60,11 @@ Link.propTypes = iconPropTypes
 List.propTypes = iconPropTypes
 Quote.propTypes = iconPropTypes
 TextSize.propTypes = iconPropTypes
+
+Bold.defaultProps = iconDefaultProps
+Code.defaultProps = iconDefaultProps
+Italic.defaultProps = iconDefaultProps
+Link.defaultProps = iconDefaultProps
+List.defaultProps = iconDefaultProps
+Quote.defaultProps = iconDefaultProps
+TextSize.defaultProps = iconDefaultProps

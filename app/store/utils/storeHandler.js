@@ -2,7 +2,7 @@ import { app } from '.'
 
 const reducer = (settings, eventHandler) => async (prevState, event) => {
   const state = { ...prevState }
-  const eventData = { state, event, settings }
+  const eventData = { event, settings, state }
 
   // handle any received event and generate the new state
   return await eventHandler(eventData)

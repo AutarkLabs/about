@@ -44,13 +44,6 @@ function cmResize(cm, config) {
   dragTracker({
     // Might be a different parent container if we were given a custom handler element..
     //  container: cmElement,
-    container: cmHandle.offsetParent,
-    selector: cmHandle,
-
-    callbackDragStart: (handle, pos) => {
-      startPos = pos
-      startSize = [ cmElement.clientWidth, cmElement.clientHeight ]
-    },
     callback: (handle, pos) => {
       const diffX = pos[0] - startPos[0]
       const diffY = pos[1] - startPos[1]
@@ -61,6 +54,13 @@ function cmResize(cm, config) {
       // Handled by CM's 'update' event above..
       //  constrainScrollbars();
     },
+    callbackDragStart: (handle, pos) => {
+      startPos = pos
+      startSize = [ cmElement.clientWidth, cmElement.clientHeight ]
+    },
+
+    container: cmHandle.offsetParent,
+    selector: cmHandle,
   })
 
   return cmHandle

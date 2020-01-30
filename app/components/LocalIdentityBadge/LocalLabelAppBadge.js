@@ -1,11 +1,11 @@
 import React from 'react'
-import { useNetwork } from '@aragon/api-react'
+import { useInstalledApps, useNetwork } from '@aragon/api-react'
 import { AppBadge } from '@aragon/ui'
 import PropTypes from 'prop-types'
 import { useIdentity } from '../../utils/identity-manager'
 import LocalLabelPopoverTitle from './LocalLabelPopoverTitle'
 import LocalLabelPopoverActionLabel from './LocalLabelPopoverActionLabel'
-import { useInstalledApps } from '@aragon/api-react'
+
 
 const LocalLabelAppBadge = ({ appAddress, label, ...props }) => {
   const network = useNetwork()
@@ -31,6 +31,10 @@ const LocalLabelAppBadge = ({ appAddress, label, ...props }) => {
       {...props}
     />
   )
+}
+
+LocalLabelAppBadge.defaultProps = {
+  label: null,
 }
 
 LocalLabelAppBadge.propTypes = {

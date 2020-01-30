@@ -24,7 +24,7 @@ const getWidgetType = widget => Object.keys(widgetType)[widget]
 const WidgetConfig = ({ data, type, setData }) => {
   switch (type) {
   case widgetType.MARKDOWN:
-    return <MarkdownConfig data={data} setData={setData}/>
+    return <MarkdownConfig data={data} setData={setData} />
     // case widgetType.ACTIVITY:
     // return <ActivityFeedConfig />
 
@@ -36,23 +36,23 @@ const WidgetConfig = ({ data, type, setData }) => {
 }
 
 WidgetConfig.propTypes ={
-  data: PropTypes.string,
-  type: PropTypes.oneOf(Object.values(widgetType)),
-  setData: PropTypes.func
+  data: PropTypes.string.isRequired,
+  setData: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(Object.values(widgetType)).isRequired,
 }
 
 const Panel = ({ onSubmit }) => {
   const [ column, setColumn ] = useState(0)
-  const [ configData, setConfigData  ] = useState()
+  const [ configData, setConfigData ] = useState()
   const [ widget, setWidget ] = useState()
 
   const handleClick = useCallback(async () => {
     const widgetObject = {
       id: uuid(),
       layout: {
-        primary: !column // Will be true when the ColumnSelect value is Primary
+        primary: !column, // Will be true when the ColumnSelect value is Primary
       },
-      type: getWidgetType(widget)
+      type: getWidgetType(widget),
     }
     if (configData) widgetObject.data = configData
 
@@ -60,25 +60,25 @@ const Panel = ({ onSubmit }) => {
     // TODO: graceful loading indicator
 
     onSubmit(widgetObject)
-  }, [ column, configData, widget ])
+  }, [ column, configData, onSubmit, widget ])
 
   const needsConfig = getWidgetType(widget) !== 'VOTES' && getWidgetType(widget) !== 'DOT_VOTES'
   const submitDisabled = widget === undefined || (needsConfig && configData === undefined)
-  
+
   //  TODO: handle when selecting another widget once configData is set (we should reset on widget change)
 
   return (
     <>
-        <ColumnSelect value={column} onChange={setColumn} />
-        <WidgetSelect value={widget} onChange={setWidget} />
-        <WidgetConfig type={widget} data={configData} setData={setConfigData}/>
-        <Button disabled={submitDisabled} label="Submit" mode="strong" onClick={handleClick} wide />
+      <ColumnSelect value={column} onChange={setColumn} />
+      <WidgetSelect value={widget} onChange={setWidget} />
+      <WidgetConfig type={widget} data={configData} setData={setConfigData} />
+      <Button disabled={submitDisabled} label="Submit" mode="strong" onClick={handleClick} wide />
     </>
   )
 }
 
 Panel.propTypes ={
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 }
 
 export default Panel

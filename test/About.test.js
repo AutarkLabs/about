@@ -35,13 +35,13 @@ contract('About', accounts => {
 
     // TODO: Add Voting and DotVoting, etc to test widgets
     // votingBase = await getContract('Voting').new()
-    
+
     // Setup ACL roles constants
     // TODO: take roles hashes from constants file
     // TODO: test roles pre-generated with keccak256
     APP_MANAGER_ROLE = await kernelBase.APP_MANAGER_ROLE()
     UPDATE_CONTENT = await appBase.UPDATE_CONTENT()
-        
+
     /** Create the dao from the dao factory */
     const daoReceipt = await daoFact.newDAO(root)
     const dao = getContract('Kernel').at(

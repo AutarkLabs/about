@@ -1,5 +1,6 @@
 import {
   AragonApi,
+  useGuiStyle,
   usePath,
   useAragonApi as useProductionApi,
   useNetwork as useProductionNetwork,
@@ -19,10 +20,11 @@ export default ({ initialState = {}, functions = (() => {}) }) => {
     }
 
     if (!inIframe()) {
-      useAragonApi = require('./useStubbedApi')({ initialState, functions })
+      useAragonApi = require('./useStubbedApi')({ functions, initialState })
       useNetwork = require('./useStubbedNetwork')
+
     }
   }
 
-  return { AragonApi, useAragonApi, useNetwork, usePath }
+  return { AragonApi, useAragonApi, useGuiStyle, useNetwork, usePath }
 }

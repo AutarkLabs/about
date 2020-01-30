@@ -21,8 +21,8 @@ import ToolBar from './ToolBar'
 
 const CONTENT = {
   EDITOR: 0,
-  PREVIEW: 1,
   INPUT: 2,
+  PREVIEW: 1,
 }
 
 const Markdown = ({ data: unsavedText, setData: setUnsavedText }) => {
@@ -118,8 +118,8 @@ const Markdown = ({ data: unsavedText, setData: setUnsavedText }) => {
 }
 
 Markdown.propTypes = {
-  data: PropTypes.string,
-  setData: PropTypes.func.isRequired
+  data: PropTypes.string.isRequired,
+  setData: PropTypes.func.isRequired,
 }
 
 export default Markdown

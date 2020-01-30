@@ -19,7 +19,9 @@ const SourceSelect = ({ onChange, value }) => (
 
 SourceSelect.propTypes ={
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.number
+  value: PropTypes.number.isRequired,
 }
 
+// TODO: use
+// eslint-disable-next-line import/no-unused-modules
 export default SourceSelect

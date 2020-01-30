@@ -83,7 +83,11 @@ const EmptyState = React.memo(({ isSyncing, onActionClick }) => {
 
 EmptyState.propTypes = {
   isSyncing: PropTypes.bool,
-  onActionClick: PropTypes.func.isRequired
+  onActionClick: PropTypes.func.isRequired,
+}
+
+EmptyState.defaultProps = {
+  isSyncing: true,
 }
 
 EmptyState.displayName = 'EmptyState'

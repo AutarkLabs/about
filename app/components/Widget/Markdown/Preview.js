@@ -12,7 +12,7 @@ const Link = ({ children, ...props }) => (
 )
 
 Link.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node.isRequired,
 }
 
 const ListItem = ({ checked, children, ...props }) => {
@@ -30,8 +30,8 @@ const ListItem = ({ checked, children, ...props }) => {
 }
 
 ListItem.propTypes = {
-  checked: PropTypes.bool,
-  children: PropTypes.node
+  checked: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
 }
 
 // TODO: Markdown preview not working

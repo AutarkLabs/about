@@ -10,7 +10,7 @@ export function useEditMode() {
   return context
 }
 
-export function EditProvider(props) {
+export var EditProvider = props => {
   const [ editMode, setEditMode ] = useState(false)
   const [ editedWidgets, setEditedWidgets ] = useState()
 

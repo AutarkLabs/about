@@ -72,5 +72,5 @@ export const IdentityProvider = ({ children }) => {
 }
 
 IdentityProvider.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 }

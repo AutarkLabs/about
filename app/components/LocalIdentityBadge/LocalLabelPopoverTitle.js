@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { GU, Tag } from '@aragon/ui'
 
-function LocalLabelPopoverTitle({ label }) {
+var LocalLabelPopoverTitle = ({ label }) => {
   return (
     <div
       css={`

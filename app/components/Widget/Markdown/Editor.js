@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useState } from 'react'
-import { GU, RADIUS, textStyle,useSidePanel, useTheme, } from '@aragon/ui'
+import { GU, RADIUS, textStyle, useSidePanel, useTheme } from '@aragon/ui'
 
 import CodeMirror from 'codemirror/lib/codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -10,15 +10,15 @@ import 'codemirror/addon/scroll/simplescrollbars.css'
 import cmResize from '../../../utils/codemirror/cm-resize'
 
 const editorOptions = {
-  mode: 'gfm',
   lineWrapping: true,
+  mode: 'gfm',
   scrollbarStyle: 'overlay', // depends on simplescrollbars codemirror addon
 }
 
 
 // TODO: Dark mode needs fixing here
 const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
-  const [ ,setValue ] = useState(initialValue)
+  const [ , setValue ] = useState(initialValue)
 
   const ref = useRef()
 
@@ -55,7 +55,7 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
 
       editor.toTextArea()
     }
-  }, [ref])
+  }, [ editor, onChange, ref, setEditor ])
 
   useEffect(() => {
     setValue(initialValue)
@@ -123,8 +123,8 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
 }
 
 Editor.propTypes = {
-  editor: PropTypes.object,
-  initialValue:PropTypes.string,
+  editor: PropTypes.func.isRequired,
+  initialValue:PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   setEditor: PropTypes.func.isRequired,
 }

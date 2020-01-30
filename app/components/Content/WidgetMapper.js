@@ -17,42 +17,42 @@ const LABELS = {
 const HeaderArrows = () => {
   return (
     <>
-    <Button
-      css={`
+      <Button
+        css={`
       margin-right: ${GU}px;
     `}
-      disabled
-      display="icon"
-      icon={<IconArrowLeft />}
-      label="Move to primary column"
-      onClick={() => {}}
-    />
-  <Button
-    css={`
+        disabled
+        display="icon"
+        icon={<IconArrowLeft />}
+        label="Move to primary column"
+        onClick={() => {}}
+      />
+      <Button
+        css={`
       margin-right: ${GU}px;
     `}
-    disabled
-    display="icon"
-    icon={<IconArrowUp />}
-    label="Move up"
-    onClick={() => {}}
-  />
-  <Button
-    css={`
+        disabled
+        display="icon"
+        icon={<IconArrowUp />}
+        label="Move up"
+        onClick={() => {}}
+      />
+      <Button
+        css={`
       margin-right: ${GU}px;
     `}
-    display="icon"
-    icon={<IconArrowDown />}
-    label="Move down"
-    onClick={() => {}}
-  />
-  <Button
-    display="icon"
-    icon={<IconArrowRight />}
-    label="Move to secondary column"
-    onClick={() => {}}
-  />
-  </>
+        display="icon"
+        icon={<IconArrowDown />}
+        label="Move down"
+        onClick={() => {}}
+      />
+      <Button
+        display="icon"
+        icon={<IconArrowRight />}
+        label="Move to secondary column"
+        onClick={() => {}}
+      />
+    </>
   )
 }
 
@@ -107,19 +107,19 @@ const Widget = ({ children, type, ...props }) => {
       cursor: ${ editMode ? 'grab' : 'normal' };
   `}>
       {(type !== 'MARKDOWN' || editMode) && <WidgetHeader type={type} />}
-      {children && React.cloneElement(children, props)}
+      {React.cloneElement(children, props)}
     </Card>
   )
 }
 
 Widget.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   layout: PropTypes.exact({
     primary: PropTypes.bool,
     wide: PropTypes.bool,
-  }),
+  }).isRequired,
   // TODO: adjust to exact types
-  type: PropTypes.string,
+  type: PropTypes.string.isRequired,
 }
 
 const WidgetContent = ({ data, type }) => {
@@ -132,9 +132,13 @@ const WidgetContent = ({ data, type }) => {
 }
 
 WidgetContent.propTypes = {
-  data: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ]),
+  data: PropTypes.string,
   // TODO: adjust to exact types
-  type: PropTypes.string,
+  type: PropTypes.string.isRequired,
+}
+
+WidgetContent.defaultProps = {
+  data: '',
 }
 
 const WidgetMapper = ({ data, id, layout, type }) => {
@@ -148,14 +152,18 @@ const WidgetMapper = ({ data, id, layout, type }) => {
   )
 }
 
+WidgetMapper.defaultProps = {
+  data: '',
+}
+
 WidgetMapper.propTypes = {
+  data: PropTypes.string,
   id: PropTypes.number.isRequired,
-  data: PropTypes.object.isRequired,
   layout: PropTypes.exact({
     primary: PropTypes.bool,
     wide: PropTypes.bool,
   }).isRequired,
-  type: PropTypes.oneOf(Object.keys(LABELS)).isRequired
+  type: PropTypes.oneOf(Object.keys(LABELS)).isRequired,
 }
 
 export default WidgetMapper

@@ -10,13 +10,13 @@ export async function wrapTextWith(cm, symbol) {
 
     // Check if string is surrounded by the symbol
     let preEndPos = {
-      line: to.line,
       ch: to.ch + symbol.length,
+      line: to.line,
     }
     let preText = cm.getRange(to, preEndPos)
     let postEndPos = {
-      line: from.line,
       ch: from.ch - symbol.length,
+      line: from.line,
     }
     let postText = cm.getRange(postEndPos, from)
 
@@ -29,13 +29,13 @@ export async function wrapTextWith(cm, symbol) {
 
       // Keep selection like it was before the change
       let postEndPos = {
-        line: from.line,
         ch: from.ch + symbol.length,
+        line: from.line,
       }
 
       let preEndPos = {
-        line: to.line,
         ch: to.ch + symbol.length,
+        line: to.line,
       }
       cm.setSelection(postEndPos, preEndPos)
     }
@@ -53,13 +53,13 @@ export async function insertLink(cm, isImage) {
 
     // Check if string is surrounded by the symbol
     let preEndPos = {
-      line: to.line,
       ch: to.ch + linkEnd.length,
+      line: to.line,
     }
     let preText = cm.getRange(to, preEndPos)
     let postEndPos = {
-      line: from.line,
       ch: from.ch - symbol.length,
+      line: from.line,
     }
     let postText = cm.getRange(postEndPos, from)
 
@@ -72,13 +72,13 @@ export async function insertLink(cm, isImage) {
 
       // Keep selection like it was before the change
       let postEndPos = {
-        line: from.line,
         ch: from.ch + symbol.length,
+        line: from.line,
       }
 
       let preEndPos = {
-        line: to.line,
         ch: to.ch + symbol.length,
+        line: to.line,
       }
       cm.setSelection(postEndPos, preEndPos)
     }
@@ -87,13 +87,13 @@ export async function insertLink(cm, isImage) {
 
 export function insertHeader(cm) {
   let cursor = cm.getCursor()
-  let startOfLine = { line: cursor.line, ch: 0 }
-  let startOfLineText = cm.getRange(startOfLine, { line: cursor.line, ch: 1 })
+  let startOfLine = { ch: 0, line: cursor.line }
+  let startOfLineText = cm.getRange(startOfLine, { ch: 1, line: cursor.line })
   // See if it is already a header
   if (startOfLineText === '#') {
     let maxHeaderCursor = {
-      line: cursor.line,
       ch: maxHeader.length,
+      line: cursor.line,
     }
     let startOfLineTextMax = cm.getRange(startOfLine, maxHeaderCursor)
     // See if reached the last possible header number
@@ -112,12 +112,12 @@ export function insertOnStartOfLines(cm, symbol) {
   let cursor = cm.getCursor()
   // Create cursor position to check if symbol is already at the beginning of the line
   let prePos = {
-    line: cursor.line,
     ch: 0,
+    line: cursor.line,
   }
   let postPos = {
-    line: cursor.line,
     ch: symbol.length,
+    line: cursor.line,
   }
   // Get first characters of the line
   let postText = cm.getRange(prePos, postPos)
@@ -126,8 +126,8 @@ export function insertOnStartOfLines(cm, symbol) {
   } else {
     cm.doc.replaceRange(
       symbol,
-      { line: cursor.line, ch: 0 },
-      { line: cursor.line, ch: 0 }
+      { ch: 0, line: cursor.line },
+      { ch: 0, line: cursor.line }
     )
   }
 }

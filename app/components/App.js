@@ -15,7 +15,7 @@ import { ipfs } from '../utils/ipfs'
 import { IdentityProvider } from '../utils/identity-manager'
 
 const App = ({ api, widgets, isSyncing }) => {
-  const { editMode, setEditMode, editedWidgets, } = useEditMode()
+  const { editMode, setEditMode, editedWidgets } = useEditMode()
   const [ panelVisible, setPanelVisible ] = useState(false)
 
   const handleEditLayout = () => {
@@ -33,7 +33,7 @@ const App = ({ api, widgets, isSyncing }) => {
       await ipfs.dag.put(nextWidgets, { pin: true })
     ).toBaseEncodedString()
     api.updateContent(cId).toPromise()
-  }, [widgets])
+  }, [ api, widgets ])
 
   const handleEditModeCancel = () => {
     setEditMode(false)
@@ -45,7 +45,7 @@ const App = ({ api, widgets, isSyncing }) => {
     ).toBaseEncodedString()
     api.updateContent(cId).toPromise()
     setEditMode(false)
-  }, [editedWidgets])
+  }, [ api, editedWidgets, setEditMode ])
 
   return (
     <>
@@ -67,14 +67,14 @@ const App = ({ api, widgets, isSyncing }) => {
           <Header
             primary="About"
             secondary={editMode
-              ? <EditModeButtons onCancel={handleEditModeCancel} onSubmit={handleEditModeSubmit}/>
+              ? <EditModeButtons onCancel={handleEditModeCancel} onSubmit={handleEditModeSubmit} />
               : <ActionsButton
                 onClickEditLayout={handleEditLayout}
                 onClickNewWidget={handleNewWidget}
               />
             }
           />
-          <Layout widgets={widgets}/>
+          <Layout widgets={widgets} />
         </>
       )}
       <SidePanel
@@ -82,28 +82,29 @@ const App = ({ api, widgets, isSyncing }) => {
         onClose={() => setPanelVisible(false)}
         title={'New widget'}
       >
-        <Panel onSubmit={handlePanelSubmit}/>
+        <Panel onSubmit={handlePanelSubmit} />
       </SidePanel>
     </>
   )
 }
 
 App.propTypes = {
-  api: PropTypes.object,
-  widgets: PropTypes.arrayOf(types.widget),
+  api: PropTypes.func.isRequired,
+  // appStateReady: PropTypes.bool,
   isSyncing: PropTypes.bool,
+  widgets: PropTypes.arrayOf(types.widget),
 }
 
 App.defaultProps = {
   // TODO: implement appStateReady
-  appStateReady: false,
+  // appStateReady: false,
   isSyncing: true,
-  widgets: []
+  widgets: [],
 }
 
 // Passing api-react by props allows to type-check with propTypes
 const AboutApp = () => {
-  const { api, appState, guiStyle = {} } = useAragonApi()
+  const { api = {}, appState, guiStyle = {} } = useAragonApi()
   const { appearance } = guiStyle
 
   return (

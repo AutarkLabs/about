@@ -18,7 +18,7 @@ const ColumnSelect = ({ onChange, value }) => (
 
 ColumnSelect.propTypes ={
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.number
+  value: PropTypes.number.isRequired,
 }
 
 export default ColumnSelect

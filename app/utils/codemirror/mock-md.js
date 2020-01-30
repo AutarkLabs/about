@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unused-modules
 export const mocked = {
   content: `# GitHub Flavored Markdown
 
@@ -50,5 +51,5 @@ export const mocked = {
   (Set \`emoji: false\` in mode options to disable):
   
   - emoji: :smile:
-  `
+  `,
 }

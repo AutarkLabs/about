@@ -57,6 +57,10 @@ EmptyMessage.propTypes = {
   primary: PropTypes.bool,
 }
 
+EmptyMessage.defaultProps = {
+  primary: false,
+}
+
 const Layout = ({ widgets }) => {
   //  TODO: A layout preview should come from store (when parsed in vote radspec)
   const { editMode, setEditedWidgets } = useEditMode()
@@ -68,7 +72,7 @@ const Layout = ({ widgets }) => {
   useEffect(() => {
     setPrimaryWidgets(originalPrimaryWidgets)
     setSecondaryWidgets(originalSecondaryWidgets)
-  }, [editMode])
+  }, [ editMode, originalPrimaryWidgets, originalSecondaryWidgets ])
 
   const setPrimary = p => {
     const nextWidgets = p.map((e, i) => ({ ...e, index: i, layout: { primary: true } }))
@@ -82,8 +86,8 @@ const Layout = ({ widgets }) => {
 
   useEffect(()=> {
     setEditedWidgets([...new Set([ ...primaryWidgets, ...secondaryWidgets ])])
-  }, [ primaryWidgets, secondaryWidgets ])
-  
+  }, [ primaryWidgets, secondaryWidgets, setEditedWidgets ])
+
 
   if (!editMode) {
     return (
@@ -119,13 +123,13 @@ const Layout = ({ widgets }) => {
           display: grid;
           grid-template-rows: 1fr;
         `}>
-        {primaryWidgets.length === 0 && 
+        {primaryWidgets.length === 0 &&
           <div css={`
             display: flex;
             grid-column: 1/1;
             grid-row: 1/1;
           `}>
-            <EmptyMessage primary/>
+            <EmptyMessage primary />
           </div>}
         <ReactSortable
           css={`
@@ -134,7 +138,7 @@ const Layout = ({ widgets }) => {
           `}
           group="widgets"
           list={primaryWidgets}
-          primary={true}
+          primary
           setList={setPrimary}
         >
           {primaryWidgets.map(WidgetMapper)}
@@ -170,7 +174,7 @@ const Layout = ({ widgets }) => {
 }
 
 Layout.propTypes = {
-  widgets: PropTypes.arrayOf(types.widget),
+  widgets: PropTypes.arrayOf(types.widget).isRequired,
 }
 
 export default Layout

@@ -6,5 +6,5 @@ export const widget = PropTypes.shape({
   // TODO: Embed md data into object
   data: PropTypes.oneOfType([ PropTypes.object, PropTypes.string ]), // TODO: for now is not required.isRequired,
   layout: PropTypes.object.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 })

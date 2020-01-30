@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unused-modules
 import { useCallback, useEffect, useState } from 'react'
 import { Observable } from 'rxjs'
 import createDatabase from './database'
@@ -40,7 +41,7 @@ const buildHook = ({ initialState, functions }) => {
       return () => {
         db.unsubscribe(onDatabaseUpdate)
       }
-    }, [])
+    }, [onDatabaseUpdate])
 
     const apiOverride = {
       cache: (key, value) => {

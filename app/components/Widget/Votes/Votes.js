@@ -42,7 +42,7 @@ const Votes = () => {
         display: flex;
         margin-bottom: ${GU}px;
       `}>
-        <Id id={vote.id}/>
+        <Id id={vote.id} />
         <Description text={vote.description} />
       </div>
       <div css={`
@@ -52,7 +52,7 @@ const Votes = () => {
       </div>
     </Vote>
   )), [reversedVotes])
-  
+
   return (
     <div css={`
       display: flex;
@@ -132,7 +132,9 @@ const StatusText = styled.div`
 `
 
 Status.propTypes = {
-  vote: PropTypes.object.isRequired,
+  vote: PropTypes.shape({
+    // TODO: shape
+  }).isRequired,
 }
 
 const Id = ({ id }) => (
@@ -151,8 +153,11 @@ const IdContainer = styled.span`
 `
 
 const Description = ({ text }) => {
-  if (!text) return <span/>
+  // by the rules of hooks, they cannot be called conditionally
   const network = useNetwork()
+  const [localLabel] = useIdentity(address)
+
+  if (!text) return <span />
   const addressRegex = /0x[a-fA-F0-9]{40}/g
   const startIndex = text.search(addressRegex)
   if (startIndex === -1) {
@@ -166,7 +171,6 @@ const Description = ({ text }) => {
   const beforeAddress = text.substring(0, startIndex)
   const address = text.substring(startIndex, endIndex)
   const afterAddress = text.substring(endIndex)
-  const [localLabel] = useIdentity(address)
   return (
     <div css={`
       ${textStyle('body2')};
@@ -222,8 +226,8 @@ const Result = ({ yea, nay }) => {
 }
 
 Result.propTypes = {
-  yea: PropTypes.string.isRequired,
   nay: PropTypes.string.isRequired,
+  yea: PropTypes.string.isRequired,
 }
 
 const ResultContainer = styled.div`
@@ -251,7 +255,7 @@ const Bar = ({ value }) => {
 }
 
 Bar.propTypes = {
-  value: PropTypes.instanceOf(BigNumber)
+  value: PropTypes.instanceOf(BigNumber).isRequired,
 }
 
 export default Votes
