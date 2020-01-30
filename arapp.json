@@ -10,7 +10,7 @@
     "default": {
       "registry": "0x5f6f7e8cc7346a11ca2def8f827b7a0b612c56a1",
       "network": "rpc",
-      "appName": "about.hatch.open.aragonpm.eth"
+      "appName": "about.hatch.aragonpm.eth"
     },
     "staging": {
       "registry": "0x98df287b6c145399aaa709692c8d308357bc085d",

@@ -132,7 +132,7 @@ contract Template is BaseTemplate, TokenCache {
     )
         internal returns (About)
     {
-        bytes32 _appId = keccak256(abi.encodePacked(apmNamehash("open"), keccak256("about")));
+        bytes32 _appId = keccak256(abi.encodePacked(apmNamehash("hatch"), keccak256("about")));
         bytes memory initializeData = abi.encodeWithSelector(About(0).initialize.selector);
         return About(_installDefaultApp(_dao, _appId, initializeData));
     }
