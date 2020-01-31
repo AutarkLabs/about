@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { BigNumber } from 'bignumber.js'
@@ -19,8 +19,8 @@ import {
   VOTING_STATUS_REJECTED,
 } from '../../../utils/constants'
 import { getStatus } from '../../../utils/helpers'
-import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
 import { useIdentity } from '../../../utils/identity-manager'
+import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
 
 const Votes = () => {
   const { appState: { votes = [] } } = useAragonApi()
@@ -55,9 +55,9 @@ const Votes = () => {
 
   return (
     <div css={`
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-gap: ${2 * GU}px;
+      grid-template-columns: repeat(auto-fill, minmax(${29 * GU}px, 1fr));
     `}>
       {mappedVotes}
     </div>
@@ -65,14 +65,15 @@ const Votes = () => {
 }
 
 const Vote = styled(Card)`
-  :not(:last-child) {
+  /* :not(:last-child) {
     margin-bottom: ${2 * GU}px;
-  }
+  } */
 
   padding: ${2 * GU}px;
   display: flex;
   height: 100%;
   width: 100%;
+  /* max-width: ${41.75 * GU}px; */
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
@@ -152,42 +153,48 @@ const IdContainer = styled.span`
   font-weight: bold;
 `
 
-const Description = ({ text }) => {
-  // by the rules of hooks, they cannot be called conditionally
-  const network = useNetwork()
-  // TODO:: check initialization error,  put some wait or check
-  const [localLabel] = 'Pepito' // useIdentity(address)
+const ADDRESS_REGEX = /0x[a-fA-F0-9]{40}/g
 
-  if (!text) return <span />
-  const addressRegex = /0x[a-fA-F0-9]{40}/g
-  const startIndex = text.search(addressRegex)
-  if (startIndex === -1) {
-    return (
-      <span css={`margin: 0 ${.5 * GU}px;`}>
-        {text}
-      </span>
-    )
-  }
+const Description = ({ text }) => {
+  const startIndex = text.search(ADDRESS_REGEX)
   const endIndex = startIndex + 42
   const beforeAddress = text.substring(0, startIndex)
   const address = text.substring(startIndex, endIndex)
   const afterAddress = text.substring(endIndex)
+
+  const network = useNetwork()
+  const [localLabel] = useIdentity(address)
+
+  // TODO: separate address entity styling from text!
   return (
     <div css={`
-      ${textStyle('body2')};
-    `}>
-      <span css={`margin: 0 ${.5 * GU}px;`}>
-        {beforeAddress}
-      </span>
-      <IdentityBadge
-        css="padding: 0;"
-        compact
-        label={localLabel}
-        entity={address}
-        networkType={network && network.type}
-        shorten
-      />
-      {afterAddress}
+        ${textStyle('body2')};
+        overflow: hidden;
+        line-height: ${3 * GU}px; /* 24px line-height of textStyle('body2') */
+        height: ${3* GU * 3}px; /* line-height * 3 lines */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        margin: 0 ${.5 * GU}px;
+      `}>
+      {
+        startIndex < 1
+          ? text
+          : <>
+            <span css={`margin: 0 ${.5 * GU}px;`}>
+              {beforeAddress}
+            </span>
+            <IdentityBadge
+              css="padding: 0;"
+              compact
+              label={localLabel}
+              entity={address}
+              networkType={network && network.type}
+              shorten
+            />
+            {afterAddress}
+          </>
+      }
     </div>
   )
 }

@@ -99,13 +99,13 @@ const Layout = ({ widgets }) => {
     `}>
         <div css={`
           flex: 2 1 20ch;
-          margin-right: ${2 * GU}px;
         `}>
           {originalPrimaryWidgets.map(WidgetMapper)}
         </div>
         {originalSecondaryWidgets.length > 0 &&
           <div css={`
             flex: 1 1 10ch;
+            margin-left: ${2 * GU}px;
           `}>
             {originalSecondaryWidgets.map(WidgetMapper)}
           </div>

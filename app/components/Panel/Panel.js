@@ -20,7 +20,7 @@ const widgetType = {
 // TODO: Encode as part of constant object with needsConfig key
 
 
-const getWidgetType = widget => Object.keys(widgetType)[widget]
+const getWidgetType = widgetNumber => Object.keys(widgetType).find(key => widgetType[key] === widgetNumber)
 
 const WidgetConfig = ({ data, type, setData }) => {
   switch (type) {
@@ -68,7 +68,8 @@ const Panel = ({ onSubmit }) => {
     onSubmit(widgetObject)
   }, [ column, configData, onSubmit, widget ])
 
-  const needsConfig = getWidgetType(widget) !== 'VOTES' && getWidgetType(widget) !== 'DOT_VOTES'
+  // TODO: Refactor into an array filter / find
+  const needsConfig = getWidgetType(widget) !== 'VOTES' && getWidgetType(widget) !== 'DOT_VOTES' && getWidgetType(widget) !== 'NONE'
   const submitDisabled = widget === undefined || (needsConfig && configData === undefined)
 
   //  TODO: handle when selecting another widget once configData is set (we should reset on widget change)
