@@ -20,7 +20,6 @@ import {
 } from '../../../utils/constants'
 import { getStatus } from '../../../utils/helpers'
 import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
-import { useIdentity } from '../../../utils/identity-manager'
 
 const Votes = () => {
   const { appState: { votes = [] } } = useAragonApi()

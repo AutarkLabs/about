@@ -8,7 +8,7 @@ import {
   IconArrowUp,
   IconTrash,
   SidePanelSeparator,
-  textStyle
+  textStyle,
 } from '@aragon/ui'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
@@ -138,7 +138,7 @@ const Widget = ({ id, children, type, ...props }) => {
     >
       { hover && !editMode &&
         <Button
-          icon={<IconTrash/>}
+          icon={<IconTrash />}
           display='icon'
           label='Remove'
           css={`
@@ -155,8 +155,8 @@ const Widget = ({ id, children, type, ...props }) => {
 }
 
 Widget.propTypes = {
-  id: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  id: PropTypes.string.isRequired,
   layout: PropTypes.exact({
     primary: PropTypes.bool,
     wide: PropTypes.bool,
