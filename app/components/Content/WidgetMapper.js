@@ -1,6 +1,19 @@
-import { Button, Card, GU, IconArrowDown, IconArrowLeft, IconArrowRight, IconArrowUp, SidePanelSeparator, textStyle } from '@aragon/ui'
+import {
+  Button,
+  Card,
+  GU,
+  IconArrowDown,
+  IconArrowLeft,
+  IconArrowRight,
+  IconArrowUp,
+  IconTrash,
+  SidePanelSeparator,
+  textStyle
+} from '@aragon/ui'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
+import { ipfs } from '../../utils/ipfs'
+import { useAragonApi } from '../../api-react'
 
 import MarkdownPreview from '../Widget/Markdown/Preview'
 import Votes from '../Widget/Votes/Votes'
@@ -87,25 +100,54 @@ WidgetHeader.propTypes = {
   type: PropTypes.oneOf(Object.keys(LABELS)).isRequired,
 }
 
-const Widget = ({ children, type, ...props }) => {
+const Widget = ({ id, children, type, ...props }) => {
   const { editMode } = useEditMode()
+  const [ hover, setHover ] = useState(false)
+  const { api, appState } = useAragonApi()
+  const { widgets } = appState
+
+  const onRemove = async id => {
+    const nextWidgets = widgets.filter(w => w.id !== id)
+    const cId = (
+      await ipfs.dag.put(nextWidgets, { pin: true })
+    ).toBaseEncodedString()
+    api.updateContent(cId).toPromise()
+  }
+
   return (
-    <Card css={`
-      align-items: stretch;
-      display: flex;
-      flex-direction: column;
-      height: auto;
-      justify-content: center;
-      overflow: hidden;
-      padding: ${2.25 * GU}px ${3 * GU}px;
-      width: auto;
-      margin-bottom: ${2 * GU}px;
-      &.sortable-ghost {
-        background-color: #f9fafc;
-        opacity: .8;
+    <Card
+      css={`
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        justify-content: center;
+        overflow: hidden;
+        padding: ${2.25 * GU}px ${3 * GU}px;
+        width: auto;
+        margin-bottom: ${2 * GU}px;
+        &.sortable-ghost {
+          background-color: #f9fafc;
+          opacity: .8;
+        }
+        cursor: ${ editMode ? 'grab' : 'normal' };
+        position: relative;
+      `}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      { hover && !editMode &&
+        <Button
+          icon={<IconTrash/>}
+          display='icon'
+          label='Remove'
+          css={`
+            position: absolute;
+            right: ${3 * GU}px;
+          `}
+          onClick={() => onRemove(id)}
+        />
       }
-      cursor: ${ editMode ? 'grab' : 'normal' };
-  `}>
       {(type !== 'MARKDOWN' || editMode) && <WidgetHeader type={type} />}
       {React.cloneElement(children, props)}
     </Card>
@@ -113,6 +155,7 @@ const Widget = ({ children, type, ...props }) => {
 }
 
 Widget.propTypes = {
+  id: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   layout: PropTypes.exact({
     primary: PropTypes.bool,
@@ -144,7 +187,7 @@ WidgetContent.defaultProps = {
 const WidgetMapper = ({ data, id, layout, type }) => {
   // TODO: better uuid for key
   return (
-    <Widget key={id} layout={layout} type={type}>
+    <Widget key={id} id={id} layout={layout} type={type}>
       <div css={'flex: 1 0 auto;'}>
         <WidgetContent data={data} type={type} />
       </div>
