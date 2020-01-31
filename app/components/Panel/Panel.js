@@ -50,7 +50,7 @@ WidgetConfig.defaultProps ={
 const Panel = ({ onSubmit }) => {
   const [ column, setColumn ] = useState(0)
   const [ configData, setConfigData ] = useState()
-  const [ widget, setWidget ] = useState()
+  const [ widget, setWidget ] = useState(0)
 
   const handleClick = useCallback(async () => {
     const widgetObject = {
