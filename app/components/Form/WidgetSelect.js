@@ -20,7 +20,11 @@ const WidgetSelect = ({ onChange, value }) => (
 
 WidgetSelect.propTypes ={
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number,
+}
+
+WidgetSelect.defaultProps ={
+  value: -1,
 }
 
 export default WidgetSelect

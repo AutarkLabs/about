@@ -11,6 +11,7 @@ import { uuid } from '../../utils/helpers'
 // TODO: encode this in types constant along with widgetSelect
 const widgetType = {
   MARKDOWN: 0,
+  NONE: -1,
   VOTES: 1,
   // ACTIVITY: 1,
   // VOTES: 2,
@@ -36,9 +37,14 @@ const WidgetConfig = ({ data, type, setData }) => {
 }
 
 WidgetConfig.propTypes ={
-  data: PropTypes.string.isRequired,
+  data: PropTypes.string,
   setData: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(Object.values(widgetType)).isRequired,
+  type: PropTypes.oneOf(Object.values(widgetType)),
+}
+
+WidgetConfig.defaultProps ={
+  data: '',
+  type: widgetType.NONE,
 }
 
 const Panel = ({ onSubmit }) => {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { GU, RADIUS, textStyle, useSidePanel, useTheme } from '@aragon/ui'
 
 import CodeMirror from 'codemirror/lib/codemirror'
@@ -15,60 +15,33 @@ const editorOptions = {
   scrollbarStyle: 'overlay', // depends on simplescrollbars codemirror addon
 }
 
-
 // TODO: Dark mode needs fixing here
 const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
-  const [ , setValue ] = useState(initialValue)
-
   const ref = useRef()
-
   const { readyToFocus } = useSidePanel()
   const theme = useTheme()
+
+  const handleValueChange = useCallback(instance => {
+    onChange(instance.getValue())
+  }, [onChange])
+
   // initialize editor
   useEffect(() => {
     const setupCodeMirror = async () => {
-      const { current: textarea } = ref
-
-      if (!textarea) {
-        return
+      if (ref.current) {
+        const cm = CodeMirror.fromTextArea(ref.current, editorOptions)
+        cm.on('change', handleValueChange)
+        cmResize(cm, {
+          minHeight: 100,
+          resizableWidth: false,
+        })
+        setEditor(cm)
       }
-
-      const cm = CodeMirror.fromTextArea(textarea, editorOptions)
-      cm.on('change', instance => {
-        const value = instance.getValue()
-        onChange(value)
-      })
-      cmResize(cm, {
-        minHeight: 100,
-        resizableWidth: false,
-      })
-      // TODO: Clean event handlers on exit
-      setEditor(cm)
     }
-
     setupCodeMirror()
 
-    return () => {
-      if (!editor) {
-        return
-      }
-
-      editor.toTextArea()
-    }
-  }, [ editor, onChange, ref, setEditor ])
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  // useEffect(() => {
-  //   if (!editor) {
-  // return
-  // }
-  // if (value !== editor.getValue()) {
-  //     editor.setValue(value)
-  //   }
-  // }, [editor, value])
+    return () => void setEditor(null)
+  }, [ handleValueChange, setEditor ])
 
   useEffect(() => {
     if (readyToFocus && editor) {
@@ -123,10 +96,20 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
 }
 
 Editor.propTypes = {
-  editor: PropTypes.func.isRequired,
-  initialValue:PropTypes.string.isRequired,
+  editor: PropTypes.shape({
+    focus: PropTypes.func,
+    lineCount: PropTypes.func,
+    setCursor: PropTypes.func,
+
+  }),
+  initialValue:PropTypes.string,
   onChange: PropTypes.func.isRequired,
   setEditor: PropTypes.func.isRequired,
+}
+
+Editor.defaultProps = {
+  editor: null,
+  initialValue: '',
 }
 
 export default Editor

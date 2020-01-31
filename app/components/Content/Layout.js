@@ -69,10 +69,12 @@ const Layout = ({ widgets }) => {
   const [ primaryWidgets, setPrimaryWidgets ] = useState(originalPrimaryWidgets)
   const [ secondaryWidgets, setSecondaryWidgets ] = useState(originalSecondaryWidgets)
 
-  useEffect(() => {
+  const updateColumns = () => {
     setPrimaryWidgets(originalPrimaryWidgets)
     setSecondaryWidgets(originalSecondaryWidgets)
-  }, [ editMode, originalPrimaryWidgets, originalSecondaryWidgets ])
+  }
+
+  useEffect(updateColumns, [ editMode, widgets ])
 
   const setPrimary = p => {
     const nextWidgets = p.map((e, i) => ({ ...e, index: i, layout: { primary: true } }))
