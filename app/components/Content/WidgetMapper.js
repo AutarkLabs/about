@@ -117,6 +117,7 @@ const Widget = ({ id, children, type, ...props }) => {
   return (
     <Card
       css={`
+        min-height: ${10 * GU}px;
         align-items: stretch;
         display: flex;
         flex-direction: column;
@@ -137,16 +138,23 @@ const Widget = ({ id, children, type, ...props }) => {
       onMouseLeave={() => setHover(false)}
     >
       { hover && !editMode &&
+      <div
+        css={`
+            position: absolute;
+            right: ${3 * GU}px;
+            top: ${3* GU}px;
+            display: flex;
+            justify-content: flex-start;
+          `}
+      >
         <Button
+          size="small"
           icon={<IconTrash />}
           display='icon'
           label='Remove'
-          css={`
-            position: absolute;
-            right: ${3 * GU}px;
-          `}
           onClick={() => onRemove(id)}
         />
+      </div>
       }
       {(type !== 'MARKDOWN' || editMode) && <WidgetHeader type={type} />}
       {React.cloneElement(children, props)}
