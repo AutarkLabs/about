@@ -123,8 +123,8 @@ contract Template is BaseTemplate, TokenCache {
     {
         About app = _installAboutApp(_dao);
         // Warning here, set ANY_ENTITY for development,
-        // use another grantee or manager in prod like for example _voting
-        _createAboutAppPermissions(_acl, app, ANY_ENTITY, ANY_ENTITY);
+        // use another grantee in prod like for example _voting
+        _createAboutAppPermissions(_acl, app, ANY_ENTITY, _voting);
     }
 
     function _installAboutApp(

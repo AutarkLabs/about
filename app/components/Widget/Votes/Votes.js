@@ -155,7 +155,8 @@ const IdContainer = styled.span`
 const Description = ({ text }) => {
   // by the rules of hooks, they cannot be called conditionally
   const network = useNetwork()
-  const [localLabel] = useIdentity(address)
+  // TODO:: check initialization error,  put some wait or check
+  const [localLabel] = 'Pepito' // useIdentity(address)
 
   if (!text) return <span />
   const addressRegex = /0x[a-fA-F0-9]{40}/g
