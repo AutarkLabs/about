@@ -55,9 +55,9 @@ const Votes = () => {
 
   return (
     <div css={`
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-gap: ${2 * GU}px;
+      grid-template-columns: repeat(auto-fill, minmax(${29 * GU}px, 1fr));
     `}>
       {mappedVotes}
     </div>
@@ -65,15 +65,15 @@ const Votes = () => {
 }
 
 const Vote = styled(Card)`
-  :not(:last-child) {
+  /* :not(:last-child) {
     margin-bottom: ${2 * GU}px;
-  }
+  } */
 
   padding: ${2 * GU}px;
   display: flex;
   height: 100%;
   width: 100%;
-  max-width: ${41.75 * GU}px;
+  /* max-width: ${41.75 * GU}px; */
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
@@ -165,30 +165,36 @@ const Description = ({ text }) => {
   const network = useNetwork()
   const [localLabel] = useIdentity(address)
 
-  if (!text) return <span />
-  if (startIndex === -1) {
-    return (
-      <span css={`margin: 0 ${.5 * GU}px;`}>
-        {text}
-      </span>
-    )
-  }
+  // TODO: separate address entity styling from text!
   return (
     <div css={`
-      ${textStyle('body2')};
-    `}>
-      <span css={`margin: 0 ${.5 * GU}px;`}>
-        {beforeAddress}
-      </span>
-      <IdentityBadge
-        css="padding: 0;"
-        compact
-        label={localLabel}
-        entity={address}
-        networkType={network && network.type}
-        shorten
-      />
-      {afterAddress}
+        ${textStyle('body2')};
+        overflow: hidden;
+        line-height: ${3 * GU}px; /* 24px line-height of textStyle('body2') */
+        height: ${3* GU * 3}px; /* line-height * 3 lines */
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        margin: 0 ${.5 * GU}px;
+      `}>
+      {
+        startIndex < 1
+          ? text
+          : <>
+            <span css={`margin: 0 ${.5 * GU}px;`}>
+              {beforeAddress}
+            </span>
+            <IdentityBadge
+              css="padding: 0;"
+              compact
+              label={localLabel}
+              entity={address}
+              networkType={network && network.type}
+              shorten
+            />
+            {afterAddress}
+          </>
+      }
     </div>
   )
 }
