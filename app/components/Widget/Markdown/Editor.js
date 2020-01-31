@@ -6,6 +6,7 @@ import CodeMirror from 'codemirror/lib/codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
+import 'codemirror/addon/selection/mark-selection'
 
 import cmResize from '../../../utils/codemirror/cm-resize'
 
@@ -13,6 +14,7 @@ const editorOptions = {
   lineWrapping: true,
   mode: 'gfm',
   scrollbarStyle: 'overlay', // depends on simplescrollbars codemirror addon
+  styleSelectedText: true, // depends on mark-selection codemirror addon
 }
 
 // TODO: Dark mode needs fixing here
@@ -57,16 +59,28 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
         flex: 1 1 100%;
         margin-bottom: ${3 * GU}px;
         .CodeMirror {
+          overflow: hidden;
+          padding: ${1 * GU}px;
+        }
+        .CodeMirror-wrap {
+          ${textStyle('body3')};
+          background-color: ${theme.background};
           border: 1px solid ${theme.border};
           border-radius: ${RADIUS}px;
           color: ${theme.surfaceContent};
           font-family: aragon-ui, sans-serif;
-          overflow: hidden;
-          padding: ${1 * GU}px;
-          ${textStyle('body3')};
+          height: ${22 * GU}px;
         }
-        .CodeMirror-wrap {
-          height: ${22 * GU}px
+        .CodeMirror-cursor {
+          border-left: 1px solid ${theme.primaryContent};
+        }
+        .CodeMirror-selectedtext {
+          background: ${theme.selected};
+          color: ${theme.selectedContent};
+        }
+        .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection {
+          background: red;
+          color: red;
         }
         .cm-resize-handle {
           display: block;

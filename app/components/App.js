@@ -16,7 +16,7 @@ import { IdentityProvider } from '../utils/identity-manager'
 
 const App = ({ api, widgets, isSyncing }) => {
   const { editMode, setEditMode, editedWidgets } = useEditMode()
-  const [ panelVisible, setPanelVisible ] = useState(false)
+  const [ panelVisible, setPanelVisible ] = useState(true)
 
   const handleEditLayout = () => {
     setEditMode(true)
