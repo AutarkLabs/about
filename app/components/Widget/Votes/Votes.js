@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { BigNumber } from 'bignumber.js'
@@ -19,6 +19,7 @@ import {
   VOTING_STATUS_REJECTED,
 } from '../../../utils/constants'
 import { getStatus } from '../../../utils/helpers'
+import { useIdentity } from '../../../utils/identity-manager'
 import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
 
 const Votes = () => {
@@ -72,7 +73,7 @@ const Vote = styled(Card)`
   display: flex;
   height: 100%;
   width: 100%;
-  max-width: 334px;
+  max-width: ${41.75 * GU}px;
   flex-direction: column;
   justify-content: space-between;
   align-items: stretch;
@@ -152,15 +153,19 @@ const IdContainer = styled.span`
   font-weight: bold;
 `
 
+const ADDRESS_REGEX = /0x[a-fA-F0-9]{40}/g
+
 const Description = ({ text }) => {
-  // by the rules of hooks, they cannot be called conditionally
+  const startIndex = text.search(ADDRESS_REGEX)
+  const endIndex = startIndex + 42
+  const beforeAddress = text.substring(0, startIndex)
+  const address = text.substring(startIndex, endIndex)
+  const afterAddress = text.substring(endIndex)
+
   const network = useNetwork()
-  // TODO:: check initialization error,  put some wait or check
-  const [localLabel] = 'Pepito' // useIdentity(address)
+  const [localLabel] = useIdentity(address)
 
   if (!text) return <span />
-  const addressRegex = /0x[a-fA-F0-9]{40}/g
-  const startIndex = text.search(addressRegex)
   if (startIndex === -1) {
     return (
       <span css={`margin: 0 ${.5 * GU}px;`}>
@@ -168,10 +173,6 @@ const Description = ({ text }) => {
       </span>
     )
   }
-  const endIndex = startIndex + 42
-  const beforeAddress = text.substring(0, startIndex)
-  const address = text.substring(startIndex, endIndex)
-  const afterAddress = text.substring(endIndex)
   return (
     <div css={`
       ${textStyle('body2')};
