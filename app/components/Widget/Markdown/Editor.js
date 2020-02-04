@@ -6,7 +6,6 @@ import CodeMirror from 'codemirror/lib/codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
-import 'codemirror/addon/selection/mark-selection'
 
 import cmResize from '../../../utils/codemirror/cm-resize'
 
@@ -14,7 +13,6 @@ const editorOptions = {
   lineWrapping: true,
   mode: 'gfm',
   scrollbarStyle: 'overlay', // depends on simplescrollbars codemirror addon
-  styleSelectedText: true, // depends on mark-selection codemirror addon
 }
 
 // TODO: Dark mode needs fixing here
@@ -74,13 +72,12 @@ const Editor = ({ editor, initialValue, onChange, setEditor, ...props }) => {
         .CodeMirror-cursor {
           border-left: 1px solid ${theme.primaryContent};
         }
-        .CodeMirror-selectedtext {
+        .CodeMirror-selected {
+          background: #0294B3; /* not aragon-ui definition */
+        }
+        .CodeMirror-focused .CodeMirror-selected {
           background: ${theme.selected};
           color: ${theme.selectedContent};
-        }
-        .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection {
-          background: red;
-          color: red;
         }
         .cm-resize-handle {
           display: block;
