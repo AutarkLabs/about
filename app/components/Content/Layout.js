@@ -61,7 +61,7 @@ EmptyMessage.defaultProps = {
   primary: false,
 }
 
-const Layout = ({ widgets }) => {
+const Layout = ({ widgets, onEditMarkdown }) => {
   //  TODO: A layout preview should come from store (when parsed in vote radspec)
   const { editMode, setEditedWidgets } = useEditMode()
   const originalPrimaryWidgets = widgets.filter(w => w.layout.primary)
@@ -100,14 +100,32 @@ const Layout = ({ widgets }) => {
         <div css={`
           flex: 2 1 20ch;
         `}>
-          {originalPrimaryWidgets.map(WidgetMapper)}
+          {originalPrimaryWidgets.map(widget => (
+            <WidgetMapper
+              key={widget.id}
+              data={widget.data}
+              id={widget.id}
+              layout={widget.layout}
+              type={widget.type}
+              onEditMarkdown={() => onEditMarkdown(widget)}
+            />
+          ))}
         </div>
         {originalSecondaryWidgets.length > 0 &&
           <div css={`
             flex: 1 1 10ch;
             margin-left: ${2 * GU}px;
           `}>
-            {originalSecondaryWidgets.map(WidgetMapper)}
+            {originalSecondaryWidgets.map(widget => (
+              <WidgetMapper
+                key={widget.id}
+                data={widget.data}
+                id={widget.id}
+                layout={widget.layout}
+                type={widget.type}
+                onEditMarkdown={() => onEditMarkdown(widget)}
+              />
+            ))}
           </div>
         }
       </div>
@@ -143,7 +161,16 @@ const Layout = ({ widgets }) => {
           primary
           setList={setPrimary}
         >
-          {primaryWidgets.map(WidgetMapper)}
+          {primaryWidgets.map(widget => (
+            <WidgetMapper
+              key={widget.id}
+              data={widget.data}
+              id={widget.id}
+              layout={widget.layout}
+              type={widget.type}
+              onEditMarkdown={() => onEditMarkdown(widget)}
+            />
+          ))}
         </ReactSortable>
       </div>
       <div css={`
@@ -168,7 +195,16 @@ const Layout = ({ widgets }) => {
           list={secondaryWidgets}
           setList={setSecondary}
         >
-          {secondaryWidgets.map(WidgetMapper)}
+          {secondaryWidgets.map(widget => (
+            <WidgetMapper
+              key={widget.id}
+              data={widget.data}
+              id={widget.id}
+              layout={widget.layout}
+              type={widget.type}
+              onEditMarkdown={() => onEditMarkdown(widget)}
+            />
+          ))}
         </ReactSortable>
       </div>
     </div>
@@ -176,6 +212,7 @@ const Layout = ({ widgets }) => {
 }
 
 Layout.propTypes = {
+  onEditMarkdown: PropTypes.func.isRequired,
   widgets: PropTypes.arrayOf(types.widget).isRequired,
 }
 
