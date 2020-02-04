@@ -17,6 +17,7 @@ import { IdentityProvider } from '../utils/identity-manager'
 const App = ({ api, widgets, isSyncing }) => {
   const { editMode, setEditMode, editedWidgets } = useEditMode()
   const [ panelVisible, setPanelVisible ] = useState(false)
+  const [ editWidget, setEditWidget ] = useState(null)
 
   const handleEditLayout = () => {
     setEditMode(true)
@@ -26,13 +27,27 @@ const App = ({ api, widgets, isSyncing }) => {
     setPanelVisible(true)
   }
 
+  const onEditMarkdown = widget => {
+    setEditWidget(widget)
+    setPanelVisible(true)
+  }
+
   const handlePanelSubmit = useCallback(async widgetObject => {
     setPanelVisible(false)
-    const nextWidgets = [ ...widgets, widgetObject ]
+    let nextWidgets
+    const index = widgets.findIndex(widget => widget.id === widgetObject.id)
+    if (index === -1) {
+      nextWidgets = [ ...widgets, widgetObject ]
+    }
+    else {
+      nextWidgets = widgets
+      nextWidgets[index] = widgetObject
+    }
     const cId = (
       await ipfs.dag.put(nextWidgets, { pin: true })
     ).toBaseEncodedString()
     api.updateContent(cId).toPromise()
+    setEditWidget(null)
   }, [ api, widgets ])
 
   const handleEditModeCancel = () => {
@@ -74,15 +89,18 @@ const App = ({ api, widgets, isSyncing }) => {
               />
             }
           />
-          <Layout widgets={widgets} />
+          <Layout onEditMarkdown={onEditMarkdown} widgets={widgets} />
         </>
       )}
       <SidePanel
         opened={panelVisible}
-        onClose={() => setPanelVisible(false)}
-        title={'New widget'}
+        onClose={() => {
+          setPanelVisible(false)
+          setEditWidget(null)
+        }}
+        title={editWidget ? 'Edit widget' : 'New widget'}
       >
-        <Panel onSubmit={handlePanelSubmit} />
+        <Panel onSubmit={handlePanelSubmit} editWidget={editWidget} />
       </SidePanel>
     </>
   )

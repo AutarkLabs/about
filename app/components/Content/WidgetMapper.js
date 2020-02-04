@@ -6,6 +6,7 @@ import {
   IconArrowLeft,
   IconArrowRight,
   IconArrowUp,
+  IconEdit,
   IconTrash,
   SidePanelSeparator,
   textStyle,
@@ -100,7 +101,7 @@ WidgetHeader.propTypes = {
   type: PropTypes.oneOf(Object.keys(LABELS)).isRequired,
 }
 
-const Widget = ({ id, children, type, ...props }) => {
+const Widget = ({ id, children, type, onEditMarkdown, ...props }) => {
   const { editMode } = useEditMode()
   const [ hover, setHover ] = useState(false)
   const { api, appState } = useAragonApi()
@@ -147,6 +148,18 @@ const Widget = ({ id, children, type, ...props }) => {
             justify-content: flex-start;
           `}
       >
+        { type === 'MARKDOWN' && (
+          <Button
+            size="small"
+            icon={<IconEdit />}
+            display='icon'
+            label='Edit'
+            onClick={onEditMarkdown}
+            css={`
+              margin-right: ${GU}px;
+            `}
+          />
+        )}
         <Button
           size="small"
           icon={<IconTrash />}
@@ -170,6 +183,7 @@ Widget.propTypes = {
     wide: PropTypes.bool,
   }).isRequired,
   // TODO: adjust to exact types
+  onEditMarkdown: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
 }
 
@@ -192,9 +206,15 @@ WidgetContent.defaultProps = {
   data: '',
 }
 
-const WidgetMapper = ({ data, id, layout, type }) => {
+const WidgetMapper = ({ data, id, layout, type, onEditMarkdown }) => {
   return (
-    <Widget key={id} id={id} layout={layout} type={type}>
+    <Widget
+      key={id}
+      id={id}
+      layout={layout}
+      type={type}
+      onEditMarkdown={onEditMarkdown}
+    >
       <div css={'flex: 1 0 auto;'}>
         <WidgetContent data={data} type={type} />
       </div>
@@ -213,6 +233,7 @@ WidgetMapper.propTypes = {
     primary: PropTypes.bool,
     wide: PropTypes.bool,
   }).isRequired,
+  onEditMarkdown: PropTypes.func.isRequired,
   type: PropTypes.oneOf(Object.keys(LABELS)).isRequired,
 }
 

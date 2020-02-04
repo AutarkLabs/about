@@ -61,7 +61,7 @@ EmptyMessage.defaultProps = {
   primary: false,
 }
 
-const Layout = ({ widgets }) => {
+const Layout = ({ widgets, onEditMarkdown }) => {
   //  TODO: A layout preview should come from store (when parsed in vote radspec)
   const { editMode, setEditedWidgets } = useEditMode()
   const originalPrimaryWidgets = widgets.filter(w => w.layout.primary)
@@ -107,6 +107,7 @@ const Layout = ({ widgets }) => {
               id={widget.id}
               layout={widget.layout}
               type={widget.type}
+              onEditMarkdown={() => onEditMarkdown(widget)}
             />
           ))}
         </div>
@@ -122,6 +123,7 @@ const Layout = ({ widgets }) => {
                 id={widget.id}
                 layout={widget.layout}
                 type={widget.type}
+                onEditMarkdown={() => onEditMarkdown(widget)}
               />
             ))}
           </div>
@@ -166,6 +168,7 @@ const Layout = ({ widgets }) => {
               id={widget.id}
               layout={widget.layout}
               type={widget.type}
+              onEditMarkdown={() => onEditMarkdown(widget)}
             />
           ))}
         </ReactSortable>
@@ -199,6 +202,7 @@ const Layout = ({ widgets }) => {
               id={widget.id}
               layout={widget.layout}
               type={widget.type}
+              onEditMarkdown={() => onEditMarkdown(widget)}
             />
           ))}
         </ReactSortable>
@@ -208,6 +212,7 @@ const Layout = ({ widgets }) => {
 }
 
 Layout.propTypes = {
+  onEditMarkdown: PropTypes.func.isRequired,
   widgets: PropTypes.arrayOf(types.widget).isRequired,
 }
 
