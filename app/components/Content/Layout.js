@@ -32,23 +32,26 @@ const EmptyMessage = ({ primary }) => (
       />
       <div
         css={`
-      color: ${theme.content};
-      ${textStyle('title4')}
-      `}
+          color: ${theme.content};
+          ${textStyle('title4')}
+        `}
       >
-      No widgets here
+        No widgets here
       </div>
-      {primary && <div
-        css={`
-         /* No aragon color defined for this */
-        color: #637381;
-        margin: ${1 * GU}px 0;
-        text-align: center;
-        ${textStyle('body2')}
-      `}
-      >
-      Add a new widget or move an existing one to this primary column
-      </div>}
+      {
+        primary &&
+        <div
+          css={`
+            /* No aragon color defined for this */
+            color: #637381;
+            margin: ${1 * GU}px 0;
+            text-align: center;
+            ${textStyle('body2')}
+          `}
+        >
+          Add a new widget or move an existing one to this primary column
+        </div>
+      }
     </div>
   </Card>
 )
