@@ -43,9 +43,7 @@ const App = ({ api, widgets, isSyncing }) => {
       nextWidgets = widgets
       nextWidgets[index] = widgetObject
     }
-    const cId = (
-      await ipfs.dag.put(nextWidgets, { pin: true })
-    ).toBaseEncodedString()
+    const cId = (await ipfs.object.put({ Data: Buffer.from(JSON.stringify(nextWidgets)), Links: [] }, { enc: 'json', pin: true })).string
     api.updateContent(cId).toPromise()
     setEditWidget(null)
   }, [ api, widgets ])
@@ -55,9 +53,7 @@ const App = ({ api, widgets, isSyncing }) => {
   }
 
   const handleEditModeSubmit = useCallback(async () => {
-    const cId = (
-      await ipfs.dag.put(editedWidgets, { pin: true })
-    ).toBaseEncodedString()
+    const cId = (await ipfs.object.put({ Data: Buffer.from(JSON.stringify(editedWidgets)), Links: [] }, { enc: 'json', pin: true })).string
     api.updateContent(cId).toPromise()
     setEditMode(false)
   }, [ api, editedWidgets, setEditMode ])
