@@ -193,7 +193,6 @@ WidgetContent.defaultProps = {
 }
 
 const WidgetMapper = ({ data, id, layout, type }) => {
-  // TODO: better uuid for key
   return (
     <Widget key={id} id={id} layout={layout} type={type}>
       <div css={'flex: 1 0 auto;'}>
@@ -209,7 +208,7 @@ WidgetMapper.defaultProps = {
 
 WidgetMapper.propTypes = {
   data: PropTypes.string,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   layout: PropTypes.exact({
     primary: PropTypes.bool,
     wide: PropTypes.bool,

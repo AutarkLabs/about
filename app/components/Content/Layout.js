@@ -100,14 +100,30 @@ const Layout = ({ widgets }) => {
         <div css={`
           flex: 2 1 20ch;
         `}>
-          {originalPrimaryWidgets.map(WidgetMapper)}
+          {originalPrimaryWidgets.map(widget => (
+            <WidgetMapper
+              key={widget.id}
+              data={widget.data}
+              id={widget.id}
+              layout={widget.layout}
+              type={widget.type}
+            />
+          ))}
         </div>
         {originalSecondaryWidgets.length > 0 &&
           <div css={`
             flex: 1 1 10ch;
             margin-left: ${2 * GU}px;
           `}>
-            {originalSecondaryWidgets.map(WidgetMapper)}
+            {originalSecondaryWidgets.map(widget => (
+              <WidgetMapper
+                key={widget.id}
+                data={widget.data}
+                id={widget.id}
+                layout={widget.layout}
+                type={widget.type}
+              />
+            ))}
           </div>
         }
       </div>
@@ -143,7 +159,15 @@ const Layout = ({ widgets }) => {
           primary
           setList={setPrimary}
         >
-          {primaryWidgets.map(WidgetMapper)}
+          {primaryWidgets.map(widget => (
+            <WidgetMapper
+              key={widget.id}
+              data={widget.data}
+              id={widget.id}
+              layout={widget.layout}
+              type={widget.type}
+            />
+          ))}
         </ReactSortable>
       </div>
       <div css={`
@@ -168,7 +192,15 @@ const Layout = ({ widgets }) => {
           list={secondaryWidgets}
           setList={setSecondary}
         >
-          {secondaryWidgets.map(WidgetMapper)}
+          {secondaryWidgets.map(widget => (
+            <WidgetMapper
+              key={widget.id}
+              data={widget.data}
+              id={widget.id}
+              layout={widget.layout}
+              type={widget.type}
+            />
+          ))}
         </ReactSortable>
       </div>
     </div>
