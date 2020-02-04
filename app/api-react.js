@@ -68,13 +68,13 @@ const functions =
   ((appState, setAppState) => ({
     addWidget: (_id, cId) => ({
       toPromise: async () =>{
-        const widgetObj = (await ipfs.dag.get(cId)).value
+        const widgetObj = JSON.parse((await ipfs.object.data(cId)).toString())
+
         setAppState({
           ...appState,
           widgets: [ ...appState.widgets, { ...widgetObj } ],
         })},
-    })
-    ,
+    }),
     setSyncing: syncing =>
       setAppState({
         ...appState,

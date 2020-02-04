@@ -109,9 +109,7 @@ const Widget = ({ id, children, type, onEditMarkdown, ...props }) => {
 
   const onRemove = async id => {
     const nextWidgets = widgets.filter(w => w.id !== id)
-    const cId = (
-      await ipfs.dag.put(nextWidgets, { pin: true })
-    ).toBaseEncodedString()
+    const cId = (await ipfs.object.put({ Data: Buffer.from(JSON.stringify(nextWidgets)), Links: [] }, { enc: 'json', pin: true })).string
     api.updateContent(cId).toPromise()
   }
 

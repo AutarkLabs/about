@@ -5,6 +5,6 @@ import { ipfs } from '../utils/ipfs'
 /// ////////////////////////////////////
 
 export const updateContent = async cId => {
-  const content = (await ipfs.dag.get(cId)).value
-  return content
+  const content = (await ipfs.object.data(cId)).toString()
+  return JSON.parse(content)
 }
