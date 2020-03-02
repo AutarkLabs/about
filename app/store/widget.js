@@ -1,4 +1,5 @@
-import { ipfs } from '../utils/ipfs'
+import { ipfsGet } from './utils/ipfs'
+
 
 /// ////////////////////////////////////
 /*    Widgets event handlers          */
@@ -6,14 +7,8 @@ import { ipfs } from '../utils/ipfs'
 
 export const updateContent = async cId => {
   try {
-    if (cId.startsWith('Qm') && cId.length === 46) {
-      const content = (await ipfs.object.data(cId)).toString()
-      return JSON.parse(content)
-    }
-    if(cId.length === 59) {
-      const content = (await ipfs.dag.get(cId)).value
-      return content
-    }
+    const content = await ipfsGet(cId)
+    return content
   } catch(e) {
     console.error(e)
   }
