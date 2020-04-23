@@ -39,11 +39,9 @@ const Votes = () => {
         <Status vote={vote} />
       </div>
       <div css={`
-        display: flex;
         margin-bottom: ${GU}px;
       `}>
-        <Id id={vote.id} />
-        <Description text={vote.description} />
+        <Description id={vote.id} text={vote.description} />
       </div>
       <div css={`
         display: flex;
@@ -140,7 +138,7 @@ Status.propTypes = {
 
 const Id = ({ id }) => (
   <IdContainer>
-    #{id}
+    #{id}:
   </IdContainer>
 )
 
@@ -149,13 +147,14 @@ Id.propTypes = {
 }
 
 const IdContainer = styled.span`
-  ${textStyle('body2')};
+  ${textStyle('body1')};
   font-weight: bold;
+  margin-right: ${GU}px;
 `
 
 const ADDRESS_REGEX = /0x[a-fA-F0-9]{40}/g
 
-const Description = ({ text }) => {
+const Description = ({ id, text }) => {
   const startIndex = text.search(ADDRESS_REGEX)
   const endIndex = startIndex + 42
   const beforeAddress = text.substring(0, startIndex)
@@ -168,7 +167,7 @@ const Description = ({ text }) => {
   // TODO: separate address entity styling from text!
   return (
     <div css={`
-        ${textStyle('body2')};
+        ${textStyle('body1')};
         overflow: hidden;
         line-height: ${3 * GU}px; /* 24px line-height of textStyle('body2') */
         height: ${3* GU * 3}px; /* line-height * 3 lines */
@@ -177,6 +176,7 @@ const Description = ({ text }) => {
         -webkit-line-clamp: 3;
         margin: 0 ${.5 * GU}px;
       `}>
+      <Id id={id} />
       {
         startIndex < 1
           ? text
@@ -200,6 +200,7 @@ const Description = ({ text }) => {
 }
 
 Description.propTypes = {
+  id: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
 }
 
@@ -220,7 +221,7 @@ const Result = ({ yea, nay }) => {
   }
   return (
     <ResultContainer>
-      <LabelContainer>
+      <LabelContainer css='margin-bottom: 2px;'>
         <LabelText>
           YES {percentageYea}%
         </LabelText>

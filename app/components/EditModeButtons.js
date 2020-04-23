@@ -1,14 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Button, GU } from '@aragon/ui'
+import { Button, GU, Help } from '@aragon/ui'
 
 const EditModeButtons = ({ onCancel, onSubmit }) => {
   return (
-    <>
-      <Button css={`margin-right: ${GU}px;`} label="Cancel" onClick={onCancel} />
+    <div css={`
+      display: flex;
+      align-items: center;
+    `}>
+      <Help hint="Drag and drop widgets to change the layout">
+        Drag and drop widgets to change the layout.
+      </Help>
+      <Button css={`margin: 0 ${GU}px;`} label="Cancel" onClick={onCancel} />
       <Button label="Submit" mode="strong" onClick={onSubmit} />
-    </>
+    </div>
   )
 }
 

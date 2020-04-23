@@ -24,7 +24,7 @@ import { useEditMode } from '../../context/Edit'
 const LABELS = {
   ACTIVITY: 'Activity feed',
   DOT_VOTES: 'Latest dot votes',
-  MARKDOWN: 'Custom content',
+  MARKDOWN: null,
   VOTES: 'Latest votes',
 }
 
@@ -75,24 +75,20 @@ const WidgetHeader = ({ type }) => {
   const { editMode } = useEditMode()
   const label = LABELS[type]
   return (
-    <>
-      <div
-        css={`
-          display: flex;
-          flex: 0 0 ${5 * GU}px;
-          align-items: center;
-          ${textStyle('body1')}
-        `}
-      >
-        <span css='flex: 1 0 auto'>{label}</span>
-        {false && editMode && <HeaderArrows />}
-      </div>
-      <SidePanelSeparator
-        css={`
-          margin: ${3 * GU}px -${3 * GU}px;
-        `}
-      />
-    </>
+    <div
+      css={`
+        display: flex;
+        flex: 0 0 ${5 * GU}px;
+        align-items: center;
+        ${textStyle('body1')}
+        font-weight: 700;
+        font-size: 1.5em;
+        margin-bottom: ${GU}px;
+      `}
+    >
+      <span css='flex: 1 0 auto'>{label}</span>
+      {false && editMode && <HeaderArrows />}
+    </div>
   )
 }
 
@@ -109,7 +105,7 @@ const Widget = ({ id, children, type, onEditMarkdown, ...props }) => {
 
   const onRemove = async id => {
     const nextWidgets = widgets.filter(w => w.id !== id)
-    const cId = (await ipfs.object.put({ Data: Buffer.from(JSON.stringify(nextWidgets)), Links: [] }, { enc: 'json', pin: true })).string
+    const cId = (await ipfs.add(Buffer.from(JSON.stringify(nextWidgets))))[0].hash
     api.updateContent(cId).toPromise()
   }
 
@@ -123,7 +119,7 @@ const Widget = ({ id, children, type, onEditMarkdown, ...props }) => {
         height: auto;
         justify-content: center;
         overflow: hidden;
-        padding: ${2.25 * GU}px ${3 * GU}px;
+        padding: ${3 * GU}px;
         width: auto;
         margin-bottom: ${2 * GU}px;
         &.sortable-ghost {
@@ -141,7 +137,7 @@ const Widget = ({ id, children, type, onEditMarkdown, ...props }) => {
         css={`
             position: absolute;
             right: ${3 * GU}px;
-            top: ${3* GU}px;
+            top: ${3 * GU}px;
             display: flex;
             justify-content: flex-start;
           `}
@@ -167,7 +163,7 @@ const Widget = ({ id, children, type, onEditMarkdown, ...props }) => {
         />
       </div>
       }
-      {(type !== 'MARKDOWN' || editMode) && <WidgetHeader type={type} />}
+      {type !== 'MARKDOWN' && <WidgetHeader type={type} />}
       {React.cloneElement(children, props)}
     </Card>
   )
