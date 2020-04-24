@@ -17,7 +17,15 @@ export const ipfsGet = async cId => {
   }
   try {
     const { data } = await axios.get(endpoint)
-    return data
+    if (typeof data === 'object') return data
+    // If we retrieve a regular IPFS file from the '/object/data' endpoint,
+    // it will contain the array but with some garbage data surrounding it.
+    // So we can extract the relavant string and parse it into JSON
+    const extractedString = data.substring(
+      data.indexOf('['),
+      data.lastIndexOf(']') + 1
+    )
+    return JSON.parse(extractedString)
   } catch (err) {
     console.error('Error getting data from IPFS', err)
   }

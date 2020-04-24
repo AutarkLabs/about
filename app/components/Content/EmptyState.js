@@ -31,7 +31,7 @@ const EmptyState = React.memo(({ isSyncing, onActionClick }) => {
               grid-template-columns: auto auto;
               grid-gap: ${1 * GU}px;
               /* Fixed weight to avoid flicker
-              resizing when switching from 
+              resizing when switching from
               text to syncing state */
               height: ${10.5 * GU}px;
               margin: ${3 * GU}px 0;
@@ -52,8 +52,7 @@ const EmptyState = React.memo(({ isSyncing, onActionClick }) => {
             </div>
             <div
               css={`
-                /* No aragon color defined for this */
-                color: #637381;
+                color: ${theme.surfaceContentSecondary}
                 margin: ${1 * GU}px 0;
                 ${textStyle('body2')}
               `}

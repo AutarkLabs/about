@@ -74,7 +74,7 @@ const Panel = ({ onSubmit, editWidget }) => {
 
   // TODO: Refactor into an array filter / find
   const needsConfig = getWidgetType(widget) !== 'VOTES' && getWidgetType(widget) !== 'DOT_VOTES' && getWidgetType(widget) !== 'NONE'
-  const submitDisabled = widget === undefined || (needsConfig && configData === undefined)
+  const submitDisabled = widget === -1 || (needsConfig && configData === undefined)
 
   //  TODO: handle when selecting another widget once configData is set (we should reset on widget change)
 

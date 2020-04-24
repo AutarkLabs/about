@@ -1,6 +1,6 @@
 {
   "name": "About",
-  "description": "A customizable interface to add interactive widgets with information and insights about your organization.",
+  "description": "A customizable interface to add widgets for your organization's details and insights",
   "author": "Autark",
   "changelog_url": "https://github.com/AutarkLabs/about/releases",
   "source_url": "https://github.com/AutarkLabs/about/tree/master/",
