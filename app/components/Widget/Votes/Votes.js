@@ -8,11 +8,12 @@ import {
   IconCheck,
   IconClose,
   IdentityBadge,
+  Link,
   ProgressBar,
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { useAragonApi, useNetwork } from '../../../api-react'
+import { useAppState, useInstalledApps, useNetwork } from '../../../api-react'
 import {
   VOTING_STATUS,
   VOTING_STATUS_ONGOING,
@@ -23,13 +24,21 @@ import { useIdentity } from '../../../utils/identity-manager'
 import LocalLabelAppBadge from '../../LocalIdentityBadge/LocalLabelAppBadge'
 
 const Votes = () => {
-  const { appState: { votes = [] } } = useAragonApi()
+  const { votes = [] } = useAppState()
+  const network = useNetwork()
+  const installedApps = useInstalledApps()
+  const kernel = installedApps.find(app => app.name === 'Kernel').appAddress
+  const voting = installedApps.find(app => app.name === 'Voting').appAddress
+  console.log('Network: ', network)
+  const voteUrl = network.type === 'private'
+    ? `http://localhost:3000/#/${kernel}/${voting}/vote`
+    : `https://${network.type}.aragon.org/#/${kernel}/${voting}/vote`
 
   const reversedVotes = [...votes]
   reversedVotes.reverse()
 
   const mappedVotes = useMemo(() => reversedVotes.slice(0, 4).map(vote => (
-    <Vote key={vote.id}>
+    <Vote key={vote.id} href={`${voteUrl}/${vote.id}`}>
       <div css={`
         display: flex;
         justify-content: space-between;
@@ -49,7 +58,7 @@ const Votes = () => {
         <Result yea={vote.yea} nay={vote.nay} />
       </div>
     </Vote>
-  )), [reversedVotes])
+  )), [ reversedVotes, voteUrl ])
 
   return (
     <div css={`
@@ -62,20 +71,38 @@ const Votes = () => {
   )
 }
 
-const Vote = styled(Card)`
-  /* :not(:last-child) {
-    margin-bottom: ${2 * GU}px;
-  } */
+const Vote = ({ children, href }) => {
+  const theme = useTheme()
+  return (
+    <Link
+      href={href}
+      css={`
+        text-decoration: none;
+        color: ${theme.surfaceContent};
+      `}
+    >
+      <Card
+        css={`
+          padding: ${2 * GU}px;
+          display: flex;
+          height: 100%;
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+          text-align: left;
+          cursor: pointer;
+        `}
+      >
+        {children}
+      </Card>
+    </Link>
+  )
+}
 
-  padding: ${2 * GU}px;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  /* max-width: ${41.75 * GU}px; */
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
-`
+Vote.propTypes = {
+  children: PropTypes.node.isRequired,
+  href: PropTypes.string.isRequired,
+}
 
 const AppBadge = ({ address }) => {
   return (

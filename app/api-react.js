@@ -84,9 +84,9 @@ const functions =
 
 
 // TODO: Add and export usePath
-const { AragonApi, useAragonApi, useNetwork } = buildStubbedApiReact({
+const { AragonApi, useAppState, useAragonApi, useInstalledApps, useNetwork } = buildStubbedApiReact({
   functions,
   initialState,
 })
 
-export { AragonApi, useAragonApi, useNetwork }
+export { AragonApi, useAppState, useAragonApi, useInstalledApps, useNetwork }
