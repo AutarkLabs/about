@@ -1,6 +1,8 @@
 import {
   AragonApi,
+  useAppState,
   useGuiStyle,
+  useInstalledApps,
   usePath,
   useAragonApi as useProductionApi,
   useNetwork as useProductionNetwork,
@@ -25,5 +27,5 @@ export default ({ initialState = {}, functions = (() => {}) }) => {
     }
   }
 
-  return { AragonApi, useAragonApi, useGuiStyle, useNetwork, usePath }
+  return { AragonApi, useAppState, useAragonApi, useGuiStyle, useInstalledApps, useNetwork, usePath }
 }
