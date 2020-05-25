@@ -37,6 +37,10 @@ const Votes = () => {
   const reversedVotes = [...votes]
   reversedVotes.reverse()
 
+  /* TODO: AppBadge component here seems redundant:
+   * its definition is just wrapping another component,
+   * why not simply put that component here? also it has a
+   * bug with <a> appearing as descendant of another <a> */
   const mappedVotes = useMemo(() => reversedVotes.slice(0, 4).map(vote => (
     <Vote key={vote.id} href={`${voteUrl}/${vote.id}`}>
       <div css={`
