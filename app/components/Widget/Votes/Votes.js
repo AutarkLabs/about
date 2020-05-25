@@ -198,9 +198,7 @@ const Description = ({ id, text }) => {
         overflow: hidden;
         line-height: ${3 * GU}px; /* 24px line-height of textStyle('body2') */
         height: ${3* GU * 3}px; /* line-height * 3 lines */
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
+        white-space: normal;
         margin: 0 ${.5 * GU}px;
       `}>
       <Id id={id} />
