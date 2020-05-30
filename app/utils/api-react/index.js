@@ -1,15 +1,17 @@
 import {
   AragonApi,
-  useAppState,
   useGuiStyle,
-  useInstalledApps,
   usePath,
   useAragonApi as useProductionApi,
+  useAppState as useProductionAppState,
+  useInstalledApps as useProductionInstalledApps,
   useNetwork as useProductionNetwork,
 } from '@aragon/api-react'
 
 export default ({ initialState = {}, functions = (() => {}) }) => {
+  let useAppState = useProductionAppState
   let useAragonApi = useProductionApi
+  let useInstalledApps = useProductionInstalledApps
   let useNetwork = useProductionNetwork
 
   if (process.env.NODE_ENV !== 'production') {
@@ -23,6 +25,11 @@ export default ({ initialState = {}, functions = (() => {}) }) => {
 
     if (!inIframe()) {
       useAragonApi = require('./useStubbedApi')({ functions, initialState })
+      useAppState = () => {
+        const { appState } = useAragonApi()
+        return appState
+      }
+      useInstalledApps = require('./useStubbedInstalledApps')
       useNetwork = require('./useStubbedNetwork')
     }
   }

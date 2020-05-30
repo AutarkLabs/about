@@ -29,7 +29,6 @@ const Votes = () => {
   const installedApps = useInstalledApps()
   const kernel = installedApps.find(app => app.name === 'Kernel').appAddress
   const voting = installedApps.find(app => app.name === 'Voting').appAddress
-  console.log('Network: ', network)
   const voteUrl = network.type === 'private'
     ? `http://localhost:3000/#/${kernel}/${voting}/vote`
     : `https://${network.type}.aragon.org/#/${kernel}/${voting}/vote`
