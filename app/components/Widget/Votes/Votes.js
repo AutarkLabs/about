@@ -37,6 +37,10 @@ const Votes = () => {
   const reversedVotes = [...votes]
   reversedVotes.reverse()
 
+  /* TODO: AppBadge component here seems redundant:
+   * its definition is just wrapping another component,
+   * why not simply put that component here? also it has a
+   * bug with <a> appearing as descendant of another <a> */
   const mappedVotes = useMemo(() => reversedVotes.slice(0, 4).map(vote => (
     <Vote key={vote.id} href={`${voteUrl}/${vote.id}`}>
       <div css={`
@@ -198,9 +202,7 @@ const Description = ({ id, text }) => {
         overflow: hidden;
         line-height: ${3 * GU}px; /* 24px line-height of textStyle('body2') */
         height: ${3* GU * 3}px; /* line-height * 3 lines */
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
+        white-space: normal;
         margin: 0 ${.5 * GU}px;
       `}>
       <Id id={id} />
