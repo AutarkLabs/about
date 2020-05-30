@@ -11,7 +11,7 @@ const initialState = process.env.NODE_ENV !== 'production' && {
   isSyncing: false,
   votes: [
     {
-      app: '0xbaB65A7D8a8F67D38cD26af113b95279fA3E7616',
+      appAddress: '0xbaB65A7D8a8F67D38cD26af113b95279fA3E7616',
       description: 'Mint 1 ETH for 0xE7F5Fd82F861343Fbe794E4796dC3Ff8999B0Ee4',
       id: '0',
       nay: '0',
@@ -19,7 +19,7 @@ const initialState = process.env.NODE_ENV !== 'production' && {
       yea: '1000000000000000000',
     },
     {
-      app: '0x978f4De6B4833e956a366A441B277deB7A7C0d4c',
+      appAddress: '0x978f4De6B4833e956a366A441B277deB7A7C0d4c',
       description: 'Mint 19 ETH for 0xE7F5Fd82F861343Fbe794E4796dC3Ff8999B0Ee4',
       id: '1',
       nay: '1000000000000000000',
@@ -30,33 +30,33 @@ const initialState = process.env.NODE_ENV !== 'production' && {
   widgets: [
     {
       data: '# Title for Markdown test 🐈',
-      id: 0,
+      id: '0',
       layout: { primary: true },
       type: TYPE_MARKDOWN,
     },
     {
       data: {
       },
-      id: 1,
+      id: '1',
       layout: { primary: false },
       type: TYPE_VOTES,
     },
     {
       data: '# hello, `WORLD`! 🌐👽',
-      id: 2,
+      id: '2',
       layout: { primary: true },
       type: TYPE_MARKDOWN,
     },
     {
       data: {
       },
-      id: 3,
+      id: '3',
       layout: { primary: true },
       type: TYPE_VOTES,
     },
     {
       data: 'Unicorns exist 🦄',
-      id: 4,
+      id: '4',
       layout: { primary: true },
       type: TYPE_MARKDOWN,
     },

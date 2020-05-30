@@ -1,5 +1,5 @@
 import React from 'react'
-import { useInstalledApps, useNetwork } from '@aragon/api-react'
+import { useInstalledApps, useNetwork } from '../../api-react'
 import { AppBadge } from '@aragon/ui'
 import PropTypes from 'prop-types'
 import { useIdentity } from '../../utils/identity-manager'
